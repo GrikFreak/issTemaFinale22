@@ -364,6 +364,7 @@ div.imagedesc{
   the reply of the <ks>transport trolley</ks> after a command making the service less reactive.
   The <ks>transport trolley</ks> sends also a request to the <ks>WS</ks> to check if the TruckLoad is havier or not than the MAXCapacity and the <ks>WS</ks> reply.
   (An entity has to send information to WS to communicate that there is a new req, and also the type of waste and the weight? --> so WS ha to receive msg)
+  (we have to return an Error to the wasteservice if a component of the truck is break? like a brocken led or wheel)
 </div><br>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
@@ -412,6 +413,7 @@ The status of the <ks>led</ks> can be changed by the <ks>WS</ks> through three c
 with its new state. 
 This implies that the led can only be in three states, one is "on" which indicates that the <ks>transport trolley</ks> is stopped , the second one is "off" and indicates that the  <ks>transport trolley</ks> is at HOME, the last one is "blink" and indicates that the <ks>transport trolley</ks> is moving,
 The interaction between the <ks>led</ks> and the <ks>WS</ks>  is more predisposed to a <b>synchronous semantics</b>.
+( we have though about a Led Fail (it breaks), maybe a Fail led status?)
 </div> <br>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
@@ -511,37 +513,18 @@ The interaction between the <ks>led</ks> and the <ks>WS</ks>  is more predispose
 <div id="problem_analysis_waste_service_status_GUI">
   <h3>WasteServiceStatusGUI</h3>
   <div class="remark">
-    Manager's interface must be able to send commands to the fan and the <ks>trasport trolley</ks> as well as receive and show details
-    about current system status. Another key functionality that the manager's interface must integrate is the ability
-    to receive and show in a proper way the alarm signal.<br>
-    The system behaviour results in two type of interaction between the <ks>ParkServiceStatusGUI</ks> and the <ks>PMS</ks>:
+    The Service Manager's interface must be able to show these <a id="status">status</a>:
     <ul>
-      <li>to stop/resume both fan and trasport trolley with a request/response semantic. This
-      allows both entities to know if a command was successful or not. Alternatively, a dispatch semantic can be used to make the interaction less constrained;</li>
-      <li>to receive data about the current status of the system with a dispatch or invitation semantic. <!-- This allows to
-      reply the system with an ack about the Information received. That mechanism is fundamental
-      especially when the alarm is triggered.--></li>
+      <li> the current state of the <ks>trasport trolley</ks> and its position;</li>
+      <li> the current weight of the material stored in the two containers (the plastic one and the glass one);</li>
+      <li> the current state of the Led (on, blinks, off).</li>
+    (1 dispatch or 3 ? )
     </ul>
-    Below a <a id="status">detailed list</a> of what the GUI must show:
-    <ul>
-      <li>status of the <ks>fan</ks> (<b>on/off</b>);</li>
-      <li>status of the <ks>transport trolley</ks> (<b>idle/working/stopped</b>);</li>
-      <li><ks>temperature</ks> of the room (expressed in celsius degrees);</li>
-      <li>status of the <ks>INDOOR-area</ks> (through weightsensor data);</li>
-      <li>status of the <ks>OUTDOOR-area</ks> (through outsonar data);</li>
-    </ul>
-    In addiction, the GUI should contain a series of buttons to interact with:
-    <ul>
-      <li><kr>ACTIVATE</kr>/<kr>DEACTIVATE</kr> button for the fan;</li>
-      <li><kr>STOP</kr>/<kr>RESUME</kr> task button for the transport trolley;</li>
-      <li><kr>STOP</kr> button if the alarm is triggered;</li>
-    </ul>
-    The gui must also be able to capture the park manager's attention via visual and additionally audible cues when the alarm is triggered.<br>
   </div>
   <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
     <tr>
       <td style="border: 0px">
-        <center><img src="IMG/MANAGERGUI.png" alt="ParkingServiceStatusGUI" width="65%"></center>
+        <center><img src="images/WasteServiceStatusGUI.png" alt="WasteServiceStatusGUI" width="65%"></center>
       </td>
       <td style="border: 0px">
         <center>
@@ -552,43 +535,14 @@ The interaction between the <ks>led</ks> and the <ks>WS</ks>  is more predispose
                 <th>Content</th>
                 <th>Type</th>
               </tr>
-              <tr>
-                <td rowspan="5">Command</td>
-                <td>turn_on</td>
-                <td rowspan="5">request</td>
-              </tr>
-              <tr>
-                <td>turn_off</td>
-              </tr>
-              <tr>
-                <td>resume_work</td>
-              </tr>
-              <tr>
-                <td>stop_work</td>
-              </tr>
-              <tr>
-                <td>stop_alarm</td>
-              </tr>
-              <tr>
-                <td rowspan="2">Reply</td>
-                <td>ok</td>
-                <td rowspan="2">reply</td>
-              </tr>
-              <tr>
-                <td>
-                  fail
-                </td>
-              </tr>
+
+
               <tr>
                 <td>System Status</td>
-                <td><a href="#status">check above</a></td>
+                <td><a href="#status">check status</a></td>
                 <td>dispatch</td>
               </tr>
-              <tr>
-                <td>Alarm</td>
-                <td>alarm_situation</td>
-                <td>dispatch</td>
-              </tr>
+
             </tbody>
           </table>
         </center>
@@ -596,285 +550,50 @@ The interaction between the <ks>led</ks> and the <ks>WS</ks>  is more predispose
     </tr>
   </table>
 </div>
-<div id="problem_analysis_parking_service_GUI">
-  <h3> ParkServiceGUI </h3>
-  <div class="remark">
-  Client's interface must be able to send commands to the <ks>PMS</ks> in order to park client's car, receive a
-  receipt and to pick up the car using the same receipt. These three phases consist in <a href="#R1">R1</a>, <a href="#R2B">R2B</a> and <a href="#R3">R3</a> requirements.
-  These requirements are satisfied using a request/response communication. This type of communication is needed due to the fact that the client needs
-  a feedback everytime he asks for a service. <br>
-  Another feature that the <ks>ParkServiceGUI</ks> must implement is the capability of receiving an alert if the car stands at the outdoor area for more than <ks>DTFREE</ks>.
-  Alerts are a type of information sent by the <ks>PMS</ks> which don't require replies.
-  </div>
-  <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
-    <tr>
-      <td style="border: 0px">
-        <center><img src="IMG/PARKSERVICEGUI.png" alt="ParkingServiceGUI" width="65%"></center>
-      </td>
-      <td style="border: 0px">
-        <center>
-          <table cellpadding="5%">
-            <tbody>
-              <tr>
-                <th>Message</th>
-                <th>Content</th>
-                <th>Type</th>
-              </tr>
-              <tr>
-                <td rowspan="3">Command</td>
-                <td>acceptIN</td>
-                <td rowspan="3">request</td>
-              </tr>
-              <tr>
-                <td>CARENTER</td>
-              </tr>
-              <tr>
-                <td>acceptOUT</td>
-              </tr>
-              <tr>
-                <td rowspan="5">Reply</td>
-                <td>ok</td>
-                <td rowspan="5">reply</td>
-              </tr>
-              <tr>
-                <td>
-                  fail
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  wait
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  TOKENID
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  SLOTNUM
-                </td>
-              </tr>
-              <tr>
-                <td>Alert</td>
-                <td>free_outdoor_area</td>
-                <td>dispatch</td>
-              </tr>
-            </tbody>
-          </table>
-        </center>
-      </td>
-    </tr>
-  </table>
-</div>
-<!--
-<div id="core_system_overview">
-  <h4>Core System Overview</h4>
-  <div class="remark">
-    The core system is the most important component of the entire software system because it contains the business logic.
-    Acting like the system 'hub', it manages various types of information coming from external sensors, it receives messages or
-    commands from clients or the manager and it controls the transport trolley and the fan.
-    For its complexity and by following a 'divide-et-impera' approach and single responsability priciple, the core system could be divided in four different actors:
-  </div>
-  <center><img src="IMG/CORESYSTEM.png" alt="CoreSystem" width="35%"></center>
-  <div class="remark">
-    <ul>
-      <li><b>business logic actor</b>: process key functionalities for the entire system:
-        <ul>
-          <li>receive information from the data collector actor;</li>
-          <li>manage and maintain parking availability;</li>
-          <li>manage transport trolley's state;</li>
-          <li>manage automatically the fan or after a manager's command;</li>
-          <li>interaction between the manager and clients through the GUI controller actor and the generation and collection of the TOKENID.</li>
-        </ul>
-      </li>
-      <li><b>actuators controller actor</b>: it interacts with components which are able to receive commands. In particular:
-        <ul>
-          <li>simply redirects commands from the business logic to the fan;</li>
-          <li>given initial and final coordinates from the business logic, generates the best path for the transport trolley to follow;</li>
-          <li>allows future integration with new active components much easier.</li>
-        </ul>
-      </li>
-      <li><b>data collector actor</b>: it is responsible for receiving and elaborating information from the sensors usable by the business logic actor;</li>
-      <li><b>GUI controller actor</b>: it is placed between the business logic actor and GUIs. It gets information from GUIs and forwards them
-        to the business logic actor and respectively sends datas from the business logic actor to clients' GUI.</li>
-    </ul>
-  </div>
-</div>
--->
+
 <div id="abstraction_gap">
   <h3>Abstraction gap</h3>
   <div class="remark">
-    The problem analysis was carried out to highlight the requirements without focusing on used technologies by introducing high-level concepts.
-    Another goal was the development of a code as independent as possible from the technology used for the transport trolley in order to
-    make it easier to replace it if necessary. The abstraction between system design and available
-    technologies is facilitated thanks to the presence of modern programming languages such as Kotlin that allows the definition of actors. However,
-    Kotlin doesn't solve the distributed management of actors. Finally,
-    the use of particular technologies to deal with problems such as data persistence and failure resistance leads to a wider gap.
+    After the initial analysis it emerged that the main gap concerns the communication between the components of the system. 
+    Another goal that we have set ourselves is to develop a code that was independent of the technologies used, so that it can also be reused in other distributed applications.
+    The abstraction gap between system designer and the technologies is filled by programming languages like Kotlin, that gives us a solution to describe actors.
   </div>
 </div>
 <div id="system_weakness">
   <h4>System weaknesses</h4>
   <div class="remark">
-    The system may soffer some rare case studies:
+    The system may soffer rarely these case studies:
     <ul>
-      <li>If the parking manager isn't well trained about system functionalities he may create a bottleneck of requests simply stopping transport trolley tasks
-        through his GUI. In fact, the system isn't developed in a way that can't stop wrong decision by the parking manager;</li>
-      <li>Considering the distributed nature of the system, network problems lead to a malfunction of the entire system;</li>
-      <li>Some information is kept by the business logic in order to manage the system. In case of system faults, these data can be lost.</li>
+      <li>Network problem: it could lead to a malfuction of the system;</li>
+      <li>Comunication problem ?: latecy of response could lead to bad requests management;</li>
+      <li>Some informations, such as the used capacity of the containers, are in the business logic. In case of system faults, these data can be lost.</li>
     </ul>
   </div>
 </div>
-<div id="architectural_model">
+<div id="logical_architecture">
   <h3>Logical Architecture</h3>
   From the previous considerations on the components of the system it is possible to define a first logical architecture: <br><br>
-  <center><img src="IMG/LOGICAL ARCHITECTURE.png" alt="architectural_model" width="40%"></center>
+  <center><img src="images/LogicalArchitecture.png" alt="logical_architecture" width="40%"></center>
+
   <div class="remark">
-    The information about the status of the components can be centralized or kept in a distributed way. In order to satisfy GUIs requirements, a centralized management
-    would be more easily implemented. However, the centralized management is open to single point of failure.
+    In order to make our waste software reusable and as much as possibile independent from the undelying communication protocols,
+    the designer could make reference to proper design pattern such as <b>Adapter</b>, <b>Bridge</b> , <b>Facade</b> ,  <b>Singleton</b>, <b>Proxy</b> and <b>Decorator</b>. 
   </div>
   <div class="remark">
-    In order to make our parking software reusable and as much as possibile independent from the undelying communication protocols,
-    the designer could make reference to proper design pattern such as <b>adapter</b>, <b>bridge</b> and <b>facade</b>. Other design pattern that might be considered during
-    the development are <b>singleton</b>, <b>observer</b> and <b>layer</b>.
-  </div>
-  <div class="remark">
-    From the different user stories given by the customer, a model of the first phase (<b>client - parking phase</b>) will be developed using the Qak meta-modelling language.
-    The simplified version of the system is based on a series of assumptions:
-    <ul>
-      <li>INDOOR cell (6,0) / OUTDOOR cell (6,4);</li>
-      <li>temperature under <ks>TMAX</ks>;</li>
-      <li>one client;</li>
-      <li>free INDOOR-area;</li>
-      <li>no interaction from parking manager;</li>
-      <li>one free parking slot (3,3) <ks>SLOTNUM</ks> = 6.</li>
-    </ul>
+    User-Story:
   </div>
 </div>
-<div id="estimate_effort">
-  <h3>Estimate delivery time</h3>
-  <div class="remark">
-    Following these assumptions the model can be developed in two working days. The first one will be used by a single member of the team to develop the model.
-    The first half of the second day will be used by the team to discuss the model produced, meanwhile the second half will be used to fix
-    and audit changes proposed previously.
-  </div>
-</div>
-The model is available <a href="https://github.com/enriLoniterp/iss2021project/blob/main/requirements/model_prob_an/src/requirements.qak">here</a>.
+
 <h2>Test plans</h2>
 <div id="test_plans">
   <div class="remark">
-    Features presented in <b>client - parking phase</b> user story are tested following four test plans. These tests have been defined according with
-    assumptions made before and some different configuration:
-    <ol>
-      <li><U>Slot 6 free</U>. Client makes a request to enter, it is accepted by the <ks>PMS</ks> and the client receives <b>6</b> (linked to the parking slot) as response;</li>
-      <li><U>all the parking slots are occupied </U>. Client makes a request to enter and receives number <b>0</b> as response;</li>
-      <li><U>the INDOOR-AREA isn't available</U>. Client makes a request to enter receives a waiting message.</li>
-      <li><U>INDOOR-AREA free</U>. Client makes <ks>CARENTER</ks> request and receives <ks>TOKENID</ks> as response.</li>
-    </ol>
   </div>
 </div>
-Test plans are based on the model developed and are available <a href="https://github.com/enriLoniterp/iss2021project/blob/main/requirements/model_prob_an/src/tests/TestPlan.kt">here</a>.
+
 <h2>Work Plan</h2>
 <div id="work_plan">
   <div class="remark">
-    The first product backlog can be defined starting from the previous analysis. The chart contains the following items ordered by priority.<br><br>
-    <table id="product_backlog" cellpadding="5%">
-      <tr>
-        <th>ID</th>
-        <th>PRIORITY</th>
-        <th>ITEM</th>
-        <th>REQUIREMENTS</th>
-      </tr>
-      <tr>
-        <td><b>1</b></td>
-        <td>HIGH</td>
-        <td><ks>PMS</ks> processes car deposit requests</td>
-        <td><a id="#R1">R1</a>, <a id="#R2">R2</a>, <a id="#R2B">R2B</a></td>
-      </tr>
-      <tr>
-        <td><b>2</b></td>
-        <td>HIGH</td>
-        <td><ks>PMS</ks> processes car pick-up requests</td>
-        <td><a id="#R3">R3</a></td>
-      </tr>
-      <tr>
-        <td><b>3</b></td>
-        <td>HIGH</td>
-        <td><ks>PMS</ks> manages data from sensors</td>
-        <td><a id="#R1">R1</a>, <a id="#R3">R3</a></td>
-      </tr>
-      <tr>
-        <td><b>4</b></td>
-        <td>HIGH</td>
-        <td><ks>PMS</ks> manages transport trolley</td>
-        <td><a id="#R2A">R2A</a>, <a id="#R2C">R2C</a>, <a id="#R2D">R2D</a>, <a id="#R2E">R2E</a> <a id="#R3A">R3A</a>, <a id="#R3B">R3B</a>, <a id="#R3C">R3C</a>, <a id="#R3C">R3C</a></td>
-      </tr>
-        <td><b>5</b></td>
-        <td>MEDIUM</td>
-        <td><ks>PMS</ks> manages fan</td>
-        <td><a id="#R4">R4</a></td>
-      </tr>
-      <tr>
-        <td><b>6</b></td>
-        <td>MEDIUM</td>
-        <td><ks>PMS</ks> satisfies manager's start and stop trolley and fan requests</td>
-        <td><a id="#R4">R4</a>, <a id="#R5">R5</a></td>
-      </tr>
-      <tr>
-        <td><b>7</b></td>
-        <td>MEDIUM</td>
-        <td><ks>PMS</ks> maintains an updated version of the system status</td>
-        <td><a id="#R4">R4</a></td>
-      </tr>
-      <tr>
-        <td><b>8</b></td>
-        <td>MEDIUM</td>
-        <td><ks>PMS</ks> recognizes critical OUTDOOR-area situation and generates an alarm for the manager</td>
-        <td><a id="#R4">R4</a></td>
-      </tr>
-      <tr>
-        <td><b>9</b></td>
-        <td>LOW</td>
-        <td><ks>PMS</ks> asks the client to pick up his car due a DTFREE timeout</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><b>10</b></td>
-        <td>LOW</td>
-        <td><ks>PMS</ks> manages fan automatically</td>
-        <td></td>
-      </tr>
-    </table>
-    <br>All the items above can be group in several sprint as datailed in the next table:<br><br>
-    <table id="sprint" cellpadding="5%">
-      <tr>
-        <th>SPRINT GOAL</th>
-        <th>BACKLOG ITEM IDS</th>
-      </tr>
-      <tr>
-        <td><ks>PMS</ks> basic functionalities - sensors</td>
-        <td><b>3</b></td>
-      </tr>
-      <tr>
-        <td><ks>PMS</ks> basic functionalities - transport trolley and fan</td>
-        <td><b>4</b>, <b>5</b></td>
-      </tr>
-      <tr>
-        <td><ks>PMS</ks> able to manage user requests</td>
-        <td><b>1</b>, <b>2</b></td>
-      </tr>
-      <tr>
-        <td><ks>PMS</ks> interaction with manager and care of system status</td>
-        <td><b>6</b>, <b>7</b>, <b>8</b></ul>
-        </td>
-      </tr>
-      <tr>
-        <td><ks>PMS</ks> Optimization</td>
-        <td><b>9</b>, <b>10</b></ul>
-        </td>
-      </tr>
-    </table>
+    
   </div>
 </div>
 
@@ -891,21 +610,13 @@ Test plans are based on the model developed and are available <a href="https://g
 
 <h2>Maintenance</h2>
 
-<!-- USEFUL
-<table style="width:100%" border="1">
-<tr>
-<td style="width:50%">
-</td>
-<td></td>
-</tr>
-</table>
--->
-
 <br/><br/>
 </div>
 
 <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
-By Bignami Filippo, Greco Davide; email: filippo.bignami@studio.unibo.it,  davide.greco4@studio.unibo.it
+<li>By Bignami Filippo, Greco Davide</li>
+<li>email: filippo.bignami@studio.unibo.it,  davide.greco4@studio.unibo.it</li>
+<li>GitHub repository: https://github.com/GrikFreak/issTemaFinale22</li>
 </div>
 </body>
 </html>
