@@ -218,25 +218,25 @@ div.imagedesc{
 </div>
 <h2>Requirements</h2>
 <div id="Requirements" class="remark">
-    <p>The main goal of the <kr>WasteService</kr> software is to allow a <kr>Waste truck</kr> to deposit its load of
+    <p> <a id="R1">(R1)</a> The main goal of the <kr>WasteService</kr> software is to allow a <kr>Waste truck</kr> to deposit its load of
         <strong>TruckLoad</strong> kg plastic or glass in the proper container.</p>
         <p>The global story can be described as follows:</p>
         <ol class="arabic simple">
-        <li><p>The <cite>Waste truck</cite> driver approaches the <cite>INDOOR</cite> and sends (using a smart device) a request to store the load,
+        <li><p><a id="R1A">(R1A)</a> The <cite>Waste truck</cite> driver approaches the <cite>INDOOR</cite> and sends (using a smart device) a request to store the load,
         by specifyng the <cite>type of  the material</cite> (plastic or glass) and its <cite>TruckLoad</cite>.</p></li>
-        <li><p>The <cite>WasteService</cite> sends the answer <em>loadaccept</em> if the final content of proper container will not surpass the
+        <li><p><a id="R1B">(R1B)</a> The <cite>WasteService</cite> sends the answer <em>loadaccept</em> if the final content of proper container will not surpass the
         maximum value allowed (<em>MAXPB</em> or <em>MAXGB</em>). Otherwise, it sends the answer <em>loadrejecetd</em> and the  <cite>Waste truck</cite>
         leaves the <cite>INDOOR</cite> area.</p></li>
-        <li><p>When the load is accepted, the <cite>transport trolley</cite> reaches the <cite>INDOOR</cite>, picks up the material, goes to the
+        <li><p><a id="R1C">(R1C)</a> When the load is accepted, the <cite>transport trolley</cite> reaches the <cite>INDOOR</cite>, picks up the material, goes to the
         proper container and settles the material. During this activity, the <cite>WasteService</cite> <strong>blinks</strong> the <cite>Led</cite></p></li>
-        <li><p>When the deposit action is terminated, the <cite>transport trolley</cite>  excutes another deposit command (if any)
+        <li><p><a id="R1D">(R1D)</a> When the deposit action is terminated, the <cite>transport trolley</cite>  excutes another deposit command (if any)
         or returns to its <cite>HOME</cite>.</p></li>
         </ol>
-        <p>The <cite>WasteService</cite> must create a <kr>WasteServiceStatusGUI</kr> that shows to the <em>Service-manager</em>:</p>
+        <p> <a id="R2">(R2)</a> The <cite>WasteService</cite> must create a <kr>WasteServiceStatusGUI</kr> that shows to the <em>Service-manager</em>:</p>
         <ul>
-        <li><p>the current state of the <cite>transport trolley</cite> and it position in the room</p></li>
-        <li><p>the current weigth of the material stored in the two waste-containers</p></li>
-        <li><p>the current state of the <cite>Led</cite>
+        <li><p><a id="R2A">(R2A)</a> the current state of the <cite>transport trolley</cite> and it position in the room</p></li>
+        <li><p><a id="R2B">(R2B)</a> the current weigth of the material stored in the two waste-containers</p></li>
+        <li><p><a id="R2C">(R2C)</a> the current state of the <cite>Led</cite>
     </p>
 </div>
 
@@ -244,15 +244,15 @@ div.imagedesc{
 <div class="remark">
   <div>
     Our <b>interaction with the customer</b> has clarified that nouns have the following meanings:
-    <ul>/ks>: component which uses the <ks>DDR Robot</ks> in order to complete his tasks;</li>
-      
+    <ul>
+      <li><ks>transport trolley</ks>: component which uses the <ks>DDR Robot</ks> in order to complete his tasks;</li>
       <li><ks>software</ks>:set of computer programs and associated documentation and data ;</li>
       <li><ks>waste-load(or TruckLoad)</ks>: amount of chemical, physical, or biological matter contained within a waste discharge;</li>
       <li><ks>weight</ks>: relative mass or the quantity of matter contained by something;</li>
       <li><ks>material</ks>: matter from which a thing is or can be made; in our case could be only glass or plastic;</li>
       <li><ks>service-area</ks>:detailed area of the map where the Robot can move;</li>
       <li><ks>INDOOR</ks>: port in the service area where the waste material enters;</li>
-      <li><ks>PlasticBox</ks>: container devoted to store objects made of plastic;</li>\
+      <li><ks>PlasticBox</ks>: container devoted to store objects made of plastic;</li>
       <li><ks>GlassBox</ks>: container devoted to store objects made of glass;</li>
       <li><ks>HOME</ks>:detailed area where it's initially placed the robot;</li>
       <li><ks>MAXPB</ks>: limits of weight (in kg ) that the PlasticBox can contain;</li>
@@ -312,133 +312,22 @@ div.imagedesc{
 </div>
 <br>
 <div class="remark">
-  After a discussion with the customer the <ks>out-sonar</ks>, the <ks>thermometer</ks> and the <ks>weightsensor</ks> are an autonmous active component that does not 'know' any other component.
+ the <ks>Sonar</ks> is autonomous component ? it has a global view of the system?
 </div>
 <div class="remark">
-  The two actuators (<ks>transport trolley</ks> and <ks>fan</ks>), following the discussion with the customer and as they are actively controlled by the ParkManagerService,
-  can already be modeled as actors using the Qak meta-modeling language. <!-- Questo modello di linguaggio di modellazione è un custom dsl sviluppate dal committente
+  The two actuators (<ks>transport trolley</ks> and <ks>Led</ks>), they are controlled by WasteService ?  <!-- Questo modello di linguaggio di modellazione è un custom dsl sviluppate dal committente
   e possono essere ritrovate nella seguente libreria. -->
-  <br>
-  The model of the two actors is detailed <a href="https://github.com/enriLoniterp/iss2021project/blob/main/requirements/model_req_an/src/requirements.qak">here</a>.
-  In addiction, unit test for both the <a href="https://github.com/enriLoniterp/iss2021project/blob/main/requirements/model_req_an/src/tests/TestPlanFan.kt">fan</a>
-  and the <a href="https://github.com/enriLoniterp/iss2021project/blob/main/requirements/model_req_an/src/tests/TestPlanTrolley.kt">trasport trolley</a> are presented.
 </div>
-
-<!--
-<div id="user_stories">
-  <div id="Main User Story">
-    <h3>Main user story</h3>
-    <table style="width:98%" cellpadding="5%">
-      <tbody>
-        <tr>
-          <td style="width:70%">
-           A client interacts with the <ks>ParkServiceGUI</ks> in order to park its car. The system, then checks if the <ks>INDOOR-area</ks> is free, and in that case
-           it replies to the client with a number that identifies a free park-slot (<ks>SLOTNUM</ks>). At that time, if <ks>SLOTNUM</ks> > 0, the client receives a receipt with the
-           <ks>TOKENID</ks>, enters the car and then the <ks>ParkingManagerService</ks> makes the transport trolley pick up the car <b>(1)</b> and moves it to the selected parking-slot <b>(2)</b>. <br><br>
-           When the client wants his car back, he interacts again with the <ks>ParkServiceGUI</ks> by requesting a pick up of his car
-           using the <ks>TOKENID</ks> previously received. At this time, the transport trolley carries the selected car from its parking-slot to the
-           outdoor-area <b>(3)</b>. Finally, the client takes the car and frees the outdoor-area.
-          </td>
-          <td><center><img src="IMG/user_story_1.jpg" alt="TestPlan0" width="95%"></center>
-          </td>
-        </tr>
-       </tbody>
-    </table>
-    <pre> Let assume the <ks>INDOOR-area</ks> is free and at least one parking slot is available:<br>
-          Client notifies interest in entering the car<br>
-          System return <ks>SLOTNUM</ks><br>
-          assert 0 < <ks>SLOTNUM</ks> <= 6<br>
-          Client <ks>CARENTER</ks><br>
-          System return <ks>TOKENID</ks> and park the car<br>
-          <b>wait</b><br>
-          Client wants to pick up his car by sending <ks>TOKENID</ks><br>
-          System moves the selected car to the <ks>OUTDOOR-area</ks><br>
-          Client receives a confirm.
-    </pre>
-  </div>
-<div id="user_story_standard_supervision">
-  <h3>User story: normal parking manager's supervision</h3>
-  <table style="width:98%" cellpadding="5%">
-    <tbody>
-      <td>
-        While the <kr>ParkingMenagerService</kr> is working, it collects data of system current state. This includes the temperature (<ks>TA</ks>), state of the fan
-        and the <ks>transport trolley</ks>. The manager can view this information by the GUI.
-      </td>
-    </tbody>
-  </table>
-</div>
-<pre>
-  System simulates the change of the current status<br>
-  GUI checks if new changes appears.
-</pre>
-<div id="user_story_non_standard_supervision">
-  <h3>User story: non standard parking manager's supervision</h3>
-  <table style="width:98%" cellpadding="5%">
-    <tbody>
-      <td>
-        When the system is working, the thermometer measures the temperature <ks>TA</ks>. If <ks>TA</ks> > <ks>TMAX</ks> the <kr>ParkingManagerService</kr> informs the <ks>ParkingServiceStatusGUI</ks>.
-        Therefore the manager requests to stop the trasport trolley and activates the fan via the GUI.
-        The system stops the <ks>transport trolley</ks> and waits until <ks>TA</ks> < <ks>TMAX</ks>. When this happens the manager sees it on the GUI and requests to activate the
-        <ks>trasport</ks> trolley and to stop the fan using the GUI.
-      </td>
-    </tbody>
-  </table>
-</div>
-<pre>
-  <ks>Thermometer</ks> simulates a temperature <ks>TA</ks> > <ks>TMAX</ks><br>
-  <b>wait</b> <br>
-  System checks new fan and transport trolley status<br>
-  Thermometer simulates a temperature <ks>TA</ks> < <ks>TMAX</ks><br>
-  <b>wait</b> <br>
-  System checks new <ks>fan</ks> and <ks>transport trolley</ks> status<br>
-</pre>
-<div id="alarm_situation">
-  <h3>User story: DTFREE OUTDOOR-AREA </h3>
-  <table style="width:98%" cellpadding="5%">
-    <tbody>
-      <td>
-        Initially the outsonar detects the presence of a car in the <ks>OUTDOOR-area</ks> and refers it to the <ks>ParkManagerService</ks>. If the car is still waiting in the
-        <ks>OUTDOOR-area</ks> within the <ks>DTFREE</ks> time the <kr>ParkManagerService</kr> sends an <b>ALARM</b> signal to the <ks>ParkServiceStatusGui</ks>. The manager is now aware of the situation.
-      </td>
-    </tbody>
-  </table>
-</div>
-</div>
-<pre>
-  <ks>Outsonar</ks> simulates the presence of a car for a time <ks>T</ks> > <ks>DTFREE</ks><br>
-  <ks>ParkServiceStatusGui</ks> checks if an alarm has been received<br>
-</pre>
--->
 
 <h2>Problem analysis</h2>
 
 <div class="remark" id = "problem_analysis">
-  The system is made up of a series of distributed heterogeneous components that must communicate with each others.
-  From their interaction arises the problem of evaluating the technologies to be used for the transmission of information in the best possible way.
-  Another problem can be found in the management of the transport trolley as a core feature of the parking system.<br>
+  The system is composed by distributed heterogeneous components that must communicate with each others.
+  The problem is evaluating which technologies fit the best way for the transmission of information.
+  Another problem is the management of the transport trolley as a core feature of the system.<br>
 </div>
-  This <a href="./Legenda.odp">legend</a> will be used to represent the components in the problem analysis.
+  This legend (?) will be used to represent the components in the problem analysis.
 
-<!--
-<div>
-  <h4>System overview</h4>
-  <table style="width:98%" cellpadding="5%">
-    <tbody>
-      <tr>
-        <td style="width:60%" style="text-align:top">
-          The side image shows a schematic view of the system, including components and users.<br>
-          As can be seen from the image, the core system is the hub of the system and plays the role of mediator
-          between components. For this reason, the central system is the same entity which elaborates information and schedules
-          tasks for interacting components.
-          The interaction between those entities takes place via network or via different networks using messages. Data transmission
-          and message format will be described below.
-        </td>
-        <td><center><img src="IMG/SYSTEM OVERVIEW.jpg" alt="SystemOverview" width="90%"></center></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
--->
 <div id="System_communication_overview">
   <h4>System communication overview</h4>
   <div class="remark">
@@ -450,7 +339,7 @@ div.imagedesc{
     <ul>
       <li><ks>websocket</ks>;</li>
       <li><ks>HTTP</ks>;</li>
-      <li><ks>MQTT</ks>;</li>
+      <li><ks>Pub-Sub</ks>;</li>
       <li><ks>COaP</ks>.</li>
     </ul>
     Afterwards, for every component will be discussed the best communication solution according to its task.
@@ -458,25 +347,28 @@ div.imagedesc{
 </div>
 <h4>Components overview</h4>
 <div>
-  <h3> ParkManagerService </h3>
-<div class="remark" id="problem_analysis_park_manager_service">
-  The ParkManagerService (<b>PMS</b>) is the core of the entire software system as it contains the business logic.
-  Acting like the system 'hub', the <kr>PMS</kr> can be described as a <ks>service</ks>, managing various types of information coming from external sensors,
-  receving messages or commands from clients or the manager and controlling the transport trolley and the fan.
+  <h3>WasteService </h3>
+<div class="remark" id="problem_analysis_Waste_service">
+  The WasteService(<b>WS</b>) is the core of the entire software system as it contains the business logic.
+  The WasteService acts like a controller.
+  The <kr>WS</kr> can be described as a <ks>service</ks>, managing various types of information coming from an external sensor (<ks>Sonar</ks>),
+  receving messages (or commands from Service manager?) and controlling the transport trolley and the Led, it also sends information to the WasteServiceStatusGUI.
 </div>
   <h3> Transport trolley </h3>
 <div class="remark" id="problem_analysis_transport_trolley">
-  <ks>Transport trolley</ks> must satisfy these requirements: <a href="#R2A">R2A</a>, <a href="#R2C">R2C</a>, <a href="#R2D">R2D</a>, <a href="#R2E">R2E</a>, <a href="#R3B">R3B</a>, <a href="#R3C">R3C</a>, <a href="#R3D"> R3D</a>.<br>
-  At any time, parking manager is allowed to stop these tasks. Transport trolley aim leads to both active and passive behaviour. <br>
-  As discussed in the requirements analysis, the <ks>transport trolley</ks> is represented as an actor. Since <ks>PMS</ks> contains the business logic of the
-  service, it must know the status of the <ks>transport trolley</ks>. At the same time, <ks>PMS</ks> must be able to complete other tasks. For that reason,
-  a non-blocking communication using <b>dispatches</b> is more situable. Alternatively, a <b>synchronous communication</b> would force the <ks>PMS</ks> to wait
+  <ks>Transport trolley</ks> must satisfy these requirements: <a href="#R1A">R1A</a>,  <a href="#R1B">R1B</a>, <a href="#R1C">R1C</a>, <a href="#R1D">R1D</a>, <a href="#R2A">R2A</a>.<br>
+  At any time, the Service Manager can stop the tasks(??). Transport trolley aim leads to both active and passive behaviour. <br>
+  As discussed in the requirements analysis, the <ks>transport trolley</ks> is represented as an actor. Since <ks>WS</ks> contains the business logic of the
+  service, it must know the status of the <ks>transport trolley</ks>. At the same time, <ks>WS</ks> must be able to complete other tasks. For that reason,
+  a non-blocking communication using <b>dispatches</b> is more situable. Alternatively, a <b>synchronous communication</b> would force the <ks>WS</ks> to wait
   the reply of the <ks>transport trolley</ks> after a command making the service less reactive.
+  The <ks>transport trolley</ks> sends also a request to the <ks>WS</ks> to check if the TruckLoad is havier or not than the MAXCapacity and the <ks>WS</ks> reply.
+  (An entity has to send information to WS to communicate that there is a new req, and also the type of waste and the weight? --> so WS ha to receive msg)
 </div><br>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
     <td style="border: 0px">
-        <center><img src="IMG/TRANSPORT TROLLEY.jpg" alt="TRANSPORTROLLEY" width="60%"></center>
+        <center><img src="images/Transport_trolley.png" alt="Transport_trolley" width="60%"><center>
     </td>
     <td style="border: 0px">
       <center><table cellpadding="5%">
@@ -486,56 +378,45 @@ div.imagedesc{
             <th>Semantic</th>
         </tr>
         <tr>
-            <td rowspan="6">command</td>
-            <td>t_moveToIn</td>
-            <td rowspan="6">dispatch</td>
+            <td rowspan="3">??</td>
+            <td>deposit_command</td>
+            <td rowspan="3">dispatch</td>
         </tr>
         <tr>
-            <td>t_moveToOut</td>
+            <td>loadaccept</td>
         </tr>
         <tr>
-            <td>t_moveToSlotIn</td>
+            <td>loadrejected</td>
         </tr>
         <tr>
-            <td>t_moveToSlotOut</td>
-        </tr>
-        <tr>
-            <td>t_backToHome</td>
-        </tr>
-        <tr>
-            <td>t_stop</td>
-        </tr>
-        <tr>
-            <td rowspan="4">reply</td>
+            <td rowspan="3">??</td>
             <td>ok</td>
-            <td rowspan="4">dispatch</td>
+            <td rowspan="3">dispatch</td>
         </tr>
         <tr>
             <td>wait</td>
         </tr>
         <tr>
-            <td>fail</td>
+          <td>waste_action(type, kg)</td>
         </tr>
-        <tr>
-            <td>ok(x,y)</td>
-        </tr>
+      </tr>
     </tbody></table></center>
   </td>
 </tr>
 </table>
 <br>
-<h3> Fan </h3>
-<div class="remark" id="fan">
-The <ks>fan</ks> does not own or produce any valuable information by itself but it is a component controlled by the system.
-Fan status can be changed by the <ks>PMS</ks> through two commands "<kr>turn_on</kr>" and "<kr>turn_off</kr>" respectively to turn it on and to turn it off. As a result of the command, the fan replies
-with its new state. This implies that the fan can only be in two states, one is "on" which indicates that the fun is working while the second one "off" suggests that the fun is not working.
-In case of electric disguise or general failure of the application, the fan must be able to reply with its current
-state whenever the <ks>PMS</ks> requests its state of activation. Similarly to the <ks>transport trolley</ks>, the interaction between the two entities is more predisposed to a <b>synchronous semantics</b>.
+<h3> Led </h3>
+<div class="remark" id="Led">
+The <ks>Led</ks> does not own or produce any valuable information by itself but it is a component controlled by the system.
+The status of the <ks>led</ks> can be changed by the <ks>WS</ks> through three commands "<kr>turn_on</kr>" , "<kr>turn_off</kr>" and "<kr>blink</kr>". As a result of the command, the led replies
+with its new state. 
+This implies that the led can only be in three states, one is "on" which indicates that the <ks>transport trolley</ks> is stopped , the second one is "off" and indicates that the  <ks>transport trolley</ks> is at HOME, the last one is "blink" and indicates that the <ks>transport trolley</ks> is moving,
+The interaction between the <ks>led</ks> and the <ks>WS</ks>  is more predisposed to a <b>synchronous semantics</b>.
 </div> <br>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
     <td style="border: 0px">
-        <center><img src="IMG/FAN.jpg" alt="FAN" width="60%"><center>
+        <center><img src="images/Led.png" alt="Led" width="60%"><center>
     </td>
     <td style="border: 0px">
       <center><table cellpadding="5%">
@@ -550,15 +431,18 @@ state whenever the <ks>PMS</ks> requests its state of activation. Similarly to t
             <td rowspan="3">request</td>
         </tr>
         <tr>
+          <td>turn_blink</td>
+        </tr>
+        <tr>
             <td>turn_off</td>
         </tr>
         <tr>
-            <td>req_status</td>
+            <td rowspan="3">rep_status</td>
+            <td>on</td>
+            <td rowspan="3">reply</td>
         </tr>
         <tr>
-            <td rowspan="2">rep_status</td>
-            <td>on</td>
-            <td rowspan="2">reply</td>
+          <td>blinks</td>
         </tr>
         <tr>
             <td>off</td>
@@ -571,31 +455,29 @@ state whenever the <ks>PMS</ks> requests its state of activation. Similarly to t
 <hr size="4" color="black">
 <br>
 <div class="remark">
-  Requirements analysis shows that the <ks>outsonar</ks>, the <ks>thermometer</ks> and the <ks>weight-sensor</ks> are autonomous active
-  components which emit information in a continuous way. For this reason, the sensors below don't need any replies during the interaction with the <ks>PMS</ks>.
+  Requirements analysis shows that the <ks>Sonar</ks> is an autonomous active (??)
+  component which emit information in a continuous way. For this reason, the sensors below don't need any replies during the interaction with the <ks>WS</ks>.
  <br>
   This behaviour leads to an asynchronous communication that can be developed through different forms:
   <ul>
-    <li><b>Polling</b>: where the <ks>PMS</ks> makes, at a regular interval of time, requests to sensors;</li>
-    <li><b>Dispatches</b>: sent from sensor to the <ks>PMS</ks>;</li>
-    <li><b>Events</b>: generated from sensors and sent in broadcast through networks.</li>
+    <li><b>Dispatches</b>: sent from sensor to the <ks>WS</ks>;</li>
+    <li><b>Polling</b>: where the <ks>WS</ks> makes, at a regular interval of time, requests to the sensor;</li>
+     <li><b>Events</b>: generated from the sensor and sent in broadcast through networks.</li>
   </ul>
-  Following the discussion with the customer, each of these components isn't aware about the rest of the system.
-  This leads to events being the best form of interaction between components and the <ks>PMS</ks>.
+ the Sonar isn't aware about the rest of the system(???)
+  This leads to events being the best form of interaction between components and the <ks>WS</ks>.
 </div>
-<div id="problem_analysis_out_sonar">
-  <h3> Out-Sonar </h3>
+<div id="problem_analysis_sonar">
+  <h3> Sonar </h3>
   <div class="remark">
-    Data from the <ks>out-sonar</ks> is used when a client starts the <ks>acceptOUT</ks> procedure and to trigger the alarm procedure
-    if it detects a car in the <ks>OUTDOOR-AREA</ks> for more than <ks>DFTREE</ks> time.
-    Moreover, as previously stated, <ks>out-sonar</ks> emits events which contain the <b>distance misured</b> and the relative <b>timestamp</b>.<br>
-    Customer's <a href="./SonarAlone.c">SonarAlone.c</a> can be used in order to simplify the development of this component.
+    The <ks>Sonar</ks> is used as an ‘alarm device’: when it measures a distance less that a prefixed value <ks>DLIMT</ks>, the transport trolley must be stopped. It will be resumed when Sonar detects again a distance higher than DLIMT.
+    Il Sonar manda continuamente la misura al WS (??)
     <br>
   </div>
   <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
     <tr>
       <td style="border: 0px">
-          <center><img src="IMG/OUTSONAR.jpg" alt="OUTSONAR" width="60%"><center>
+          <center><img src="images/Sonar.png" alt="Sonar" width="60%"><center>
       </td>
       <td style="border: 0px">
         <center>
@@ -616,99 +498,18 @@ state whenever the <ks>PMS</ks> requests its state of activation. Similarly to t
 </tr>
 </table>
 </div>
-<div id="problem_analysis_weight_sensor">
-  <h3>Weightsensor</h3>
-    <div class="remark">
-      Data from <ks>weightsensor</ks> is used when a client starts the <ks>acceptIN</ks> procedure by pressing the <ks>CARENTER</ks> button. Like the sonar,
-      the <ks>weightsensor</ks> has to emit events which contains the weight measured and the relative timestamp in order to guarantee data freshness. <br>
-    </div>
-      <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
-        <tr>
-          <td style="border: 0px">
-              <center><img src="IMG/WEIGHTSENSOR.png" alt="WEIGHTSENSOR" width="60%"><center>
-          </td>
-          <td style="border: 0px">
-            <center>
-      <table cellpadding="5%">
-        <tbody>
-          <tr>
-            <th>Message</th>
-            <th>Content</th>
-            <th>Type</th>
-          </tr>
-          <tr>
-            <td>event</td>
-            <td>weight, timestamp</td>
-            <td>event</td>
-          </tr>
-        </tbody>
-    </table>
-  </center>
- </td>
- </tr>
- </table>
-</div>
-<div id="problem_analysis_thermometer">
-  <h3>Thermometer</h3>
-  <div class="remark">
-    <ks>Thermometer</ks> measures the temperature of the parking room and sends events to the <ks>PMS</ks>. Since temperature usually doesn't change
-    that quickly, events can be sent at regular time interval which can help the application to rely in a less bandwidth usage. The time interval
-    must take into account of the position of the thermometer in the parking room.
-  </div>
-  <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
-    <tr>
-      <td style="border: 0px">
-          <center><img src="IMG/THERMOMETER.png" alt="THERMOMETER" width="60%"><center>
-      </td>
-      <td style="border: 0px">
-        <center>
-  <table cellpadding="5%">
-    <tbody>
-      <tr>
-        <th>Message</th>
-        <th>Content</th>
-        <th>Type</th>
-      </tr>
-      <tr>
-        <td>event</td>
-        <td>temperature, timestamp</td>
-        <td>event</td>
-      </tr>
-    </tbody>
-</table>
-</center>
-</td>
-</tr>
-</table>
-</div>
-<div id="problem_analysis_map">
-  <h3> Map </h3>
-  <div class="remark">
-    The <ks>map</ks> is a passive element that is used by the <ks>PMS</ks> to manage the state of the parking-area.
-    In order to simplify the use of the map, it is represented by an image composed of different symbols:
-    <ul>
-      <li>the symbol <b>h</b> represent the "home" position of the trasport trolley;</li>
-      <li>the symbol <b>0</b> represents an area where the trasport trolley can move;</li>
-      <li>the numbers from <b>1</b> to <b>6</b> represent the parking slots, where the cars can be parked. The specific number is the SLOTNUM used by the core system;</li>
-      <li>the symbol <b>|</b> represents a wall;</li>
-      <li>he symbol <b>i</b> represents the position of coordinates (6,0), where a car is left by a client;</li>
-      <li>the symbol <b>o</b> represents the position of coordinates (6,4), where a car is brought by the trasport trolley to be picked up by the customer.</li>
-  </ul>
-  <img src="IMG/map.png" alt="MAP" width="20%">
-  </div>
-</div>
+
+<div id="problem_analysis_Service_Area">
+  <h3> Service_Area ?? </h3>
+  
 <div id="problem_analysis_GUI_overview">
   <h4>GUI overview</h4>
   <div class="remark">
-    In an attempt to achieve a wider catchment area and to guarantee simplicity and portability both GUIs should be web
-    interfaces. In that case, <a href="https://spring.io/"><b>Spring</b></a>,
-    <a href="https://sparkjava.com/"><b>Spark</b></a> and <a href="https://grails.org/"><b>Grails</b></a>
-      frameworks are technologies that can be used to simplify the development of the two GUIs.
-    Furthermore, both client and manager interfaces should be clear and user-friendly.
+   To implement the GUI we will try to make it more easy and lighter, we'll probably use SpringBoot (and other tools), the service-manager interface should be clear and user-friendly.
   </div>
 </div>
-<div id="problem_analysis_parking_service_status_GUI">
-  <h3>ParkServiceStatusGUI</h3>
+<div id="problem_analysis_waste_service_status_GUI">
+  <h3>WasteServiceStatusGUI</h3>
   <div class="remark">
     Manager's interface must be able to send commands to the fan and the <ks>trasport trolley</ks> as well as receive and show details
     about current system status. Another key functionality that the manager's interface must integrate is the ability
@@ -1104,8 +905,7 @@ Test plans are based on the model developed and are available <a href="https://g
 </div>
 
 <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
-By Cristaudo Giuseppe, Manfreda Filippo, Andrini Enrico; email: giuseppe.cristaudo@studio.unibo.it, filippo.manfreda@studio.unibo.it, enrico.andrini@studio.unibo.it
-<!--<img src="./img/emiglio.png" alt="mbot" width="15%" height="15%">-->
+By Bignami Filippo, Greco Davide; email: filippo.bignami@studio.unibo.it,  davide.greco4@studio.unibo.it
 </div>
 </body>
 </html>
