@@ -1,9 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-    <!--
-<link rel="stylesheet" type="text/css" href="../css/issStyle1.css">
-<script type="text/javascript" src="../css/issStyle.js"></script>
--->
+
 <style type="text/css">
 body
 {
@@ -369,7 +366,7 @@ div.imagedesc{
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
     <td style="border: 0px">
-        <center><img src="images/Transport_trolley.png" alt="Transport_trolley" width="60%"><center>
+        <center><img src="images/Transport_trolley.png" alt="Transport_trolley" width="70%"><center>
     </td>
     <td style="border: 0px">
       <center><table cellpadding="5%">
@@ -379,26 +376,30 @@ div.imagedesc{
             <th>Semantic</th>
         </tr>
         <tr>
-            <td rowspan="3">??</td>
+            <td rowspan="1">WS_command(?)</td>
             <td>deposit_command</td>
-            <td rowspan="3">dispatch</td>
+            <td rowspan="1">dispatch</td>
         </tr>
         <tr>
-            <td>loadaccept</td>
+          <td rowspan="2">WS_rep(?)</td>
+          <td>loadaccept</td>
+          <td rowspan="2">reply</td>
         </tr>
         <tr>
             <td>loadrejected</td>
         </tr>
         <tr>
-            <td rowspan="3">??</td>
+            <td rowspan="2">T_response</td>
             <td>ok</td>
-            <td rowspan="3">dispatch</td>
+            <td rowspan="2">dispatch</td>
         </tr>
         <tr>
             <td>wait</td>
         </tr>
         <tr>
-          <td>waste_action(type, kg)</td>
+            <td rowspan="1">T_request(?)</td>
+            <td>waste_action(type, kg)</td>
+            <td rowspan="1">request</td>
         </tr>
       </tr>
     </tbody></table></center>
