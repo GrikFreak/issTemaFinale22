@@ -1,20 +1,20 @@
-!SESSION 2022-06-21 17:53:52.636 -----------------------------------------------
-eclipse.buildId=4.20.0.I20210611-1600
+!SESSION 2022-06-24 15:55:49.555 -----------------------------------------------
+eclipse.buildId=4.22.0.I20211124-1800
 java.version=14.0.2
 java.vendor=Oracle Corporation
 BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=it_IT
-Framework arguments:  -product org.eclipse.epp.package.dsl.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.dsl.product
+Framework arguments:  -product org.eclipse.epp.package.dsl.product -product org.eclipse.epp.package.dsl.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.dsl.product -data C:\issTF22\issTemaFinale22 -product org.eclipse.epp.package.dsl.product
 
-!ENTRY org.eclipse.jface 2 0 2022-06-21 17:54:22.532
+!ENTRY org.eclipse.jface 2 0 2022-06-24 15:55:54.887
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2022-06-21 17:54:22.532
+!SUBENTRY 1 org.eclipse.jface 2 0 2022-06-24 15:55:54.887
 !MESSAGE A conflict occurred for CTRL+SHIFT+T:
 Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
 		Open a type in a Java editor,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@33a3e5db,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4d8522ff,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
@@ -22,243 +22,1221 @@ Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
 		,
 		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4f9213d2,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1c9975a8,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2022-06-24 15:55:54.887
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3883031d,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5d6d424d,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
 
-!ENTRY org.eclipse.egit.ui 2 0 2022-06-21 17:54:32.488
+!ENTRY org.eclipse.egit.ui 2 0 2022-06-24 15:56:01.176
 !MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
 user global configuration and to define the default location to store repositories: 'C:\Users\dgree'. If this is
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.equinox.p2.operations 4 0 2022-06-21 18:12:06.499
-!MESSAGE Operation details
-!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2022-06-21 18:12:06.499
-!MESSAGE Your original request has been modified.
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 1 10003 2022-06-21 18:12:06.499
-!MESSAGE "Xtext Complete SDK" is already installed, so an update will be performed instead.
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2022-06-21 18:12:06.499
-!MESSAGE "Xtext Redistributable" will be ignored because a newer version is already installed. 
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 1 10003 2022-06-21 18:12:06.499
-!MESSAGE "Xtend IDE" is already installed, so an update will be performed instead.
-!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10054 2022-06-21 18:12:06.499
-!MESSAGE Cannot complete the install because of a conflicting dependency.
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.499
-!MESSAGE Software being installed: Xtext Complete SDK 2.27.0.v20220530-0508 (org.eclipse.xtext.sdk.feature.group 2.27.0.v20220530-0508)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.499
-!MESSAGE Software currently installed: MWE2 Language SDK 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.12.1.v20210218-2134)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.499
-!MESSAGE Only one of the following can be installed at once: 
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.499
-!MESSAGE MWE2 Language UI 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.ui 2.12.1.v20210218-2134)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.499
-!MESSAGE MWE2 Language UI 2.13.0.v20220519-1115 (org.eclipse.emf.mwe2.language.ui 2.13.0.v20220519-1115)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.499
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.499
-!MESSAGE From: MWE2 Language SDK 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.12.1.v20210218-2134)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.499
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.ui [2.12.1.v20210218-2134,2.12.1.v20210218-2134]
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.499
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.499
-!MESSAGE From: MWE2 Language SDK 2.13.0.v20220519-1115 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.13.0.v20220519-1115)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.500
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.ui [2.13.0.v20220519-1115,2.13.0.v20220519-1115]
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.500
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.500
-!MESSAGE From: Xtext Complete SDK 2.27.0.v20220530-0508 (org.eclipse.xtext.sdk.feature.group 2.27.0.v20220530-0508)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.500
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.sdk.feature.group 2.13.0
-
-!ENTRY org.eclipse.equinox.p2.operations 4 0 2022-06-21 18:12:06.510
-!MESSAGE Operation details
-!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2022-06-21 18:12:06.510
-!MESSAGE Your original request has been modified.
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 1 10003 2022-06-21 18:12:06.510
-!MESSAGE "Xtext Complete SDK" is already installed, so an update will be performed instead.
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2022-06-21 18:12:06.510
-!MESSAGE "Xtext Redistributable" will be ignored because a newer version is already installed. 
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 1 10003 2022-06-21 18:12:06.510
-!MESSAGE "Xtend IDE" is already installed, so an update will be performed instead.
-!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10054 2022-06-21 18:12:06.510
-!MESSAGE Cannot complete the install because of a conflicting dependency.
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE Software being installed: Xtext Complete SDK 2.27.0.v20220530-0508 (org.eclipse.xtext.sdk.feature.group 2.27.0.v20220530-0508)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE Software currently installed: MWE2 Language SDK 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.12.1.v20210218-2134)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.510
-!MESSAGE Only one of the following can be installed at once: 
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE MWE2 Language UI 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.ui 2.12.1.v20210218-2134)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE MWE2 Language UI 2.13.0.v20220519-1115 (org.eclipse.emf.mwe2.language.ui 2.13.0.v20220519-1115)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.510
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE From: MWE2 Language SDK 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.12.1.v20210218-2134)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.ui [2.12.1.v20210218-2134,2.12.1.v20210218-2134]
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.510
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE From: MWE2 Language SDK 2.13.0.v20220519-1115 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.13.0.v20220519-1115)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.ui [2.13.0.v20220519-1115,2.13.0.v20220519-1115]
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.510
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE From: Xtext Complete SDK 2.27.0.v20220530-0508 (org.eclipse.xtext.sdk.feature.group 2.27.0.v20220530-0508)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.510
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.sdk.feature.group 2.13.0
-
-!ENTRY org.eclipse.equinox.p2.operations 4 0 2022-06-21 18:12:06.526
-!MESSAGE Operation details
-!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2022-06-21 18:12:06.526
-!MESSAGE Your original request has been modified.
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 1 10003 2022-06-21 18:12:06.526
-!MESSAGE "Xtext Complete SDK" is already installed, so an update will be performed instead.
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2022-06-21 18:12:06.526
-!MESSAGE "Xtext Redistributable" will be ignored because a newer version is already installed. 
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 1 10003 2022-06-21 18:12:06.526
-!MESSAGE "Xtend IDE" is already installed, so an update will be performed instead.
-!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10054 2022-06-21 18:12:06.526
-!MESSAGE Cannot complete the install because of a conflicting dependency.
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE Software being installed: Xtext Complete SDK 2.27.0.v20220530-0508 (org.eclipse.xtext.sdk.feature.group 2.27.0.v20220530-0508)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE Software currently installed: MWE2 Language SDK 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.12.1.v20210218-2134)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.526
-!MESSAGE Only one of the following can be installed at once: 
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE MWE2 Language UI 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.ui 2.12.1.v20210218-2134)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE MWE2 Language UI 2.13.0.v20220519-1115 (org.eclipse.emf.mwe2.language.ui 2.13.0.v20220519-1115)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.526
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE From: MWE2 Language SDK 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.12.1.v20210218-2134)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.ui [2.12.1.v20210218-2134,2.12.1.v20210218-2134]
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.526
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE From: MWE2 Language SDK 2.13.0.v20220519-1115 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.13.0.v20220519-1115)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.ui [2.13.0.v20220519-1115,2.13.0.v20220519-1115]
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.526
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE From: Xtext Complete SDK 2.27.0.v20220530-0508 (org.eclipse.xtext.sdk.feature.group 2.27.0.v20220530-0508)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.526
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.sdk.feature.group 2.13.0
-
-!ENTRY org.eclipse.equinox.p2.operations 4 0 2022-06-21 18:12:06.527
-!MESSAGE Operation details
-!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2022-06-21 18:12:06.527
-!MESSAGE Your original request has been modified.
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 1 10003 2022-06-21 18:12:06.527
-!MESSAGE "Xtext Complete SDK" is already installed, so an update will be performed instead.
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2022-06-21 18:12:06.527
-!MESSAGE "Xtext Redistributable" will be ignored because a newer version is already installed. 
-!SUBENTRY 2 org.eclipse.equinox.p2.operations 1 10003 2022-06-21 18:12:06.527
-!MESSAGE "Xtend IDE" is already installed, so an update will be performed instead.
-!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10054 2022-06-21 18:12:06.527
-!MESSAGE Cannot complete the install because of a conflicting dependency.
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.527
-!MESSAGE Software being installed: Xtext Complete SDK 2.27.0.v20220530-0508 (org.eclipse.xtext.sdk.feature.group 2.27.0.v20220530-0508)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.527
-!MESSAGE Software currently installed: MWE2 Language SDK 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.12.1.v20210218-2134)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.527
-!MESSAGE Only one of the following can be installed at once: 
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.527
-!MESSAGE MWE2 Language UI 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.ui 2.12.1.v20210218-2134)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.527
-!MESSAGE MWE2 Language UI 2.13.0.v20220519-1115 (org.eclipse.emf.mwe2.language.ui 2.13.0.v20220519-1115)
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.527
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.527
-!MESSAGE From: MWE2 Language SDK 2.12.1.v20210218-2134 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.12.1.v20210218-2134)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.527
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.ui [2.12.1.v20210218-2134,2.12.1.v20210218-2134]
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.527
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.527
-!MESSAGE From: MWE2 Language SDK 2.13.0.v20220519-1115 (org.eclipse.emf.mwe2.language.sdk.feature.group 2.13.0.v20220519-1115)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.528
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.ui [2.13.0.v20220519-1115,2.13.0.v20220519-1115]
-!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2022-06-21 18:12:06.528
-!MESSAGE Cannot satisfy dependency:
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.528
-!MESSAGE From: Xtext Complete SDK 2.27.0.v20220530-0508 (org.eclipse.xtext.sdk.feature.group 2.27.0.v20220530-0508)
-!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2022-06-21 18:12:06.528
-!MESSAGE To: org.eclipse.equinox.p2.iu; org.eclipse.emf.mwe2.language.sdk.feature.group 2.13.0
-
-!ENTRY org.eclipse.equinox.p2.touchpoint.natives 2 0 2022-06-21 18:31:17.612
-!MESSAGE Could not remove temporary backup directory (it is safe to manually delete it and its contents): C:\Users\dgree\AppData\Local\Temp\epp.package.dsl_3030e3522c80_a02087b0da9
-!SESSION 2022-06-22 10:01:09.756 -----------------------------------------------
-eclipse.buildId=4.24.0.I20220607-0700
+!SESSION 2022-06-24 15:59:59.189 -----------------------------------------------
+eclipse.buildId=4.22.0.I20211124-1800
 java.version=14.0.2
 java.vendor=Oracle Corporation
 BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=it_IT
 Framework arguments:  -product org.eclipse.epp.package.dsl.product
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.dsl.product
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.029
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.buildship.ui.views.taskview" id and the "Gradle Tasks" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.eclipse.jface 2 0 2022-06-24 16:00:04.082
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2022-06-24 16:00:04.082
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4f2d8175,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@44618fe6,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2022-06-24 16:00:04.082
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2b15ba1a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@796fe2b5,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.031
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.buildship.ui.views.executionview" id and the "Gradle Executions" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.eclipse.egit.ui 2 0 2022-06-24 16:00:07.332
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\dgree'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.039
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.egit.ui.RepositoriesView" id and the "Git Repositories" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.apache.log4j 2 0 2022-06-24 16:24:41.528
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Val' is an invalid ID
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.039
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.egit.ui.StagingView" id and the "Git Staging" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Val' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completePAtomic_Val(AbstractQactorkProposalProvider.java:364)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.lambda$0(CompletionProposalPopup.java:507)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.showProposals(CompletionProposalPopup.java:502)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.showPossibleCompletions(ContentAssistant.java:1858)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:978)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1466)
+	at org.eclipse.ui.texteditor.ContentAssistAction.lambda$0(ContentAssistAction.java:85)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.ui.texteditor.ContentAssistAction.run(ContentAssistAction.java:84)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:121)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:97)
+	at jdk.internal.reflect.GeneratedMethodAccessor86.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:317)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:251)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:173)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:156)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:487)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:213)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:308)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:647)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:439)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:96)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1280)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1059)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1084)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1069)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1111)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1107)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1536)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4875)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:345)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4753)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:340)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5002)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3630)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.040
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.egit.ui.InteractiveRebaseView" id and the "Git Interactive Rebase" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.apache.log4j 2 0 2022-06-24 16:24:41.536
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Functor' is an invalid ID
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.041
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.egit.ui.CompareTreeView" id and the "Git Tree Compare" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Functor' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completePStruct_Functor(AbstractQactorkProposalProvider.java:373)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.lambda$0(CompletionProposalPopup.java:507)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.showProposals(CompletionProposalPopup.java:502)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.showPossibleCompletions(ContentAssistant.java:1858)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:978)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1466)
+	at org.eclipse.ui.texteditor.ContentAssistAction.lambda$0(ContentAssistAction.java:85)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.ui.texteditor.ContentAssistAction.run(ContentAssistAction.java:84)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:121)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:97)
+	at jdk.internal.reflect.GeneratedMethodAccessor86.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:317)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:251)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:173)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:156)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:487)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:213)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:308)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:647)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:439)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:96)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1280)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1059)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1084)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1069)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1111)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1107)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1536)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4875)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:345)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4753)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:340)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5002)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3630)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.041
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.egit.ui.ReflogView" id and the "Git Reflog" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.apache.log4j 2 0 2022-06-24 16:25:50.640
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Val' is an invalid ID
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.043
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.gef.ui.palette_view" id and the "Palette" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Val' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completePAtomic_Val(AbstractQactorkProposalProvider.java:364)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.lambda$0(CompletionProposalPopup.java:507)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.showProposals(CompletionProposalPopup.java:502)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.showPossibleCompletions(ContentAssistant.java:1858)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:978)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1466)
+	at org.eclipse.ui.texteditor.ContentAssistAction.lambda$0(ContentAssistAction.java:85)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.ui.texteditor.ContentAssistAction.run(ContentAssistAction.java:84)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:121)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:97)
+	at jdk.internal.reflect.GeneratedMethodAccessor86.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:317)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:251)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:173)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:156)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:487)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:213)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:308)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:647)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:439)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:96)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1280)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1059)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1084)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1069)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1111)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1107)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1536)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4875)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:345)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4753)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:340)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5002)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3630)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.057
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.m2e.core.views.MavenRepositoryView" id and the "Maven Repositories" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.apache.log4j 2 0 2022-06-24 16:25:50.644
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Functor' is an invalid ID
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.058
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.m2e.core.views.MavenBuild" id and the "Maven Workspace Build" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Functor' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completePStruct_Functor(AbstractQactorkProposalProvider.java:373)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.lambda$0(CompletionProposalPopup.java:507)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.showProposals(CompletionProposalPopup.java:502)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.showPossibleCompletions(ContentAssistant.java:1858)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:978)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1466)
+	at org.eclipse.ui.texteditor.ContentAssistAction.lambda$0(ContentAssistAction.java:85)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.ui.texteditor.ContentAssistAction.run(ContentAssistAction.java:84)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:121)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:97)
+	at jdk.internal.reflect.GeneratedMethodAccessor86.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:317)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:251)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:173)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:156)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:487)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:213)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:308)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:647)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:439)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:96)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1280)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1059)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1084)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1069)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1111)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1107)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1536)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4875)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:345)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4753)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:340)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5002)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3630)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.059
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.pde.api.tools.ui.views.apitooling.views.apitoolingview" id and the "API Tools" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.apache.log4j 2 0 2022-06-24 16:52:33.219
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Val' is an invalid ID
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.059
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.pde.runtime.RegistryBrowser" id and the "Plug-in Registry" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Val' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completePAtomic_Val(AbstractQactorkProposalProvider.java:364)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.lambda$0(CompletionProposalPopup.java:507)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.showProposals(CompletionProposalPopup.java:502)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.showPossibleCompletions(ContentAssistant.java:1858)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:978)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1466)
+	at org.eclipse.ui.texteditor.ContentAssistAction.lambda$0(ContentAssistAction.java:85)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.ui.texteditor.ContentAssistAction.run(ContentAssistAction.java:84)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:121)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:97)
+	at jdk.internal.reflect.GeneratedMethodAccessor86.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:317)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:251)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:173)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:156)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:487)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:213)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:308)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:647)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:439)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:96)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1280)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1059)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1084)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1069)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1111)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1107)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1536)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4875)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:345)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4753)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:340)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5002)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3630)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.079
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.search.SearchResultView" id and the "Classic Search" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.apache.log4j 2 0 2022-06-24 16:52:33.222
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Functor' is an invalid ID
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.102
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.wst.common.snippets.internal.ui.SnippetsView" id and the "Snippets" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Functor' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completePStruct_Functor(AbstractQactorkProposalProvider.java:373)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.lambda$0(CompletionProposalPopup.java:507)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.showProposals(CompletionProposalPopup.java:502)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.showPossibleCompletions(ContentAssistant.java:1858)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:978)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1466)
+	at org.eclipse.ui.texteditor.ContentAssistAction.lambda$0(ContentAssistAction.java:85)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.ui.texteditor.ContentAssistAction.run(ContentAssistAction.java:84)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:121)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:97)
+	at jdk.internal.reflect.GeneratedMethodAccessor86.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:317)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:251)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:173)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:156)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:487)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:213)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:308)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:647)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:439)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:96)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1280)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1059)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1084)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1069)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1111)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1107)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1536)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4875)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:345)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4753)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:340)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5002)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3630)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.103
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.wst.xml.ui.views.annotations.XMLAnnotationsView" id and the "Documentation" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!ENTRY org.apache.log4j 2 0 2022-06-24 16:52:33.933
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Val' is an invalid ID
 
-!ENTRY org.eclipse.e4.ui.workbench 2 0 2022-06-22 10:01:46.103
-!MESSAGE Removing PartDescriptorImpl with the "org.eclipse.wst.xml.ui.contentmodel.view" id and the "Content Model" label.It points to the non available "bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" class. Bundle might have been uninstalled
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Val' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completePAtomic_Val(AbstractQactorkProposalProvider.java:364)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeFilteredProposals(CompletionProposalPopup.java:1515)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup$1.run(CompletionProposalPopup.java:367)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:185)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4035)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3635)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
 
-!ENTRY org.eclipse.oomph.setup.core 2 0 2022-06-22 10:01:53.956
-!MESSAGE The Eclipse Git-hosted URI 'http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/interim/GMFRuntime.setup' is blocked for direct access.
-Please open a Bugzilla to add it to an official Oomph catalog.
-For initial testing, use the file system local version of the resource.
-Alternatively, run the setup archiver application as follows:
-  C:\Program Files\eclipse\eclipsec.exe -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/interim/GMFRuntime.setup
+!ENTRY org.apache.log4j 2 0 2022-06-24 16:52:33.936
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Functor' is an invalid ID
+
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Functor' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completePStruct_Functor(AbstractQactorkProposalProvider.java:373)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeFilteredProposals(CompletionProposalPopup.java:1515)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup$1.run(CompletionProposalPopup.java:367)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:185)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4035)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3635)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.apache.log4j 2 0 2022-06-24 17:02:32.931
+!MESSAGE org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider  - Error in polymorphic dispatcher : The value 'Name' is an invalid ID
+
+!STACK 0
+org.eclipse.xtext.conversion.ValueConverterException: The value 'Name' is an invalid ID
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.createTokenTypeMismatchException(AbstractLexerBasedConverter.java:79)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:70)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.assertTokens(AbstractLexerBasedConverter.java:59)
+	at org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter.toString(AbstractLexerBasedConverter.java:50)
+	at org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService.toString(AbstractDeclarativeValueConverterService.java:75)
+	at org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider.complete_ID(TerminalsProposalProvider.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeRuleCall(AbstractJavaBasedContentProposalProvider.java:197)
+	at it.unibo.ui.contentassist.AbstractQactorkProposalProvider.completeState_Name(AbstractQactorkProposalProvider.java:139)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.xtext.util.PolymorphicDispatcher.invoke(PolymorphicDispatcher.java:303)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.invokeMethod(AbstractJavaBasedContentProposalProvider.java:301)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.completeAssignment(AbstractJavaBasedContentProposalProvider.java:206)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:67)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.caseAssignment(AbstractContentProposalProvider.java:1)
+	at org.eclipse.xtext.util.XtextSwitch.doSwitch(XtextSwitch.java:144)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:53)
+	at org.eclipse.emf.ecore.util.Switch.doSwitch(Switch.java:69)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider$DefaultContentAssistProcessorSwitch.accept(AbstractContentProposalProvider.java:73)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractContentProposalProvider.createProposals(AbstractContentProposalProvider.java:105)
+	at org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.createProposals(AbstractJavaBasedContentProposalProvider.java:276)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:53)
+	at org.eclipse.xtext.ui.editor.contentassist.CompletionProposalComputer.exec(CompletionProposalComputer.java:1)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.priorityReadOnly(XtextDocument.java:489)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.priorityReadOnly(XtextDocument.java:145)
+	at org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor.computeCompletionProposals(XtextContentAssistProcessor.java:77)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.lambda$0(ContentAssistant.java:2048)
+	at java.base/java.util.Collections$SingletonSet.forEach(Collections.java:4872)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$2.run(ContentAssistant.java:2047)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.computeCompletionProposals(ContentAssistant.java:2044)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.computeProposals(CompletionProposalPopup.java:577)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.lambda$0(CompletionProposalPopup.java:507)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.showProposals(CompletionProposalPopup.java:502)
+	at org.eclipse.jface.text.contentassist.ContentAssistant.showPossibleCompletions(ContentAssistant.java:1858)
+	at org.eclipse.jface.text.source.SourceViewer.doOperation(SourceViewer.java:978)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.doOperation(ProjectionViewer.java:1466)
+	at org.eclipse.ui.texteditor.ContentAssistAction.lambda$0(ContentAssistAction.java:85)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:74)
+	at org.eclipse.ui.texteditor.ContentAssistAction.run(ContentAssistAction.java:84)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.commands.ActionHandler.execute(ActionHandler.java:121)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.execute(E4HandlerProxy.java:97)
+	at jdk.internal.reflect.GeneratedMethodAccessor86.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invokeUsingClass(InjectorImpl.java:317)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.invoke(InjectorImpl.java:251)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.invoke(ContextInjectionFactory.java:173)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceHandler.execute(HandlerServiceHandler.java:156)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:487)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.executeHandler(HandlerServiceImpl.java:213)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.executeCommand(KeyBindingDispatcher.java:308)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.press(KeyBindingDispatcher.java:580)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.processKeyEvent(KeyBindingDispatcher.java:647)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher.filterKeySequenceBindings(KeyBindingDispatcher.java:439)
+	at org.eclipse.e4.ui.bindings.keys.KeyBindingDispatcher$KeyDownFilter.handleEvent(KeyBindingDispatcher.java:96)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.filterEvent(Display.java:1280)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1059)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1084)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1069)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1111)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1107)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1536)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4875)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:345)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4753)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:340)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5002)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3630)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1154)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1045)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:644)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:551)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:156)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:401)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+!SESSION 2022-06-25 10:50:07.787 -----------------------------------------------
+eclipse.buildId=4.22.0.I20211124-1800
+java.version=14.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=it_IT
+Framework arguments:  -product org.eclipse.epp.package.dsl.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.dsl.product
+
+!ENTRY org.eclipse.jface 2 0 2022-06-25 10:50:24.416
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2022-06-25 10:50:24.416
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@70cd122,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@79424f25,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2022-06-25 10:50:24.416
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5fd4e67f,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@59b1edab,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2022-06-25 10:50:35.401
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\dgree'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.buildship.core 2 0 2022-06-25 17:14:35.726
+!MESSAGE Failed to detect project changes
+!STACK 1
+org.eclipse.core.runtime.CoreException: SynchronizingBuildScriptUpdateListener failed
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener$1.visit(SynchronizingBuildScriptUpdateListener.java:75)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:77)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:51)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.visitDelta(SynchronizingBuildScriptUpdateListener.java:68)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.resourceChanged(SynchronizingBuildScriptUpdateListener.java:55)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:305)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:295)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:158)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:381)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1503)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2327)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2338)
+	at org.eclipse.jdt.core.JavaCore.run(JavaCore.java:5923)
+	at org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:108)
+	at org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter$1.run(WorkbenchRunnableAdapter.java:121)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.eclipse.buildship.core.internal.GradlePluginsRuntimeException: Can't read root project location for project located at C:\issTF22\issTemaFinale22\it.unibo.WasteService
+	at org.eclipse.buildship.core.internal.configuration.BuildConfigurationPersistence.readPathToRoot(BuildConfigurationPersistence.java:90)
+	at org.eclipse.buildship.core.internal.configuration.DefaultConfigurationManager.loadProjectConfiguration(DefaultConfigurationManager.java:114)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.isEnabledInPreferences(SynchronizingBuildScriptUpdateListener.java:63)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.doVisitDelta(SynchronizingBuildScriptUpdateListener.java:85)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.access$000(SynchronizingBuildScriptUpdateListener.java:44)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener$1.visit(SynchronizingBuildScriptUpdateListener.java:73)
+	... 17 more
+!SUBENTRY 1 org.eclipse.buildship.core 2 0 2022-06-25 17:14:35.729
+!MESSAGE SynchronizingBuildScriptUpdateListener failed
+!STACK 0
+org.eclipse.buildship.core.internal.GradlePluginsRuntimeException: Can't read root project location for project located at C:\issTF22\issTemaFinale22\it.unibo.WasteService
+	at org.eclipse.buildship.core.internal.configuration.BuildConfigurationPersistence.readPathToRoot(BuildConfigurationPersistence.java:90)
+	at org.eclipse.buildship.core.internal.configuration.DefaultConfigurationManager.loadProjectConfiguration(DefaultConfigurationManager.java:114)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.isEnabledInPreferences(SynchronizingBuildScriptUpdateListener.java:63)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.doVisitDelta(SynchronizingBuildScriptUpdateListener.java:85)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.access$000(SynchronizingBuildScriptUpdateListener.java:44)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener$1.visit(SynchronizingBuildScriptUpdateListener.java:73)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:77)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:51)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.visitDelta(SynchronizingBuildScriptUpdateListener.java:68)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.resourceChanged(SynchronizingBuildScriptUpdateListener.java:55)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:305)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:295)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:158)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:381)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1503)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2327)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2338)
+	at org.eclipse.jdt.core.JavaCore.run(JavaCore.java:5923)
+	at org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:108)
+	at org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter$1.run(WorkbenchRunnableAdapter.java:121)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.ui.ide 4 4 2022-06-25 17:14:35.736
+!MESSAGE Problems occurred refreshing the selected resources.
+!SUBENTRY 1 org.eclipse.core.resources 4 567 2022-06-25 17:14:35.736
+!MESSAGE The project description file (.project) for 'it.unibo.WasteService' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+!STACK 0
+java.lang.Exception: The project description file (.project) for 'it.unibo.WasteService' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+	at org.eclipse.core.internal.resources.ResourceException.provideStackTrace(ResourceException.java:42)
+	at org.eclipse.core.internal.resources.ResourceException.<init>(ResourceException.java:38)
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.read(FileSystemResourceManager.java:908)
+	at org.eclipse.core.internal.resources.Project.updateDescription(Project.java:1346)
+	at org.eclipse.core.internal.resources.File.updateMetadataFiles(File.java:376)
+	at org.eclipse.core.internal.localstore.RefreshLocalVisitor.visit(RefreshLocalVisitor.java:291)
+	at org.eclipse.core.internal.localstore.UnifiedTree.accept(UnifiedTree.java:119)
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.refreshResource(FileSystemResourceManager.java:978)
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.refresh(FileSystemResourceManager.java:961)
+	at org.eclipse.core.internal.resources.Resource.refreshLocal(Resource.java:1562)
+	at org.eclipse.ui.actions.RefreshAction.refreshResource(RefreshAction.java:274)
+	at org.eclipse.ui.actions.RefreshAction$2.execute(RefreshAction.java:234)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation.lambda$0(WorkspaceModifyOperation.java:110)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2338)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation.run(WorkspaceModifyOperation.java:131)
+	at org.eclipse.jdt.ui.actions.RefreshAction$WrappedWorkbenchRefreshAction.run(RefreshAction.java:112)
+	at org.eclipse.jdt.ui.actions.RefreshAction.performRefresh(RefreshAction.java:178)
+	at org.eclipse.jdt.ui.actions.RefreshAction.lambda$0(RefreshAction.java:169)
+	at org.eclipse.jdt.internal.core.BatchOperation.executeOperation(BatchOperation.java:41)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2338)
+	at org.eclipse.jdt.core.JavaCore.run(JavaCore.java:5923)
+	at org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:108)
+	at org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter$1.run(WorkbenchRunnableAdapter.java:121)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.buildship.core 2 0 2022-06-25 17:14:35.918
+!MESSAGE Failed to detect project changes
+!STACK 1
+org.eclipse.core.runtime.CoreException: SynchronizingBuildScriptUpdateListener failed
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener$1.visit(SynchronizingBuildScriptUpdateListener.java:75)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:77)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:51)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.visitDelta(SynchronizingBuildScriptUpdateListener.java:68)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.resourceChanged(SynchronizingBuildScriptUpdateListener.java:55)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:305)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:295)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:158)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:381)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1503)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:175)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:251)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.eclipse.buildship.core.internal.GradlePluginsRuntimeException: Can't read root project location for project located at C:\issTF22\issTemaFinale22\it.unibo.WasteService
+	at org.eclipse.buildship.core.internal.configuration.BuildConfigurationPersistence.readPathToRoot(BuildConfigurationPersistence.java:90)
+	at org.eclipse.buildship.core.internal.configuration.DefaultConfigurationManager.loadProjectConfiguration(DefaultConfigurationManager.java:114)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.isEnabledInPreferences(SynchronizingBuildScriptUpdateListener.java:63)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.doVisitDelta(SynchronizingBuildScriptUpdateListener.java:85)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.access$000(SynchronizingBuildScriptUpdateListener.java:44)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener$1.visit(SynchronizingBuildScriptUpdateListener.java:73)
+	... 14 more
+!SUBENTRY 1 org.eclipse.buildship.core 2 0 2022-06-25 17:14:35.919
+!MESSAGE SynchronizingBuildScriptUpdateListener failed
+!STACK 0
+org.eclipse.buildship.core.internal.GradlePluginsRuntimeException: Can't read root project location for project located at C:\issTF22\issTemaFinale22\it.unibo.WasteService
+	at org.eclipse.buildship.core.internal.configuration.BuildConfigurationPersistence.readPathToRoot(BuildConfigurationPersistence.java:90)
+	at org.eclipse.buildship.core.internal.configuration.DefaultConfigurationManager.loadProjectConfiguration(DefaultConfigurationManager.java:114)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.isEnabledInPreferences(SynchronizingBuildScriptUpdateListener.java:63)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.doVisitDelta(SynchronizingBuildScriptUpdateListener.java:85)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.access$000(SynchronizingBuildScriptUpdateListener.java:44)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener$1.visit(SynchronizingBuildScriptUpdateListener.java:73)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:77)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:51)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.visitDelta(SynchronizingBuildScriptUpdateListener.java:68)
+	at org.eclipse.buildship.core.internal.workspace.SynchronizingBuildScriptUpdateListener.resourceChanged(SynchronizingBuildScriptUpdateListener.java:55)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:305)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:295)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:158)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:381)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1503)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:175)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:251)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.core.resources 2 2 2022-06-25 17:14:54.914
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2022-06-25 17:14:54.914
+!MESSAGE The project description file (.project) for 'it.unibo.WasteService' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.

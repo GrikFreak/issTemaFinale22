@@ -1,0 +1,196 @@
+System wasteservicecore
+
+Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
+Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
+Reply loadrejected : loadrejected(MATERIAL, TRUCKLOAD)
+
+Dispatch execute : execute(MATERIAL)
+
+Event containers_weight : containers_weight(GWEIGHT, PWEIGHT)
+
+Event trolley_status : trolley_status(STATUS)
+Event trolley_position : trolley_position(POSITION)
+
+Context ctxWasteService ip [ host="localhost" port=8025 ]
+
+QActor wastetruck context ctxWasteService {
+	
+	[#
+		var Material 	= "";
+		var TruckLoad 	= 0L;
+	#]
+	
+	State s0 initial {
+		printCurrentMessage
+		println("the WasteTruck is waiting..")
+		delay 3000
+		
+		[# val Load = kotlin.random.Random.nextLong(10,100) #]
+		request wasteservice -m waste_request : waste_request(plastic, $Load)
+	}
+	
+	Transition t0 whenReply loadaccept -> accepted
+				  whenReply loadrejected -> rejected 
+				  
+	State accepted {
+		printCurrentMessage
+		onMsg(loadaccept : loadaccept(MATERIAL, TRUCKLOAD)) {
+			[#
+				Material 	= payloadArg(0);
+				TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WasteTruck | accepted $Material load with weight $TruckLoad")
+		}
+	}
+	
+	// if de-commented the system will loop with other waste request 
+	// Goto s0
+	
+	State rejected {
+		printCurrentMessage
+		onMsg(loadrejected : loadrejected(MATERIAL, TRUCKLOAD)) {
+			[#
+				Material 	= payloadArg(0);
+				TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WasteTruck | rejected $Material load with weight $TruckLoad")
+		}
+	}
+	
+	// if de-commented the system will loop with other waste request 
+	// Goto s0
+}
+
+QActor wasteservice context ctxWasteService {
+	
+	[# 
+		var MAXPB 	= 500L;
+		var MAXGB 	= 500L;
+		var CurrentPB = 0L;
+		var CurrentGB = 0L;
+	#]
+	
+	State s0 initial {
+		printCurrentMessage
+		println("the WasteService is waiting..")
+	}
+	
+	Transition t0 whenRequest waste_request -> handle_request
+				  
+	State handle_request {
+		printCurrentMessage
+		onMsg(waste_request : waste_request(MATERIAL, TRUCKLOAD)) {
+			[#
+				var Material 	= payloadArg(0);
+				var TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WasteService | arrived request: $Material load with weight $TruckLoad")
+			if [# Material.equals("plastic") #] {
+				if [# TruckLoad + CurrentPB <= MAXPB #]{
+					replyTo waste_request with loadaccept : loadaccept(plastic, $TruckLoad) 
+					[# CurrentPB += TruckLoad #]
+					println("WasteService | current plastic weight: $CurrentPB")
+					forward transporttrolley -m execute : execute(plastic)
+				} else {
+					replyTo waste_request with loadrejected : loadrejected(plastic, $TruckLoad)
+				}
+			} else {
+				if [# TruckLoad + CurrentGB <= MAXGB #]{
+					replyTo waste_request with loadaccept : loadaccept(glass, $TruckLoad) 
+					[# CurrentGB += TruckLoad #]
+					println("WasteService | current glass weight: $CurrentGB")
+					forward transporttrolley -m execute : execute(glass)
+				} else {
+					replyTo waste_request with loadrejected : loadrejected(glass, $TruckLoad)
+				}
+			}
+			emit containers_weight : containers_weight(CurrentGB, CurrentPB)
+		}
+	}
+	
+	Goto s0
+	
+}
+
+QActor transporttrolley context ctxWasteService {
+	
+	[#
+		var Status	= "IDLE";	
+		var Position = "HOME";
+		var Material = "";
+	#]
+	
+	State s0 initial {
+		printCurrentMessage
+		println("the transportTrolley is waiting..")
+	}
+	
+	Transition t0 whenMsg execute -> move_to_INDOOR
+	
+	State move_to_INDOOR {
+		onMsg(execute : execute(MATERIAL)){
+		 	[# Material = payloadArg(0) #]
+		}
+		printCurrentMessage
+		println("transportTrolley | moving to INDOOR")
+		[# Status = "WORKING" #]
+		[# Position = "GENERIC" #]
+		emit trolley_status : trolley_status(Status)
+		emit trolley_position : trolley_position(Position)
+		delay 500 
+		println("transportTrolley | arrived to INDOOR")
+		println("transportTrolley | picking up $Material")
+		[# Position = "INDOOR" #]
+		emit trolley_position : trolley_position(Position)
+		
+	}
+	
+	Goto move_to_ContainerP if [# Material.equals("plastic") #] else move_to_ContainerG
+	
+	State move_to_ContainerP{
+		printCurrentMessage
+		println("transportTrolley | moving to plastic container ")
+		[# Status = "WORKING" #]
+		emit trolley_status : trolley_status(Status)
+		delay 500 
+		println("transportTrolley | arrived to plastic container")
+		[# Position = "CONTAINERP" #]
+		emit trolley_position : trolley_position(Position)
+		println("transportTrolley | settling plastic")
+		delay 300
+		[# Status = "IDLE" #]
+		emit trolley_status : trolley_status(Status)
+	}
+	
+	Goto move_to_HOME
+	
+	State move_to_ContainerG{
+		printCurrentMessage
+		println("transportTrolley | moving to glass container ")
+		[# Status = "WORKING" #]
+		emit trolley_status : trolley_status(Status)
+		delay 500 
+		println("transportTrolley | arrived to glass container")
+		[# Position = "CONTAINERG" #]
+		emit trolley_position : trolley_position(Position)
+		println("transportTrolley | settling glass")
+		delay 300
+		[# Status = "IDLE" #]
+		emit trolley_status : trolley_status(Status)
+	}
+	
+	Goto move_to_HOME
+	
+	State move_to_HOME{
+		printCurrentMessage
+		println("transportTrolley | coming back to HOME ")
+		delay 500 
+		println("transportTrolley | arrived HOME")
+		[# Position = "HOME" #]
+		emit trolley_position : trolley_position(Position)
+	}
+	
+}
+
+
+
