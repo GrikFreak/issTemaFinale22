@@ -25,9 +25,9 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the transportTrolley is waiting..")
 					}
-					 transition(edgeName="t05",targetState="move_to_INDOOR",cond=whenDispatch("execute"))
-					transition(edgeName="t06",targetState="stop_trolley",cond=whenDispatch("stop"))
-					transition(edgeName="t07",targetState="resume_trolley",cond=whenDispatch("resume"))
+					 transition(edgeName="t07",targetState="move_to_INDOOR",cond=whenDispatch("execute"))
+					transition(edgeName="t08",targetState="stop_trolley",cond=whenDispatch("stop"))
+					transition(edgeName="t09",targetState="resume_trolley",cond=whenDispatch("resume"))
 				}	 
 				state("move_to_INDOOR") { //this:State
 					action { //it:State
@@ -47,6 +47,9 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						println("transportTrolley | picking up $Material of load $TruckLoad")
 						 Position = "INDOOR"  
 						emit("trolley_position", "trolley_position($Position)" ) 
+						delay(500) 
+						println("transportTrolley | picked up, send end action to WS.")
+						forward("withdrawal_done", "withdrawal_done(DONE)" ,"wasteservice" ) 
 					}
 					 transition( edgeName="goto",targetState="move_to_ContainerP", cond=doswitchGuarded({ Material.equals("plastic")  
 					}) )

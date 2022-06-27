@@ -45,10 +45,7 @@ class Wastetruck ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 								println("WasteTruck | accepted $Material load with weight $TruckLoad")
 						}
 					}
-					 transition( edgeName="goto",targetState="s0", cond=doswitchGuarded({ Count <= 2   
-					}) )
-					transition( edgeName="goto",targetState="s1", cond=doswitchGuarded({! ( Count <= 2   
-					) }) )
+					 transition(edgeName="t12",targetState="leave_Indoor",cond=whenDispatch("free_Indoor"))
 				}	 
 				state("rejected") { //this:State
 					action { //it:State
@@ -60,6 +57,12 @@ class Wastetruck ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 												TruckLoad 	= payloadArg(1).toLong();
 								println("WasteTruck | rejected $Material load with weight $TruckLoad")
 						}
+					}
+					 transition( edgeName="goto",targetState="leave_Indoor", cond=doswitch() )
+				}	 
+				state("leave_Indoor") { //this:State
+					action { //it:State
+						println("WASTETRUCK | WasteTruck left Indoor area.")
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitchGuarded({ Count <= 2   
 					}) )

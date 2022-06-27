@@ -4,7 +4,9 @@ Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
 Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
 Reply loadrejected : loadrejected(MATERIAL, TRUCKLOAD)
 
+Dispatch free_Indoor : free_Indoor(FREE)
 Dispatch execute : execute(MATERIAL,TRUCKLOAD)
+Dispatch withdrawal_done : withdrawal_done(DONE)
 
 Event containers_weight : containers_weight(GWEIGHT, PWEIGHT)
 
@@ -49,8 +51,7 @@ QActor wastetruck context ctxWasteService {
 		}
 	}
 	
-	// if de-commented the system will loop with other waste request 
-	// Goto s0
+	Transition t1 whenMsg free_Indoor -> leave_Indoor
 	
 	State rejected {
 		printCurrentMessage
@@ -63,8 +64,13 @@ QActor wastetruck context ctxWasteService {
 		}
 	}
 	
-	// if de-commented the system will loop with other waste request 
-	// Goto s0
+	Goto leave_Indoor
+	
+	State leave_Indoor {
+		println("WASTETRUCK | WasteTruck left Indoor area.")
+	}
+
+	//Goto s0
 }
 
 QActor wasteservice context ctxWasteService {
@@ -116,6 +122,14 @@ QActor wasteservice context ctxWasteService {
 		}
 	}
 	
+	Transition t1 whenMsg withdrawal_done -> send_Done 
+	
+	State send_Done {
+		printCurrentMessage
+		forward wastetruck -m free_Indoor : free_Indoor(FREE)
+		println("WASTESERVICE | Sent message to wt to leave indoor area.")
+	}
+	
 	Goto s0
 	
 }
@@ -154,6 +168,9 @@ QActor transporttrolley context ctxWasteService {
 		println("transportTrolley | picking up $Material of load $TruckLoad")
 		[# Position = "INDOOR" #]
 		emit trolley_position : trolley_position(Position)
+		delay 500
+		println("transportTrolley | picked up, send end action to WS.")
+		forward wasteservice -m withdrawal_done : withdrawal_done(DONE)
 		
 	}
 	

@@ -25,7 +25,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the WasteService is waiting..")
 					}
-					 transition(edgeName="t02",targetState="handle_request",cond=whenRequest("waste_request"))
+					 transition(edgeName="t03",targetState="handle_request",cond=whenRequest("waste_request"))
 				}	 
 				state("handle_request") { //this:State
 					action { //it:State
@@ -62,6 +62,14 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 }
 								emit("containers_weight", "containers_weight(CurrentGB,CurrentPB)" ) 
 						}
+					}
+					 transition(edgeName="t14",targetState="send_Done",cond=whenDispatch("withdrawal_done"))
+				}	 
+				state("send_Done") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						forward("free_Indoor", "free_Indoor(FREE)" ,"wastetruck" ) 
+						println("WASTESERVICE | Sent message to wt to leave indoor area.")
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 

@@ -25,7 +25,7 @@ class Sonar ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scop
 						stateTimer = TimerActor("timer_s0", 
 							scope, context!!, "local_tout_sonar_s0", 100.toLong() )
 					}
-					 transition(edgeName="t09",targetState="detect",cond=whenTimeout("local_tout_sonar_s0"))   
+					 transition(edgeName="t011",targetState="detect",cond=whenTimeout("local_tout_sonar_s0"))   
 				}	 
 				state("detect") { //this:State
 					action { //it:State

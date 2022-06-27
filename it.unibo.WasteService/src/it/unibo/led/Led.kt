@@ -22,7 +22,7 @@ class Led ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scope 
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the Led is ready..")
 					}
-					 transition(edgeName="t08",targetState="change_status",cond=whenEvent("change_led"))
+					 transition(edgeName="t010",targetState="change_status",cond=whenEvent("change_led"))
 				}	 
 				state("change_status") { //this:State
 					action { //it:State

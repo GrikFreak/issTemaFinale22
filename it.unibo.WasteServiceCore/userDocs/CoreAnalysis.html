@@ -460,6 +460,7 @@ div.imagedesc{
  We decided to use a dispatch because , by requirements , we have to active a serious of action and the Waste Service doesn't need to know when the deposit action is ended.
  Furthermore the WasteService is in charge to keep track of the weight in the two containers and to update their weights when a deposit action is finished.
  At the end it will emitt an event <ks>containers_weight</ks> to the GUI.
+ For us the event is the right choice in this case because the WasteService doesn't need to know the existence of the GUI.
 
 </div>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
@@ -498,8 +499,12 @@ div.imagedesc{
 
   <h3> Transport trolley </h3>
 <div class="remark" id="problem_analysis_transport_trolley">
- The Transport Trolley sends two events to the GUI.
- The first one <ks>trolley_status</ks> shows the status of the Trolley and could be :
+The Transport Trolley, in this phase, has to comunicate to the GUI its Status and its Position.
+This requirement can be implemented in various ways, for example with two dispatches to the GUI.
+We  also thought  about the option to make only one dispatch with both information but , beacuse the Status of the Trolley doesn't change every time it changes its position we thought it was not necessary to send superfluous informations,
+However, the use of dispatches did not seem adequate to us as the Transport Trolley must know the existence of the GUI and this did not seem necessary to us.
+For this reason we decided to use two events:
+ the first one <ks>trolley_status</ks> shows the status of the Trolley and could be :
  <li><ks>working</ks>: if the trolley is working;</li>
  <li><ks>idle</ks>: if the trolley is waiting the next dispatch <ks>execute</ks> from the Waste Service;</li>
  <li><ks>stopped</ks>: if the transport_trolley is paused due to the sonar alarm;</li>

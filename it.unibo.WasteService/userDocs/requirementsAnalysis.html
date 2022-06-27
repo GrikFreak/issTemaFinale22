@@ -433,6 +433,11 @@ div.imagedesc{
 <h3>WasteTruck</h3>
 <div class="remark" id="WasteTruck">
   The <kr>WasteTruck</kr> is in charge to make a <kr>request</kr> to the WasteService to deposit the waste (<ks>waste_request(material, TruckLoad)</ks>).
+  The first problem we faced when analyzing the WasteTruck is how to tell it to leave the INDOOR area after the Transport Trolley has taken the waste.
+  There are two possible solutions:
+ <li>through an <kr>event</kr>: however communication problems would cause a total block of the software, becuse the INDOOR area will remain occupiede forever.</li> 
+ <li>through a <kr>dispatch</kr>: this solution is certainly the best because it strengthens communication and avoids the loss of messages.</li> 
+  
 </div>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
@@ -449,6 +454,10 @@ div.imagedesc{
             <td rowspan="1">waste_request(material, TruckLoad)</td>
             <td rowspan="1">request</td>
         </tr>
+        <tr>
+          <td rowspan="1">free_Indoor</td>
+          <td rowspan="1">dispatch</td>
+      </tr>
     </tbody></table></center>
   </td>
 </tr>
@@ -456,10 +465,18 @@ div.imagedesc{
 <h3>WasteService </h3>
 <div class="remark" id="WasteService">
  The <kr>WasteService</kr> sends to the WasteTruck a <kr>reply</kr> (could be <ks>loadaccept</ks> or <ks>loadrejecetd</ks> ).
- If the reply is <ks>loadaccept</ks> it sends a dispatch called <ks>execute</ks> to the TransportTrolley.
- We decided to use a dispatch because , by requirements , we have to active a serious of action and the Waste Service doesn't need to know when the deposit action is ended.
+ If the reply is <ks>loadaccept</ks> the <kr>WasteService</kr> needs to communicate to the Transport Trolley to execute the deposit action.
+ To approach this problem we thought of three possible solutions : 
+ <li>A <ks>dispatch</ks> called <kr>execute</kr> :  This is the simplest solution because we need only to send a command to the Transport Trolley. 
+  Furthermore ,by requirements , we have to active a serious of action and the Waste Service doesn't need to know when the deposit action is ended.</li>
+ <li>Another possible solution is to send an <ks>event</ks>, in this way the WasteService doesn't need to know the transport trolley and also there is the possibility to handle one or more trolleys.
+  Otherwise this solution can create communication problem because, if the event isn't arrived to the trolley, it may block the system.</li> 
+ <li>a <ks>request</ks>  and a <ks>replay</ks> : this solution allows to solve the problem of errors during communication, however, as previously mentioned, the WasteService doesn't need to receive a response from the Trolley , so we thought that this solution wasn't appropriate.</li>
+ For this reasons we decided to adopt the first solution. <a id="wasteservice"></a>
+
  Furthermore the WasteService is in charge to keep track of the weight in the two containers and to update their weights when a deposit action is finished.
  At the end it will emitt an event <ks>containers_weight</ks> to the GUI.
+ For us the event is the right choice in this case because the WasteService doesn't need to know the existence of the GUI.
 
 </div>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
@@ -498,8 +515,20 @@ div.imagedesc{
 
   <h3> Transport trolley </h3>
 <div class="remark" id="problem_analysis_transport_trolley">
- The Transport Trolley sends two events to the GUI.
- The first one <ks>trolley_status</ks> shows the status of the Trolley and could be :
+  the trolley must send a message to the WasteService to communicate that it has finished the pick-up from the Waste TRuck.
+  To do this, there are various solutions:
+  <li>a <ks>dispatch</ks>: this solution does not present communication problems, however in this case the trolley needs to know the existence of the WS</li>
+  <li>an <ks>event</ks>: this solution would allow the trolley not to know the existence of the WS, however in the event of an error the WasteService would remain blocked causing problems</li>
+  <li>a <ks>request - replay</ks>: by implementing this solution, the trolley could exploit the replay of the point described above (<a href="#wasteservice">here</a>). This solution can be considered if we consider only the BusinessCoreAnalysis, which has no other elements such as LED or SONAR.
+  From a global point of view, however, the WasteService will remain waiting for the replay from the moment the execute is sent, making it impossible, for example, to change the status of the LED.</li>
+
+The proposed solution then implements the dispatch version.
+Furthermore the Transport Trolley, in this phase, has to comunicate to the GUI its Status and its Position.
+This requirement can be implemented in various ways, for example with two dispatches to the GUI.
+We  also thought  about the option to make only one dispatch with both information but , beacuse the Status of the Trolley doesn't change every time it changes its position we thought it was not necessary to send superfluous informations,
+However, the use of dispatches did not seem adequate to us as the Transport Trolley must know the existence of the GUI and this did not seem necessary to us.
+For this reason we decided to use two events:
+ the first one <ks>trolley_status</ks> shows the status of the Trolley and could be :
  <li><ks>working</ks>: if the trolley is working;</li>
  <li><ks>idle</ks>: if the trolley is waiting the next dispatch <ks>execute</ks> from the Waste Service;</li>
  <li><ks>stopped</ks>: if the transport_trolley is paused due to the sonar alarm;</li>
@@ -517,6 +546,10 @@ div.imagedesc{
             <th>Message</th>
             <th>Semantic</th>
         </tr>
+        <tr>
+          <td rowspan="1">withdrawal_done</td>
+          <td rowspan="1">dispatch</td>
+      </tr>
         <tr>
             <td rowspan="1">trolley_status</td>
             <td rowspan="1">event</td>
@@ -539,7 +572,7 @@ div.imagedesc{
   Now that we have finished the first phase we can insert the Led and Sonar component.
   In the first phase we didn't analyse the requirement <a href="#R1D">R1D</a>.
   By analysing this requirement arise a problema , the Waste Service must know when the Transport TRollet finished the deposit action.
-  It can be solved in various way , one could be that when the <ks>Transport trolley</ks> finishes the deposit action it sends a request to the Waste Service asking if the are other deposit command.
+  It can be solved in various way, one could be that when the <ks>Transport trolley</ks> finishes the deposit action it sends a request to the Waste Service asking if the are other deposit command.
   An advantage for this solution it's that it uses the fact that anyway some informations have to converge from the Trolley to the Waste Service.
   The main problem with this type of solution is that in this way the Transport Trolley must know the existence of the Waste Service.
   Another way to solve this problem is that the transport Trolley emit an event with its status, in this way the Transport Trolley doesn't need to know the existence of the Waste Service.
