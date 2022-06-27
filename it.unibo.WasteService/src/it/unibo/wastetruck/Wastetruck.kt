@@ -17,14 +17,19 @@ class Wastetruck ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 		
 				var Material 	= "";
 				var TruckLoad 	= 0L;
+				var Count = 0L;
+				var Materials = arrayListOf<String>("glass", "plastic");
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the WasteTruck is waiting..")
-						delay(3000) 
-						 val Load = kotlin.random.Random.nextLong(10,100)  
-						request("waste_request", "waste_request(plastic,$Load)" ,"wasteservice" )  
+						delay(100) 
+						 	val Load = kotlin.random.Random.nextLong(10,100)
+									val Mat = Materials[kotlin.random.Random.nextInt(1,2)]
+									Count += 1 
+						request("waste_request", "waste_request($Mat,$Load)" ,"wasteservice" )  
+						println("WasteTruck | sent request NR : $Count of  $Material load with weight $Load")
 					}
 					 transition(edgeName="t00",targetState="accepted",cond=whenReply("loadaccept"))
 					transition(edgeName="t01",targetState="rejected",cond=whenReply("loadrejected"))
@@ -40,6 +45,10 @@ class Wastetruck ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 								println("WasteTruck | accepted $Material load with weight $TruckLoad")
 						}
 					}
+					 transition( edgeName="goto",targetState="s0", cond=doswitchGuarded({ Count <= 2   
+					}) )
+					transition( edgeName="goto",targetState="s1", cond=doswitchGuarded({! ( Count <= 2   
+					) }) )
 				}	 
 				state("rejected") { //this:State
 					action { //it:State
@@ -51,6 +60,15 @@ class Wastetruck ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 												TruckLoad 	= payloadArg(1).toLong();
 								println("WasteTruck | rejected $Material load with weight $TruckLoad")
 						}
+					}
+					 transition( edgeName="goto",targetState="s0", cond=doswitchGuarded({ Count <= 2   
+					}) )
+					transition( edgeName="goto",targetState="s1", cond=doswitchGuarded({! ( Count <= 2   
+					) }) )
+				}	 
+				state("s1") { //this:State
+					action { //it:State
+						println("Waste Truck | FINE RICHIESTE")
 					}
 				}	 
 			}

@@ -38,24 +38,26 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								println("WasteService | arrived request: $Material load with weight $TruckLoad")
 								if(  Material.equals("plastic")  
 								 ){if(  TruckLoad + CurrentPB <= MAXPB  
-								 ){answer("waste_request", "loadaccept", "loadaccept(plastic,$TruckLoad)"   )  
+								 ){answer("waste_request", "loadaccept", "loadaccept($Material,$TruckLoad)"   )  
 								 CurrentPB += TruckLoad  
 								println("WasteService | current plastic weight: $CurrentPB")
-								forward("execute", "execute(plastic)" ,"transporttrolley" ) 
+								forward("execute", "execute($Material,$TruckLoad)" ,"transporttrolley" ) 
+								println("WasteService | Said to TransportTroleey to execute")
 								}
 								else
-								 {answer("waste_request", "loadrejected", "loadrejected(plastic,$TruckLoad)"   )  
+								 {answer("waste_request", "loadrejected", "loadrejected($Material,$TruckLoad)"   )  
 								 }
 								}
 								else
 								 {if(  TruckLoad + CurrentGB <= MAXGB  
-								  ){answer("waste_request", "loadaccept", "loadaccept(glass,$TruckLoad)"   )  
+								  ){answer("waste_request", "loadaccept", "loadaccept($Material,$TruckLoad)"   )  
 								  CurrentGB += TruckLoad  
 								 println("WasteService | current glass weight: $CurrentGB")
-								 forward("execute", "execute(glass)" ,"transporttrolley" ) 
+								 forward("execute", "execute($Material,$TruckLoad)" ,"transporttrolley" ) 
+								 println("WasteService | Said to TransportTroleey to execute")
 								 }
 								 else
-								  {answer("waste_request", "loadrejected", "loadrejected(glass,$TruckLoad)"   )  
+								  {answer("waste_request", "loadrejected", "loadrejected($Material,$TruckLoad)"   )  
 								  }
 								 }
 								emit("containers_weight", "containers_weight(CurrentGB,CurrentPB)" ) 

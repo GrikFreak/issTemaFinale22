@@ -4,7 +4,7 @@ Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
 Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
 Reply loadrejected : loadrejected(MATERIAL, TRUCKLOAD)
 
-Dispatch execute : execute(MATERIAL)
+Dispatch execute : execute(MATERIAL,TRUCKLOAD)
 
 Event containers_weight : containers_weight(GWEIGHT, PWEIGHT)
 
@@ -18,6 +18,7 @@ QActor wastetruck context ctxWasteService {
 	[#
 		var Material 	= "";
 		var TruckLoad 	= 0L;
+		var Materials = arrayListOf<String>("glass", "plastic");
 	#]
 	
 	State s0 initial {
@@ -25,8 +26,13 @@ QActor wastetruck context ctxWasteService {
 		println("the WasteTruck is waiting..")
 		delay 3000
 		
-		[# val Load = kotlin.random.Random.nextLong(10,100) #]
-		request wasteservice -m waste_request : waste_request(plastic, $Load)
+		[# 
+			val Load = kotlin.random.Random.nextLong(10,100) 
+			val Mat = Materials[kotlin.random.Random.nextInt(1,2)]
+		#]
+		
+		request wasteservice -m waste_request : waste_request($Mat, $Load)
+		println("WASTETRUCK | sent request of $Mat load $Load")
 	}
 	
 	Transition t0 whenReply loadaccept -> accepted
@@ -87,21 +93,23 @@ QActor wasteservice context ctxWasteService {
 			println("WasteService | arrived request: $Material load with weight $TruckLoad")
 			if [# Material.equals("plastic") #] {
 				if [# TruckLoad + CurrentPB <= MAXPB #]{
-					replyTo waste_request with loadaccept : loadaccept(plastic, $TruckLoad) 
+					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
 					[# CurrentPB += TruckLoad #]
 					println("WasteService | current plastic weight: $CurrentPB")
-					forward transporttrolley -m execute : execute(plastic)
+					forward transporttrolley -m execute : execute($Material, $TruckLoad)
+					println("WasteService | Said to TransportTroleey to execute")
 				} else {
-					replyTo waste_request with loadrejected : loadrejected(plastic, $TruckLoad)
+					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
 				}
 			} else {
 				if [# TruckLoad + CurrentGB <= MAXGB #]{
-					replyTo waste_request with loadaccept : loadaccept(glass, $TruckLoad) 
+					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
 					[# CurrentGB += TruckLoad #]
 					println("WasteService | current glass weight: $CurrentGB")
-					forward transporttrolley -m execute : execute(glass)
+					forward transporttrolley -m execute : execute($Material, $TruckLoad)
+					println("WasteService | Said to TransportTroleey to execute")
 				} else {
-					replyTo waste_request with loadrejected : loadrejected(glass, $TruckLoad)
+					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
 				}
 			}
 			emit containers_weight : containers_weight(CurrentGB, CurrentPB)
@@ -118,6 +126,7 @@ QActor transporttrolley context ctxWasteService {
 		var Status	= "IDLE";	
 		var Position = "HOME";
 		var Material = "";
+		var TruckLoad = 0L;
 	#]
 	
 	State s0 initial {
@@ -128,18 +137,21 @@ QActor transporttrolley context ctxWasteService {
 	Transition t0 whenMsg execute -> move_to_INDOOR
 	
 	State move_to_INDOOR {
-		onMsg(execute : execute(MATERIAL)){
-		 	[# Material = payloadArg(0) #]
+		onMsg(execute : execute(MATERIAL,TRUCKLOAD)){
+		 	[# 
+		 		Material = payloadArg(0)
+		 		TruckLoad = payloadArg(1).toLong()
+		 	#]
 		}
 		printCurrentMessage
-		println("transportTrolley | moving to INDOOR")
+		println("transportTrolley | moving to INDOOR with $Material")
 		[# Status = "WORKING" #]
 		[# Position = "GENERIC" #]
 		emit trolley_status : trolley_status(Status)
 		emit trolley_position : trolley_position(Position)
 		delay 500 
-		println("transportTrolley | arrived to INDOOR")
-		println("transportTrolley | picking up $Material")
+		println("transportTrolley | arrived to INDOOR in status : $Status")
+		println("transportTrolley | picking up $Material of load $TruckLoad")
 		[# Position = "INDOOR" #]
 		emit trolley_position : trolley_position(Position)
 		
@@ -190,7 +202,5 @@ QActor transporttrolley context ctxWasteService {
 		emit trolley_position : trolley_position(Position)
 	}
 	
+	Goto s0
 }
-
-
-

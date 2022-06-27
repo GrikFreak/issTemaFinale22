@@ -23,23 +23,26 @@ class Sonar ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scop
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the sonar is active..")
 						stateTimer = TimerActor("timer_s0", 
-							scope, context!!, "local_tout_sonar_s0", 1.toLong() )
+							scope, context!!, "local_tout_sonar_s0", 100.toLong() )
 					}
-					 transition(edgeName="t08",targetState="detect",cond=whenTimeout("local_tout_sonar_s0"))   
+					 transition(edgeName="t09",targetState="detect",cond=whenTimeout("local_tout_sonar_s0"))   
 				}	 
 				state("detect") { //this:State
 					action { //it:State
-						println("$name in ${currentState.stateName} | $currentMsg")
 						 val Distance = kotlin.random.Random.nextLong(10,100)  
+						println("SONAR | Detected distance $Distance")
 						if(  Distance <= DLIMIT && !Stopped  
 						 ){forward("stop", "stop(Distance)" ,"transporttrolley" ) 
 						 Stopped = true  
+						println("SONAR | stop")
 						}
 						if(  Distance > DLIMIT && Stopped  
 						 ){forward("resume", "resume(Distance)" ,"transporttrolley" ) 
 						 Stopped = false  
+						println("SONAR | resume")
 						}
 					}
+					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 			}
 		}

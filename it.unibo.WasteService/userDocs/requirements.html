@@ -373,7 +373,7 @@ div.imagedesc{
   <h4><a href="#R2A">R2A</a></h4>
   <div class="remark" id="R2A">
     <kc>Formalization</kc>: <ks>trolley_status</ks> shows the status of the transport trolley:
-    <li><kr>moving</kr>: the transport_trolley is moving in the service area</li>
+    <li><kr>working</kr>: the transport_trolley is executing a deposit action in the service area</li>
     <li><kr>idle</kr>: the transport_trolley waiting for a request at HOME position</li>
     <li><kr>stopped</kr>: the transport_trolley is stopped by the sonar alarm</li>
     and <ks>trolley_position</ks> shows the area of the trolley:
@@ -538,7 +538,7 @@ div.imagedesc{
 
 
 <div class="remark" id="Analysis_with_led_and Sonar">
-  now that we have finished the first phase we can insert the Led and Sonar component.
+  Now that we have finished the first phase we can insert the Led and Sonar component.
   In the first phase we didn't analyse the requirement <a href="#R1D">R1D</a>.
   By analysing this requirement arise a problema , the Waste Service must know when the Transport TRollet finished the deposit action.
   It can be solved in various way , one could be that when the <ks>Transport trolley</ks> finishes the deposit action it sends a request to the Waste Service asking if the are other deposit command.

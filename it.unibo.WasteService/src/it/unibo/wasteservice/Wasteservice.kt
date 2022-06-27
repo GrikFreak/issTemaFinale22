@@ -19,6 +19,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 				var MAXGB = 500L;
 				var CurrentPB = 0L;
 				var CurrentGB = 0L;
+				var Trolley_Status = "IDLE"; 
+				
+		
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -26,6 +29,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						println("the WasteService is waiting..")
 					}
 					 transition(edgeName="t02",targetState="handle_request",cond=whenRequest("waste_request"))
+					transition(edgeName="t03",targetState="handle_led",cond=whenEvent("trolley_status"))
+					transition(edgeName="t04",targetState="handle_led",cond=whenEvent("trolley_position"))
 				}	 
 				state("handle_request") { //this:State
 					action { //it:State
@@ -36,12 +41,14 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 												var Material 	= payloadArg(0);
 												var TruckLoad 	= payloadArg(1).toLong();
 								println("WasteService | arrived request: $Material load with weight $TruckLoad")
-								if(  Material.equals("plastic")  
+								if(  Trolley_Status.equals("IDLE") || Trolley_Status.equals("MOVING") || Trolley_Status.equals("WORKING")  
+								 ){if(  Material.equals("plastic")  
 								 ){if(  TruckLoad + CurrentPB <= MAXPB  
 								 ){answer("waste_request", "loadaccept", "loadaccept(plastic,$TruckLoad)"   )  
 								 CurrentPB += TruckLoad  
 								println("WasteService | current plastic weight: $CurrentPB")
-								forward("execute", "execute(plastic)" ,"transporttrolley" ) 
+								forward("execute", "execute(plastic,$TruckLoad)" ,"transporttrolley" ) 
+								println("WasteService | send EXECUTE   to the Transport Trolley")
 								}
 								else
 								 {answer("waste_request", "loadrejected", "loadrejected(plastic,$TruckLoad)"   )  
@@ -52,34 +59,45 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								  ){answer("waste_request", "loadaccept", "loadaccept(glass,$TruckLoad)"   )  
 								  CurrentGB += TruckLoad  
 								 println("WasteService | current glass weight: $CurrentGB")
-								 forward("execute", "execute(glass)" ,"transporttrolley" ) 
+								 forward("execute", "execute(glass,$TruckLoad)" ,"transporttrolley" ) 
+								 println("WasteService | send EXECUTE   to the Transport Trolley")
 								 }
 								 else
 								  {answer("waste_request", "loadrejected", "loadrejected(glass,$TruckLoad)"   )  
 								  }
 								 }
 								emit("containers_weight", "containers_weight($CurrentGB,$CurrentPB)" ) 
+								}
+								else
+								 {println("Richiesta messa in coda")
+								 }
 						}
 					}
-					 transition(edgeName="t13",targetState="handle_led",cond=whenEvent("trolley_status"))
+					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 				state("handle_led") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						if( checkMsgContent( Term.createTerm("trolley_status(TROLLEY_STATUS)"), Term.createTerm("trolley_status(TROLLEY_STATUS)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								 var Trolley_Status = payloadArg(0)  
-								println("WasteService | Received new trolley_status: $Trolley_Status")
-								if(  Trolley_Status.equals("IDLE")  
-								 ){ var Led_Status = "LED_OFF"  
-								emit("change_led", "change_led($Led_Status)" ) 
-								}
-								if(  Trolley_Status.equals("MOVING")  
-								 ){ var Led_Status = "LED_BLINKS"  
+								 Trolley_Status = payloadArg(0)  
+								if(  Trolley_Status.equals("WORKING")  
+								 ){println("WasteService | Received new trolley_status: $Trolley_Status")
+								 var Led_Status = "LED_BLINKS"  
 								emit("change_led", "change_led($Led_Status)" ) 
 								}
 								if(  Trolley_Status.equals("STOPPED")  
-								 ){ var Led_Status = "LED_ON"  
+								 ){println("WasteService | Received new trolley_status: $Trolley_Status")
+								 var Led_Status = "LED_ON"  
+								emit("change_led", "change_led($Led_Status)" ) 
+								}
+						}
+						if( checkMsgContent( Term.createTerm("trolley_position(POSITION)"), Term.createTerm("trolley_position(TROLLEY_POSITION)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								 var Trolley_Position = payloadArg(0)  
+								if(  Trolley_Position.equals("HOME")  
+								 ){println("WasteService | Received new trolley_position: $Trolley_Position")
+								 var Led_Status = "LED_OFF"  
 								emit("change_led", "change_led($Led_Status)" ) 
 								}
 						}

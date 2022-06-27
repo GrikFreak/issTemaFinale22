@@ -18,6 +18,7 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 				var Status	= "IDLE";	
 				var Position = "HOME";
 				var Material = "";
+				var TruckLoad = 0L;
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -28,19 +29,21 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 				}	 
 				state("move_to_INDOOR") { //this:State
 					action { //it:State
-						if( checkMsgContent( Term.createTerm("execute(MATERIAL)"), Term.createTerm("execute(MATERIAL)"), 
+						if( checkMsgContent( Term.createTerm("execute(MATERIAL,TRUCKLOAD)"), Term.createTerm("execute(MATERIAL,TRUCKLOAD)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								 Material = payloadArg(0)  
+								 
+										 		Material = payloadArg(0)
+										 		TruckLoad = payloadArg(1).toLong()
 						}
 						println("$name in ${currentState.stateName} | $currentMsg")
-						println("transportTrolley | moving to INDOOR")
+						println("transportTrolley | moving to INDOOR with $Material")
 						 Status = "WORKING"  
 						 Position = "GENERIC"  
 						emit("trolley_status", "trolley_status(Status)" ) 
 						emit("trolley_position", "trolley_position(Position)" ) 
 						delay(500) 
-						println("transportTrolley | arrived to INDOOR")
-						println("transportTrolley | picking up $Material")
+						println("transportTrolley | arrived to INDOOR in status : $Status")
+						println("transportTrolley | picking up $Material of load $TruckLoad")
 						 Position = "INDOOR"  
 						emit("trolley_position", "trolley_position(Position)" ) 
 					}
@@ -92,6 +95,7 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						 Position = "HOME"  
 						emit("trolley_position", "trolley_position(Position)" ) 
 					}
+					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 			}
 		}

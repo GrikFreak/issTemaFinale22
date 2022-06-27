@@ -4,7 +4,7 @@ Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
 Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
 Reply loadrejected : loadrejected(MATERIAL, TRUCKLOAD)
 
-Dispatch execute : execute(MATERIAL)
+Dispatch execute : execute(MATERIAL,TRUCKLOAD)
 
 Event containers_weight : containers_weight(GWEIGHT, PWEIGHT)
 
@@ -24,15 +24,21 @@ QActor wastetruck context ctxWasteService {
 	[#
 		var Material 	= "";
 		var TruckLoad 	= 0L;
+		var Count = 0L;
+		var Materials = arrayListOf<String>("glass", "plastic");
 	#]
 	
 	State s0 initial {
 		printCurrentMessage
 		println("the WasteTruck is waiting..")
-		delay 3000
+		delay 100
 		
-		[# val Load = kotlin.random.Random.nextLong(10,100) #]
-		request wasteservice -m waste_request : waste_request(plastic, $Load)
+		[# 	val Load = kotlin.random.Random.nextLong(10,100)
+			val Mat = Materials[kotlin.random.Random.nextInt(1,2)]
+			Count += 1 
+		#]
+		request wasteservice -m waste_request : waste_request($Mat, $Load)
+		println("WasteTruck | sent request NR : $Count of  $Material load with weight $Load")
 	}
 	
 	Transition t0 whenReply loadaccept -> accepted
@@ -49,8 +55,7 @@ QActor wastetruck context ctxWasteService {
 		}
 	}
 	
-	// if de-commented the system will loop with other waste request 
-	// Goto s0
+	Goto  s0 if [# Count <= 2  #] else s1
 	
 	State rejected {
 		printCurrentMessage
@@ -63,8 +68,12 @@ QActor wastetruck context ctxWasteService {
 		}
 	}
 	
-	// if de-commented the system will loop with other waste request 
-	// Goto s0
+	Goto s0 if [# Count <= 2  #] else  s1
+	
+	State s1 {
+		println("Waste Truck | FINE RICHIESTE")
+	}
+
 }
 
 QActor wasteservice context ctxWasteService {
@@ -74,6 +83,9 @@ QActor wasteservice context ctxWasteService {
 		var MAXGB = 500L;
 		var CurrentPB = 0L;
 		var CurrentGB = 0L;
+		var Trolley_Status = "IDLE"; 
+		
+
 	#]
 	
 	State s0 initial {
@@ -82,6 +94,9 @@ QActor wasteservice context ctxWasteService {
 	}
 	
 	Transition t0 whenRequest waste_request -> handle_request
+				  whenEvent trolley_status -> handle_led
+				  whenEvent trolley_position -> handle_led
+				 // whenEvent trolley_status -> handle_request
 				  
 	State handle_request {
 		printCurrentMessage
@@ -91,46 +106,62 @@ QActor wasteservice context ctxWasteService {
 				var TruckLoad 	= payloadArg(1).toLong();
 			#]
 			println("WasteService | arrived request: $Material load with weight $TruckLoad")
-			if [# Material.equals("plastic") #] {
-				if [# TruckLoad + CurrentPB <= MAXPB #]{
-					replyTo waste_request with loadaccept : loadaccept(plastic, $TruckLoad) 
-					[# CurrentPB += TruckLoad #]
-					println("WasteService | current plastic weight: $CurrentPB")
-					forward transporttrolley -m execute : execute(plastic)
+			
+			if [# Trolley_Status.equals("IDLE") || Trolley_Status.equals("MOVING") || Trolley_Status.equals("WORKING") #]{
+				if [# Material.equals("plastic") #] {
+					if [# TruckLoad + CurrentPB <= MAXPB #]{
+						replyTo waste_request with loadaccept : loadaccept(plastic, $TruckLoad) 
+						[# CurrentPB += TruckLoad #]
+						println("WasteService | current plastic weight: $CurrentPB")
+						forward transporttrolley -m execute : execute(plastic,$TruckLoad)
+						println("WasteService | send EXECUTE   to the Transport Trolley")
+					} else {
+						replyTo waste_request with loadrejected : loadrejected(plastic, $TruckLoad)
+					}
 				} else {
-					replyTo waste_request with loadrejected : loadrejected(plastic, $TruckLoad)
+					if [# TruckLoad + CurrentGB <= MAXGB #]{
+						replyTo waste_request with loadaccept : loadaccept(glass, $TruckLoad) 
+						[# CurrentGB += TruckLoad #]
+						println("WasteService | current glass weight: $CurrentGB")
+						forward transporttrolley -m execute : execute(glass,$TruckLoad)
+						println("WasteService | send EXECUTE   to the Transport Trolley")
+					} else {
+						replyTo waste_request with loadrejected : loadrejected(glass, $TruckLoad)
+					}
 				}
-			} else {
-				if [# TruckLoad + CurrentGB <= MAXGB #]{
-					replyTo waste_request with loadaccept : loadaccept(glass, $TruckLoad) 
-					[# CurrentGB += TruckLoad #]
-					println("WasteService | current glass weight: $CurrentGB")
-					forward transporttrolley -m execute : execute(glass)
-				} else {
-					replyTo waste_request with loadrejected : loadrejected(glass, $TruckLoad)
+				emit containers_weight : containers_weight($CurrentGB, $CurrentPB)
+			
+				}else {
+					println("Richiesta messa in coda")	
 				}
 			}
-			emit containers_weight : containers_weight($CurrentGB, $CurrentPB)
 		}
-	}
 	
-	Transition t1 whenEvent trolley_status -> handle_led
+	
+	Goto s0
 	
 	State handle_led {
 		printCurrentMessage
 		onMsg(trolley_status : trolley_status(TROLLEY_STATUS)){
-			[# var Trolley_Status = payloadArg(0) #]
-			println("WasteService | Received new trolley_status: $Trolley_Status")
-			if [# Trolley_Status.equals("IDLE") #]{
-				[# var Led_Status = "LED_OFF" #]
-				emit change_led : change_led($Led_Status)
-			}
-			if [# Trolley_Status.equals("MOVING") #]{
+			[# Trolley_Status = payloadArg(0) #]
+			
+			if [# Trolley_Status.equals("WORKING") #]{
+				println("WasteService | Received new trolley_status: $Trolley_Status")
 				[# var Led_Status = "LED_BLINKS" #]
 				emit change_led : change_led($Led_Status)
 			} 
 			if [# Trolley_Status.equals("STOPPED") #]{
+				println("WasteService | Received new trolley_status: $Trolley_Status")
 				[# var Led_Status = "LED_ON" #]
+				emit change_led : change_led($Led_Status)
+			} 
+		}
+		onMsg(trolley_position : trolley_position(TROLLEY_POSITION)){
+			[# var Trolley_Position = payloadArg(0) #]
+			
+			if [# Trolley_Position.equals("HOME") #]{
+				println("WasteService | Received new trolley_position: $Trolley_Position")
+				[# var Led_Status = "LED_OFF" #]
 				emit change_led : change_led($Led_Status)
 			} 
 		}
@@ -146,48 +177,54 @@ QActor transporttrolley context ctxWasteService {
 		var Trolley_Status	= "IDLE";	
 		var Position = "HOME";
 		var Material = "";
+		var TruckLoad = 0L ; 
 	#]
 	
 	State s0 initial {
 		printCurrentMessage
-		println("the transportTrolley is waiting..")
+		println("the transportTrolley is waiting..")	
 	}
 	
 	Transition t0 whenMsg execute -> move_to_INDOOR
-	
+				  whenMsg stop -> stop_trolley
+				  whenMsg resume -> resume_trolley
+				  
 	State move_to_INDOOR {
-		onMsg(execute : execute(MATERIAL)){
-		 	[# Material = payloadArg(0) #]
+		onMsg(execute : execute(MATERIAL,TRUCKLOAD)){
+		 	[# 	Material = payloadArg(0)
+		 		TruckLoad = payloadArg(1).toLong() 
+		 	#]
 		}
 		printCurrentMessage
 		println("transportTrolley | moving to INDOOR")
-		[# Trolley_Status = "MOVING" #]
+		[# Trolley_Status = "WORKING" #]
 		[# Position = "GENERIC" #]
 		emit trolley_status : trolley_status($Trolley_Status)
 		emit trolley_position : trolley_position($Position)
 		delay 500 
 		println("transportTrolley | arrived to INDOOR")
-		println("transportTrolley | picking up $Material")
+		println("transportTrolley | picking up $Material of load $TruckLoad")
 		[# Position = "INDOOR" #]
 		emit trolley_position : trolley_position($Position)
 		
 	}
-	
+		
 	Goto move_to_ContainerP if [# Material.equals("plastic") #] else move_to_ContainerG
 	
 	State move_to_ContainerP{
 		printCurrentMessage
 		println("transportTrolley | moving to plastic container ")
-		[# Trolley_Status = "MOVING" #]
-		emit trolley_status : trolley_status($Trolley_Status)
+		[# Position = "GENERIC" #]
+		emit trolley_position : trolley_position($Position)
 		delay 500 
 		println("transportTrolley | arrived to plastic container")
 		[# Position = "CONTAINERP" #]
 		emit trolley_position : trolley_position($Position)
 		println("transportTrolley | settling plastic")
-		delay 300
 		[# Trolley_Status = "IDLE" #]
 		emit trolley_status : trolley_status($Trolley_Status)
+		delay 300
+		
 	}
 	
 	Goto move_to_HOME
@@ -195,16 +232,17 @@ QActor transporttrolley context ctxWasteService {
 	State move_to_ContainerG{
 		printCurrentMessage
 		println("transportTrolley | moving to glass container ")
-		[# Trolley_Status = "MOVING" #]
-		emit trolley_status : trolley_status($Trolley_Status)
+		[# Position = "GENERIC" #]
+		emit trolley_position : trolley_position($Position)
 		delay 500 
 		println("transportTrolley | arrived to glass container")
 		[# Position = "CONTAINERG" #]
 		emit trolley_position : trolley_position($Position)
 		println("transportTrolley | settling glass")
-		delay 300
 		[# Trolley_Status = "IDLE" #]
 		emit trolley_status : trolley_status($Trolley_Status)
+		delay 300
+
 	}
 	
 	Goto move_to_HOME
@@ -215,14 +253,13 @@ QActor transporttrolley context ctxWasteService {
 		delay 500 
 		println("transportTrolley | arrived HOME")
 		[# Position = "HOME";
-			Trolley_Status = "IDLE";	
+				
 		#]
 		emit trolley_position : trolley_position($Position)
-		emit trolley_status : trolley_status($Trolley_Status)
+		
 	}
 	
-	Transition t1 whenMsg stop -> stop_trolley
-				  whenMsg resume -> resume_trolley
+	Goto s0 
 	
 	State stop_trolley {
 		printCurrentMessage
@@ -231,13 +268,16 @@ QActor transporttrolley context ctxWasteService {
 		emit trolley_status : trolley_status($Trolley_Status)
 	}
 	
+	Goto s0
+	
 	State resume_trolley {
 		printCurrentMessage
 		println("TransportTrolley | the transport_trolley has been resumed.")
-		[# Trolley_Status = "MOVING" #]
+		[# Trolley_Status = "WORKING" #]
 		emit trolley_status : trolley_status($Trolley_Status)
 	}
 	
+	Goto s0
 }
 
 QActor led context ctxWasteService {
@@ -248,7 +288,7 @@ QActor led context ctxWasteService {
 	
 	State s0 initial {
 		printCurrentMessage
-		println("the Led is off..")
+		println("the Led is ready..")
 	}
 	
 	Transition t0 whenEvent change_led -> change_status
@@ -261,6 +301,8 @@ QActor led context ctxWasteService {
 			emit led_status : led_status($Led_Status)
 		}
 	}	
+	
+	Goto s0
 }
 
 QActor sonar context ctxWasteService {
@@ -275,20 +317,23 @@ QActor sonar context ctxWasteService {
 		println("the sonar is active..")
 	}
 		
-	Transition t0 whenTime 1 -> detect
+	Transition t0 whenTime 100 -> detect
 				  
 	State detect {
-		printCurrentMessage
+		
 		[# val Distance = kotlin.random.Random.nextLong(10,100) #]
+		println("SONAR | Detected distance $Distance")
 		if [# Distance <= DLIMIT && !Stopped #]{
 			forward transporttrolley -m stop : stop(Distance)
 			[# Stopped = true #]
+			println("SONAR | stop")
 		}
 		if [# Distance > DLIMIT && Stopped #]{
 			forward transporttrolley -m resume : resume(Distance)
 			[# Stopped = false #]
+			println("SONAR | resume")
 		}
-	}	
+	}
+	
+	Goto s0	
 }
-
-

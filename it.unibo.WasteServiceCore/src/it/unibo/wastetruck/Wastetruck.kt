@@ -17,14 +17,18 @@ class Wastetruck ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 		
 				var Material 	= "";
 				var TruckLoad 	= 0L;
+				var Materials = arrayListOf<String>("glass", "plastic");
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the WasteTruck is waiting..")
 						delay(3000) 
-						 val Load = kotlin.random.Random.nextLong(10,100)  
-						request("waste_request", "waste_request(plastic,$Load)" ,"wasteservice" )  
+						 
+									val Load = kotlin.random.Random.nextLong(10,100) 
+									val Mat = Materials[kotlin.random.Random.nextInt(1,2)]
+						request("waste_request", "waste_request($Mat,$Load)" ,"wasteservice" )  
+						println("WASTETRUCK | sent request of $Mat load $Load")
 					}
 					 transition(edgeName="t00",targetState="accepted",cond=whenReply("loadaccept"))
 					transition(edgeName="t01",targetState="rejected",cond=whenReply("loadrejected"))

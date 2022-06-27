@@ -18,29 +18,33 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 				var Trolley_Status	= "IDLE";	
 				var Position = "HOME";
 				var Material = "";
+				var TruckLoad = 0L ; 
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the transportTrolley is waiting..")
 					}
-					 transition(edgeName="t04",targetState="move_to_INDOOR",cond=whenDispatch("execute"))
+					 transition(edgeName="t05",targetState="move_to_INDOOR",cond=whenDispatch("execute"))
+					transition(edgeName="t06",targetState="stop_trolley",cond=whenDispatch("stop"))
+					transition(edgeName="t07",targetState="resume_trolley",cond=whenDispatch("resume"))
 				}	 
 				state("move_to_INDOOR") { //this:State
 					action { //it:State
-						if( checkMsgContent( Term.createTerm("execute(MATERIAL)"), Term.createTerm("execute(MATERIAL)"), 
+						if( checkMsgContent( Term.createTerm("execute(MATERIAL,TRUCKLOAD)"), Term.createTerm("execute(MATERIAL,TRUCKLOAD)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								 Material = payloadArg(0)  
+								 	Material = payloadArg(0)
+										 		TruckLoad = payloadArg(1).toLong() 
 						}
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("transportTrolley | moving to INDOOR")
-						 Trolley_Status = "MOVING"  
+						 Trolley_Status = "WORKING"  
 						 Position = "GENERIC"  
 						emit("trolley_status", "trolley_status($Trolley_Status)" ) 
 						emit("trolley_position", "trolley_position($Position)" ) 
 						delay(500) 
 						println("transportTrolley | arrived to INDOOR")
-						println("transportTrolley | picking up $Material")
+						println("transportTrolley | picking up $Material of load $TruckLoad")
 						 Position = "INDOOR"  
 						emit("trolley_position", "trolley_position($Position)" ) 
 					}
@@ -53,16 +57,16 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("transportTrolley | moving to plastic container ")
-						 Trolley_Status = "MOVING"  
-						emit("trolley_status", "trolley_status($Trolley_Status)" ) 
+						 Position = "GENERIC"  
+						emit("trolley_position", "trolley_position($Position)" ) 
 						delay(500) 
 						println("transportTrolley | arrived to plastic container")
 						 Position = "CONTAINERP"  
 						emit("trolley_position", "trolley_position($Position)" ) 
 						println("transportTrolley | settling plastic")
-						delay(300) 
 						 Trolley_Status = "IDLE"  
 						emit("trolley_status", "trolley_status($Trolley_Status)" ) 
+						delay(300) 
 					}
 					 transition( edgeName="goto",targetState="move_to_HOME", cond=doswitch() )
 				}	 
@@ -70,16 +74,16 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("transportTrolley | moving to glass container ")
-						 Trolley_Status = "MOVING"  
-						emit("trolley_status", "trolley_status($Trolley_Status)" ) 
+						 Position = "GENERIC"  
+						emit("trolley_position", "trolley_position($Position)" ) 
 						delay(500) 
 						println("transportTrolley | arrived to glass container")
 						 Position = "CONTAINERG"  
 						emit("trolley_position", "trolley_position($Position)" ) 
 						println("transportTrolley | settling glass")
-						delay(300) 
 						 Trolley_Status = "IDLE"  
 						emit("trolley_status", "trolley_status($Trolley_Status)" ) 
+						delay(300) 
 					}
 					 transition( edgeName="goto",targetState="move_to_HOME", cond=doswitch() )
 				}	 
@@ -90,12 +94,10 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						delay(500) 
 						println("transportTrolley | arrived HOME")
 						 Position = "HOME";
-									Trolley_Status = "IDLE";	
+										
 						emit("trolley_position", "trolley_position($Position)" ) 
-						emit("trolley_status", "trolley_status($Trolley_Status)" ) 
 					}
-					 transition(edgeName="t15",targetState="stop_trolley",cond=whenDispatch("stop"))
-					transition(edgeName="t16",targetState="resume_trolley",cond=whenDispatch("resume"))
+					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 				state("stop_trolley") { //this:State
 					action { //it:State
@@ -104,14 +106,16 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						 Trolley_Status = "STOPPED"  
 						emit("trolley_status", "trolley_status($Trolley_Status)" ) 
 					}
+					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 				state("resume_trolley") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("TransportTrolley | the transport_trolley has been resumed.")
-						 Trolley_Status = "MOVING"  
+						 Trolley_Status = "WORKING"  
 						emit("trolley_status", "trolley_status($Trolley_Status)" ) 
 					}
+					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 			}
 		}
