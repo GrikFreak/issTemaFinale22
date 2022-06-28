@@ -275,75 +275,6 @@ div.imagedesc{
 
 <h2>Requirement analysis</h2>
 <div class="remark">
-  <div>
-    Our <b>interaction with the customer</b> has clarified that nouns have the following meanings:
-    <ul>
-      <li><ks>transport trolley</ks>: component which uses the <ks>DDR Robot</ks> in order to complete his tasks;</li>
-      <li><ks>software</ks>:set of computer programs and associated documentation and data ;</li>
-      <li><ks>waste-load(or TruckLoad)</ks>: amount of chemical, physical, or biological matter contained within a waste discharge;</li>
-      <li><ks>weight</ks>: relative mass or the quantity of matter contained by something;</li>
-      <li><ks>material</ks>: matter from which a thing is or can be made; in our case could be only glass or plastic;</li>
-      <li><ks>service-area</ks>:detailed area of the map where the Robot can move;</li>
-      <li><ks>INDOOR</ks>: port in the service area where the waste material enters;</li>
-      <li><ks>PlasticBox</ks>: container devoted to store objects made of plastic;</li>
-      <li><ks>GlassBox</ks>: container devoted to store objects made of glass;</li>
-      <li><ks>HOME</ks>:detailed area where it's initially placed the robot;</li>
-      <li><ks>MAXPB</ks>: limits of weight (in kg ) that the PlasticBox can contain;</li>
-      <li><ks>MAXGB</ks>: limits of weight (in kg ) that the GlassBox can contain;</li>
-      <li><ks>obstacles</ks>: walls which marks the limit of the <ks>room</ks>;</li>
-      <li><ks>DDR</ks>:physical or virtual (simulated in an virtual environment) object which can be represented and controlled using the infomation in basicrobot22;</li>
-      <li><ks>transport trolley</ks>: component which uses the DDR Robot in order to complete his tasks;</li>
-      <li><ks>RD</ks>:side lenght of the square that forms the transport trolley;</li>
-      <li><ks>Waste truck</ks>:truck specially designed to collect  solid waste and transport it to a solid waste treatment facility;</li>
-      <li><ks>deposit action (or command)</ks>: action that consists in these phases:
-                            <ul>
-                              <li>1. pick up a waste-load from a Waste truck located on the INDOOR</li>
-                              <li>2. go from the INDOOR to the proper waste container</li>
-                              <li>3. deposit the waste-load in the container</li>
-                            </ul>
-      </li>
-      <li><ks>state</ks>: current status of the service area;</li>
-      <li><ks>WasteServiceStatusGUI</ks>: user interface which allows the <kr>ServiceManager</kr> to supervise the state of the service-area;</li>
-      <li><ks>Sonar</ks>: is a device that uses sound waves to detect objects;</li>    
-      <li><ks>Led</ks>: is light source that emits light when current flows through it;</li>  
-      <li><ks>RaspberryPi</ks>: single board computer;</li>  
-      <li><ks>warning devices</ks>: a device that signals the occurrence of some undesirable event;</li>  
-      <li><ks>LedState</ks>:
-                            <ul>
-                                <li>1. <kr>off</kr>: the led is off when the transport trolley is at HOME</li>
-                                <li>2. <kr>blinks</kr>: the Led blinks while the transport trolley is moving</li>
-                                <li>3. <kr>on</kr>: the Led is on when transport trolley is stopped</li>
-                            </ul>
-      </li>  
-      <li><ks>DLIMIT</ks>: maximum distance, detected by the sonar, beyond which it triggers an action;</li> 
-      <li><ks>alarm device</ks>: a device that gives an audible, visual or other kind of alarm signal to alert someone to a problem or condition that requires urgent attention;</li>    
-      <li><ks>position</ks>: the position of the <ks>transport trolley</ks> could be : HOME , ContainerP , ContainerG , INDOOR and "Working " if it's not in one of the previuos area;</li>                
-    </ul>
-  </div>
-  <div>
-    Regarding action or verbs:
-    <ul>
-      <li><ks>build</ks>: construct (something) by putting parts or material together;</li>
-      <li><ks>compose</ks>: the system is supplied with the necessary items for a particular purpose;</li>
-      <li><ks>enter</ks>: the <ks>waste material</ks> is in the system;</li>
-      <li><ks>pick-up (or store)</ks>:  action to load the material in the <ks>transport trolley</ks>;</li>
-      <li><ks>go</ks>: action to describe the movement of the <ks>transport trolley</ks> ;</li>
-      <li><ks>connect</ks>: the association between the <ks>Led</ks> and the <ks>Sonar</ks> with the RaspberryPi;</li>
-      <li><ks>deposit</ks>: put the waste-load in the right container;</li>
-      <li><ks>supervise</ks>: action performed by the <ks>Service-manager</ks> to check the status of the service-area using a <ks>WasteServiceStatusGUI</ks>;</li>
-      <li><ks>connect</ks>: the <ks>OUTDOOR-area</ks> is free;</li>
-      <li><ks>move</ks>: the action performed by the transport trolley to go from an area to an another one;</li>
-      <li><ks>stop</ks>: the action of finish doing something that you were doing;</li>
-      <li><ks>measure</ks>: the counting of a distance did by the sonar;</li>
-      <li><ks>resume</ks>: the continue of the trasport trolley action due to a stop;</li>
-      <li><ks>detect</ks>: the action did by <ks>Sonar</ks> to find object;</li>
-      <li><ks>send</ks>: the action to communicate the answer;</li>
-      <li><ks>settle</ks>: the placing in the specific container the current  <ks>Waste load</ks> ;</li>
-      <li><ks>terminate</ks>: the end of a deposit ac;</li>
-      <li><ks>execute</ks>: the run of a deposit action;</li>
-    </ul>
-  </div>
-</div>
 <br>
 <h2>Requirements analysis</h2>
 <div class="remark" id = "Requirements_analysis">
@@ -365,55 +296,7 @@ div.imagedesc{
      <li>goes to the proper container:  the transport_trolley moves to the correspondent container.</li>  
      <li>settles the material: the transport_trolley deposit the load picked in the container.</li> 
   </div>
-  <h4><a href="#R1D">R1D</a></h4>
-  <div class="remark" id="R1D">
-    <kc>Formalization</kc>: when the transport_trolley ends the deposit, if there are deposit_action in queue it executes again a <kr>deposit</kr>. Otherwise it moves to HOME position.
-  </div>
-  <h3>GUI requirements</h3>
-  <h4><a href="#R2A">R2A</a></h4>
-  <div class="remark" id="R2A">
-    <kc>Formalization</kc>: <ks>trolley_status</ks> shows the status of the transport trolley:
-    <li><kr>working</kr>: the transport_trolley is executing a deposit action in the service area</li>
-    <li><kr>idle</kr>: the transport_trolley waiting for a request at HOME position</li>
-    <li><kr>stopped</kr>: the transport_trolley is stopped by the sonar alarm</li>
-    and <ks>trolley_position</ks> shows the area of the trolley:
-    <li><kr>HOME</kr>: the transport_trolley is in HOME position</li>
-    <li><kr>INDOOR</kr>: the transport_trolley is adjacent INDOOR port</li>
-    <li><kr>ContainerP</kr>: the transport_trolley is adjacent plastic Container</li>
-    <li><kr>ContainerG</kr>: the transport_trolley is adjacent glass Container</li>
-    <li><kr>Generic</kr>: the transport_trolley is in a generic position inside the service area,
-      excluding previous positions</li>
-  </div>
-  <h4><a href="#R2B">R2B</a></h4>
-  <div class="remark" id="R2B">
-    <kc>Formalization</kc>: <ks>containers_weight</ks> shows the current weigth of the material stored in the two waste-containers.
-  </div>
-  <h4><a href="#R2C">R2C</a></h4>
-  <div class="remark" id="R2C">
-    <kc>Formalization</kc>: <ks>Led_status</ks> shows the current state of the Led (on, blinks, off).
-  </div>
   
-  <h3>Led requirements</h3>
-  <h4><a href="#R3A">R3A</a></h4>
-  <div class="remark" id="R3A">
-    <kc>Formalization</kc>: <ks>led_off</ks>  when the <ks>trolley_position</ks> is in position "HOME".
-  </div>
-  <h4><a href="#R1C-led">R1C-led</a></h4>
-  <div class="remark" id="R1C-led">
-    <kc>Formalization</kc>: <ks>led_blinks</ks>  when the <ks>trolley_status</ks> is working.
-  </div>
-  <h4><a href="#R3B">R3B</a></h4>
-  <div class="remark" id="R3B">
-    <kc>Formalization</kc>: <ks>led_on</ks>  when the <ks>trolley_status</ks> is stopped.
-  </div>
-
-
-  <h3>Sonar requirements</h3>
-  <h4><a href="#R4">R4</a></h4>
-  <div class="remark" id="R4">
-    <kc>Formalization</kc>: the Sonar emitts an <kr>event</kr> <ks>Sonar_alarm</ks> to the WasteService when it measures a distance less that a prefixed value DLIMT, the transport trolley must be stopped. It will be resumed when Sonar detects again a distance higher than DLIMT.
-  </div>
-
   <h3>Non-functional requirements</h3>
   <div class="remark" id="proactive">
     <kc>Proactive</kc>: the TransportTrolley has to move and to do actions autonomously.
@@ -476,16 +359,11 @@ div.imagedesc{
  <li>Another one is throught a  <ks>request</ks>  and a <ks>replay</ks> : this solution allows to solve the problem of errors during communication, however, as previously mentioned, the WasteService doesn't need to receive a response from the Trolley , so we thought that this solution wasn't appropriate.</li>
  For this reasons we decided to adopt the first solution. <a id="wasteservice"></a>
 
- <h4>GUI Problem n°3: How to communicate the containers weight to the GUI.</h4>  
- Furthermore the WasteService is in charge to keep track of the weight in the two containers and to update their weights when a deposit action is finished.
- At the end it will emitt an event <ks>containers_weight</ks> to the GUI.
- For us the event is the right choice in this case because the WasteService doesn't need to know the existence of the GUI.
-
 </div>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
     <td style="border: 0px">
-        <center><img src="images/wasteService.png" alt="waste_service" width="70%"><center>
+        <center><img src="images/CoreWS.png" alt="core_waste_service" width="70%"><center>
     </td>
     <td style="border: 0px">
       <center><table cellpadding="5%">
@@ -505,10 +383,7 @@ div.imagedesc{
           <td rowspan="1">execute</td>
           <td rowspan="1">dispatch</td>
         </tr>
-        <tr>
-          <td rowspan="1">containers_weight</td>
-          <td rowspan="1">event</td>
-        </tr>
+
     </tbody></table></center>
   </td>
 </tr>
@@ -527,23 +402,12 @@ div.imagedesc{
   From a global point of view, however, the WasteService will remain waiting for the replay from the moment the execute is sent, making it impossible, for example, to change the status of the LED.</li>
 The proposed solution then implements the dispatch version.
 
-Furthermore the Transport Trolley, in this phase, has to comunicate to the GUI its Status and its Position.
-<h4>GUI Problem n°5: How to communicate with GUI.</h4>  
-This requirement can be implemented in various ways, for example with two dispatches to the GUI.
-We  also thought  about the option to make only one dispatch with both information but , beacuse the Status of the Trolley doesn't change every time it changes its position we thought it was not necessary to send superfluous informations,
-However, the use of dispatches did not seem adequate to us as the Transport Trolley must know the existence of the GUI and this did not seem necessary to us.
-For this reason we decided to use two events:
- the first one <ks>trolley_status</ks> shows the status of the Trolley and could be :
- <li><ks>working</ks>: if the trolley is working;</li>
- <li><ks>idle</ks>: if the trolley is waiting the next dispatch <ks>execute</ks> from the Waste Service;</li>
- <li><ks>stopped</ks>: if the transport_trolley is paused due to the sonar alarm;</li>
- The second one <ks>trolley_position</ks> shows its position and could be : <kr>HOME , INDOOR ,ContainerP, ContainerG , generic</kr>.
 </div>
 <br>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
     <td style="border: 0px">
-        <center><img src="images/Transport_trolley.png" alt="Transport_trolley" width="70%"><center>
+        <center><img src="images/CoreTrolley.png" alt="core_trolley" width="70%"><center>
     </td>
     <td style="border: 0px">
       <center><table cellpadding="5%">
@@ -555,15 +419,6 @@ For this reason we decided to use two events:
           <td rowspan="1">withdrawal_done</td>
           <td rowspan="1">dispatch</td>
       </tr>
-        <tr>
-            <td rowspan="1">trolley_status</td>
-            <td rowspan="1">event</td>
-        </tr>
-
-        <tr>
-            <td rowspan="1">trolley_position</td>
-            <td rowspan="1">event</td>
-        </tr>
       </tr>
     </tbody></table></center>
   </td>
@@ -571,124 +426,14 @@ For this reason we decided to use two events:
 </table>
 <br>
 
-<a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.WasteServiceCore/src/CoreWasteService.qak" >Core Executable model</a>
-
-<div class="remark" id="Analysis_with_led_and Sonar">
-  Now that we have finished the first phase we can insert the Led and Sonar component.
-  In the first phase we didn't analyse the requirement <a href="#R1D">R1D</a>.
-  By analysing this requirement arise a problem , the Waste Service must know when the Transport Trolley finished the deposit action.
-  It can be solved in various way, one could be that when the <ks>Transport trolley</ks> finishes the deposit action it sends a request to the Waste Service asking if the are other deposit command.
-  An advantage for this solution it's that it uses the fact that anyway some informations have to converge from the Trolley to the Waste Service.
-  The main problem with this type of solution is that in this way the Transport Trolley must know the existence of the Waste Service.
-  Another way to solve this problem is that the transport Trolley emit an event with its status, in this way the Transport Trolley doesn't need to know the existence of the Waste Service.
-  Furthermore, the event <ks>trolley_status</ks> is the same used to rule the state of the LED.
-  </div>
-  
-<h3> Led </h3>
-<div class="remark" id="Led">
-The <ks>Led</ks> does not own or produce any valuable information by itself but it is a component controlled by the system.
-The transport_trolley emits an event to the WasteService called <ks>trolley_status</ks>, based on the status the <ks>led</ks> must be changed by the <ks>WasteService</ks> through an event <ks>chenge_led</ks>.
-The State of the Led depends on the status of the trolley.
-These requirements make it necessary by the Waste Service to know the Status of the trolley.
-Then the led send his status through an event <ks>led_status</ks> to the WasteServiceStatusGUI.
-
-</div> <br>
-<table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
-  <tr>
-    <td style="border: 0px">
-        <center><img src="images/Led.png" alt="Led" width="60%"><center>
-    </td>
-    <td style="border: 0px">
-      <center><table cellpadding="5%">
-        <tbody><tr>
-            <th>Message</th>
-          
-            <th>Semantic</th>
-        </tr>
-        <tr>
-            <td rowspan="1">change_led</td>
-            
-            <td rowspan="1">event</td>
-        </tr>
-        <tr>
-            <td rowspan="1">led_status</td>
-           
-            <td rowspan="1">event</td>
-        </tr>
-
-        <tr>
-          <td rowspan="1">trolley_status</td>
-         
-          <td rowspan="1">event</td>
-      </tr>
-
-    </tbody></table></center>
-  </td>
-</tr>
-</table>
-<br>
-<hr size="4" color="black">
-<br>
-<div id="problem_analysis_sonar">
-  <h3> Sonar </h3>
-  <div class="remark">
-    The <ks>Sonar</ks> is used as an ‘alarm device’: when it measures a distance less than a prefixed value <ks>DLIMT</ks>, the Sonar sends a dispatch <kr>stop</kr> to stop the transport trolley. It will be resumed when Sonar detects again a distance higher than DLIMT and the Sonar sends a dispatch called <kr>resume</kr>.
-    To solve the requirement <a href="#R4">R4</a> we thought of two possible solution: 
-    In the first one the sonar emits a serious of event and another actor will analyse the distance and send the dispatch stop/resume to the trolley.
-    In the second one the sonar doesn't emit all the distance but sends directly the  dispatch when it detects a measure greather than DLIM to stop the transport trolley.
-    We decide to implement the second one.
-    <br>
-  </div>
-  <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
-    <tr>
-      <td style="border: 0px">
-          <center><img src="images/Sonar.png" alt="Sonar" width="60%"><center>
-      </td>
-      <td style="border: 0px">
-        <center>
-    <table cellpadding="5%">
-        <tr>
-          <th>Message</th>
-          <th>Semantic</th>
-        </tr>
-        <tr>
-          <td>stop</td>
-          <td>dispatch</td>
-        </tr>
-        <tr>
-          <td>resume</td>
-          <td>dispatch</td>
-        </tr>
-   </table>
- </center>
-</td>
-</tr>
-</table>
-</div>
-
-<div id="problem_analysis_GUI_overview">
-
-</div>
-<div id="problem_analysis_waste_service_status_GUI">
-  <h3>WasteServiceStatusGUI</h3>
-  <div class="remark">
-    The Service Manager's interface must be able to show these <a id="status">status</a>:
-    <ul>
-      <li> the current state of the <ks>transport trolley</ks> and its position;</li>
-      <li> the current weight of the material stored in the two containers (the plastic one and the glass one);</li>
-      <li> the current state of the Led (on, blinks, off).</li>
-    
-    </ul>
-  </div>
-  
-</div>
 
 <div id="logical_architecture">
   <h3>Logical Architecture</h3>
   From the previous considerations on the components of the system it is possible to define a first logical architecture: <br><br>
-  <center><img src="images/LogicalArchitecture.png" alt="logical_architecture" width="100%"></center>
+  <center><img src="images/CoreLogicalArchitecture.png" alt="core_logical_architecture" width="100%"></center>
 
-  <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.WasteService/src/WasteService.qak" >Executable model</a>
+<a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.WasteServiceCore/src/CoreWasteService.qak" > <ks>Core Executable model</ks></a>
+
 </div>
 
 
