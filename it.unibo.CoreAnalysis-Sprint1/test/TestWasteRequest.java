@@ -35,7 +35,7 @@ public class TestWasteRequest {
     @Test
     public void testLoadRejected() {
         ColorsOut.outappl("testLoadRejected STARTS", ColorsOut.BLUE);
-        String wasteTruckRequestStr = "msg(waste_request,request,wastetruck,wasteservice,waste_request(plastic,60),1)";
+        String wasteTruckRequestStr = "msg(waste_request,request,wastetruck,wasteservice,waste_request(plastic,400),1)";
         try {
             ConnTcp connTcp = new ConnTcp("localhost", 8025);
             String answer = connTcp.request(wasteTruckRequestStr);

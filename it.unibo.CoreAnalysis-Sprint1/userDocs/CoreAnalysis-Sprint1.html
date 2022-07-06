@@ -440,6 +440,25 @@ The proposed solution then implements the dispatch version.
 <h2>Test plans</h2>
 <div id="test_plans">
   <div class="remark">
+    Test plans are coded in Java (JUnit); they are not executable because we don't have done the real implementations yet, but they are the traces that must be followed to implement the Core requirements tests.
+
+    <h3>TestPlan: waste_request</h3>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestWasteRequest.java" >TestWasteRequest</a>
+    
+    <div><ks>Test loadRejecetd</ks>:</div>
+    <div>The waste_truck sends a waste request to the WasteService for a waste quantity that is greater then the container capacity and this replies with a loadrejected. </li> 
+    
+    <div><ks>Test loadAccepted</ks>:</div> 
+    <div>The waste truck sends a waste request to the WasteServicefor a waste quantity that is lower then the container capacity and this replies with a loadaccept.</div> 
+    
+    <h3>TestPlan: execute</h3> 
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestExecuteDeposit.java" >TestExecuteDeposit</a>
+    
+    <div><ks>Test testExecute</ks>:</div>
+    <div>When the waste load is accepted, the WasteService sends to the transport_trolley and execute dispatch to let him starts the deposit action.</div> 
+  
+    <div><ks>Test testWithdrawal</ks>:</div>
+    <div>When the transport_trolley ends the deposit action it sends a dispatch to the WasteService to communicate it.</div> 
   </div>
 </div>
 
