@@ -41,7 +41,7 @@ class Wastetruck ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 								
 												Material 	= payloadArg(0);
 												TruckLoad 	= payloadArg(1).toLong();
-								println("WasteTruck | accepted $Material load with weight $TruckLoad")
+								println("WASTETRUCK | accepted $Material load with weight $TruckLoad")
 						}
 					}
 					 transition(edgeName="t12",targetState="leave_Indoor",cond=whenDispatch("free_Indoor"))
@@ -54,7 +54,7 @@ class Wastetruck ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 								
 												Material 	= payloadArg(0);
 												TruckLoad 	= payloadArg(1).toLong();
-								println("WasteTruck | rejected $Material load with weight $TruckLoad")
+								println("WASTETRUCK | rejected $Material load with weight $TruckLoad")
 						}
 					}
 					 transition( edgeName="goto",targetState="leave_Indoor", cond=doswitch() )

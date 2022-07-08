@@ -35,14 +35,14 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								
 												var Material 	= payloadArg(0);
 												var TruckLoad 	= payloadArg(1).toLong();
-								println("WasteService | arrived request: $Material load with weight $TruckLoad")
+								println("WASTESERVICE | arrived request: $Material load with weight $TruckLoad")
 								if(  Material.equals("plastic")  
 								 ){if(  TruckLoad + CurrentPB <= MAXPB  
 								 ){answer("waste_request", "loadaccept", "loadaccept($Material,$TruckLoad)"   )  
 								 CurrentPB += TruckLoad  
-								println("WasteService | current plastic weight: $CurrentPB")
-								forward("execute", "execute($Material,$TruckLoad)" ,"transporttrolley" ) 
-								println("WasteService | Said to TransportTroleey to execute")
+								println("WASTESERVICE | current plastic weight: $CurrentPB")
+								request("pickup_request", "pickup_request($Material,$TruckLoad)" ,"transporttrolley" )  
+								println("WASTESERVICE | Sent pickup request to TransportTrolley")
 								}
 								else
 								 {answer("waste_request", "loadrejected", "loadrejected($Material,$TruckLoad)"   )  
@@ -52,9 +52,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 {if(  TruckLoad + CurrentGB <= MAXGB  
 								  ){answer("waste_request", "loadaccept", "loadaccept($Material,$TruckLoad)"   )  
 								  CurrentGB += TruckLoad  
-								 println("WasteService | current glass weight: $CurrentGB")
-								 forward("execute", "execute($Material,$TruckLoad)" ,"transporttrolley" ) 
-								 println("WasteService | Said to TransportTroleey to execute")
+								 println("WASTESERVICE | current glass weight: $CurrentGB")
+								 request("pickup_request", "pickup_request($Material,$TruckLoad)" ,"transporttrolley" )  
+								 println("WASTESERVICE | Said to TransportTroleey to execute")
 								 }
 								 else
 								  {answer("waste_request", "loadrejected", "loadrejected($Material,$TruckLoad)"   )  
@@ -63,13 +63,20 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								emit("containers_weight", "containers_weight(CurrentGB,CurrentPB)" ) 
 						}
 					}
-					 transition(edgeName="t14",targetState="send_Done",cond=whenDispatch("withdrawal_done"))
+					 transition(edgeName="t14",targetState="pickup_Done",cond=whenReply("pickup_done"))
 				}	 
-				state("send_Done") { //this:State
+				state("pickup_Done") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						forward("free_Indoor", "free_Indoor(FREE)" ,"wastetruck" ) 
-						println("WASTESERVICE | Sent message to wt to leave indoor area.")
+						println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
+					}
+					 transition(edgeName="t25",targetState="withdrawal_Done",cond=whenDispatch("withdrawal_done"))
+				}	 
+				state("withdrawal_Done") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						println("WASTESERVICE | Handle queue if it is.")
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 

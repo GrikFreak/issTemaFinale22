@@ -352,12 +352,15 @@ div.imagedesc{
  If the reply is <ks>loadaccept</ks> the <kr>WasteService</kr> needs to communicate to the Transport Trolley to execute the deposit action.
  <h4>Core Problem n°2: How to send the start of deposit action.</h4>  
  To approach this problem we thought of three possible solutions : 
- <li>A <ks>dispatch</ks> called <kr>execute</kr> :  This is the simplest solution because we need only to send a command to the Transport Trolley. 
-  Furthermore ,by requirements , we have to active a serious of action and the Waste Service doesn't need to know when the deposit action is ended.</li>
+ <li>A <ks>dispatch</ks>  :  This is the simplest solution because we need only to send a command to the Transport Trolley. 
+  Furthermore ,by requirements , we have to active a series of action and the Waste Service doesn't need to know when the deposit action is ended.</li>
  <li>Another possible solution is to send an <ks>event</ks>, in this way the WasteService doesn't need to know the transport trolley and also there is the possibility to handle one or more trolleys.
   Otherwise this solution can create communication problem because, if the event isn't arrived to the trolley, it may block the system.</li> 
- <li>Another one is throught a  <ks>request</ks>  and a <ks>replay</ks> : this solution allows to solve the problem of errors during communication, however, as previously mentioned, the WasteService doesn't need to receive a response from the Trolley , so we thought that this solution wasn't appropriate.</li>
- For this reasons we decided to adopt the first solution. <a id="wasteservice"></a>
+ <li>Another one is throught a  <ks>request</ks>  and a <ks>replay</ks> : this solution allows to solve the problem of errors during communication, however, as previously mentioned, the WasteService doesn't need to receive a response from the Trolley.
+  The main problem is that the Waste Truck is waiting to leave the INDOOR area, it would be appreciate that he can free it as soon as possible.</li>
+  So we thought that after the WasteService sends the request to the TransportTrolley, it waits his reply , and as soon as the Waste Service receives the reply it can say to the Waste Truck to leave the
+  Indoor area. 
+ <a id="wasteservice"></a>
 
 </div>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
@@ -380,8 +383,12 @@ div.imagedesc{
             <td rowspan="1">reply</td>
         </tr>
         <tr>
-          <td rowspan="1">execute</td>
-          <td rowspan="1">dispatch</td>
+          <td rowspan="1">pickup_request</td>
+          <td rowspan="1">request</td>
+          </tr>
+          <tr>
+          <td rowspan="1">pickup_done</td>
+          <td rowspan="1">reply</td>
         </tr>
 
     </tbody></table></center>
@@ -451,15 +458,12 @@ The proposed solution then implements the dispatch version.
     <div><ks>Test loadAccepted</ks>:</div> 
     <div>The waste truck sends a waste request to the WasteServicefor a waste quantity that is lower then the container capacity and this replies with a loadaccept.</div> 
     
-    <h3>TestPlan: execute</h3> 
-    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestExecuteDeposit.java" >TestExecuteDeposit</a>
+    <h3>TestPlan: pickup_request</h3> 
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestPickUp</a>
     
-    <div><ks>Test testExecute</ks>:</div>
-    <div>When the waste load is accepted, the WasteService sends to the transport_trolley and execute dispatch to let him starts the deposit action.</div> 
-  
-    <div><ks>Test testWithdrawal</ks>:</div>
-    <div>When the transport_trolley ends the deposit action it sends a dispatch to the WasteService to communicate it.</div> 
-  </div>
+    <div><ks>Test testPickUpDone</ks>:</div>
+    <div>When the waste load is accepted, the WasteService sends to the transport_trolley a request and the TransportTrolley reply with a pickup_done when it has finished the pickup action.</div> 
+   </div>
 </div>
 
 <h2>Work Plan</h2>

@@ -4,8 +4,10 @@ Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
 Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
 Reply loadrejected : loadrejected(MATERIAL, TRUCKLOAD)
 
+Request pickup_request : pickup_request(MATERIAL,TRUCKLOAD)
+Reply pickup_done : pickup_done(DONE)
+
 Dispatch free_Indoor : free_Indoor(FREE)
-Dispatch execute : execute(MATERIAL,TRUCKLOAD)
 Dispatch withdrawal_done : withdrawal_done(DONE)
 
 Event containers_weight : containers_weight(GWEIGHT, PWEIGHT)
@@ -47,7 +49,7 @@ QActor wastetruck context ctxWasteService {
 				Material 	= payloadArg(0);
 				TruckLoad 	= payloadArg(1).toLong();
 			#]
-			println("WasteTruck | accepted $Material load with weight $TruckLoad")
+			println("WASTETRUCK | accepted $Material load with weight $TruckLoad")
 		}
 	}
 	
@@ -60,7 +62,7 @@ QActor wastetruck context ctxWasteService {
 				Material 	= payloadArg(0);
 				TruckLoad 	= payloadArg(1).toLong();
 			#]
-			println("WasteTruck | rejected $Material load with weight $TruckLoad")
+			println("WASTETRUCK | rejected $Material load with weight $TruckLoad")
 		}
 	}
 	
@@ -96,14 +98,14 @@ QActor wasteservice context ctxWasteService {
 				var Material 	= payloadArg(0);
 				var TruckLoad 	= payloadArg(1).toLong();
 			#]
-			println("WasteService | arrived request: $Material load with weight $TruckLoad")
+			println("WASTESERVICE | arrived request: $Material load with weight $TruckLoad")
 			if [# Material.equals("plastic") #] {
 				if [# TruckLoad + CurrentPB <= MAXPB #]{
 					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
 					[# CurrentPB += TruckLoad #]
-					println("WasteService | current plastic weight: $CurrentPB")
-					forward transporttrolley -m execute : execute($Material, $TruckLoad)
-					println("WasteService | Said to TransportTroleey to execute")
+					println("WASTESERVICE | current plastic weight: $CurrentPB")
+					request transporttrolley -m pickup_request : pickup_request($Material, $TruckLoad)
+					println("WASTESERVICE | Sent pickup request to TransportTrolley")
 				} else {
 					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
 				}
@@ -111,9 +113,9 @@ QActor wasteservice context ctxWasteService {
 				if [# TruckLoad + CurrentGB <= MAXGB #]{
 					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
 					[# CurrentGB += TruckLoad #]
-					println("WasteService | current glass weight: $CurrentGB")
-					forward transporttrolley -m execute : execute($Material, $TruckLoad)
-					println("WasteService | Said to TransportTroleey to execute")
+					println("WASTESERVICE | current glass weight: $CurrentGB")
+					request transporttrolley -m pickup_request : pickup_request($Material, $TruckLoad)
+					println("WASTESERVICE | Said to TransportTroleey to execute")
 				} else {
 					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
 				}
@@ -122,12 +124,19 @@ QActor wasteservice context ctxWasteService {
 		}
 	}
 	
-	Transition t1 whenMsg withdrawal_done -> send_Done 
+	Transition t1 whenReply pickup_done -> pickup_Done 
 	
-	State send_Done {
+	State pickup_Done {
 		printCurrentMessage
 		forward wastetruck -m free_Indoor : free_Indoor(FREE)
-		println("WASTESERVICE | Sent message to wt to leave indoor area.")
+		println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
+	}
+	
+	Transition t2 whenMsg withdrawal_done -> withdrawal_Done 
+	
+	State withdrawal_Done {
+		printCurrentMessage
+		println("WASTESERVICE | Handle queue if it is.")
 	}
 	
 	Goto s0
@@ -145,32 +154,32 @@ QActor transporttrolley context ctxWasteService {
 	
 	State s0 initial {
 		printCurrentMessage
-		println("the transportTrolley is waiting..")
+		println("the TransportTrolley is waiting..")
 	}
 	
-	Transition t0 whenMsg execute -> move_to_INDOOR
+	Transition t0 whenRequest pickup_request -> move_to_INDOOR
 	
 	State move_to_INDOOR {
-		onMsg(execute : execute(MATERIAL,TRUCKLOAD)){
+		onMsg(pickup_request : pickup_request(MATERIAL,TRUCKLOAD)){
 		 	[# 
 		 		Material = payloadArg(0)
 		 		TruckLoad = payloadArg(1).toLong()
 		 	#]
 		}
 		printCurrentMessage
-		println("transportTrolley | moving to INDOOR with $Material")
+		println("TRANSPORT TROLLEY | moving to INDOOR")
 		[# Status = "WORKING" #]
 		[# Position = "GENERIC" #]
 		emit trolley_status : trolley_status(Status)
 		emit trolley_position : trolley_position(Position)
 		delay 500 
-		println("transportTrolley | arrived to INDOOR in status : $Status")
-		println("transportTrolley | picking up $Material of load $TruckLoad")
+		println("TRANSPORT TROLLEY | arrived to INDOOR in status : $Status")
+		println("TRANSPORT TROLLEY | picking up $Material of load $TruckLoad")
 		[# Position = "INDOOR" #]
 		emit trolley_position : trolley_position(Position)
 		delay 500
-		println("transportTrolley | picked up, send end action to WS.")
-		forward wasteservice -m withdrawal_done : withdrawal_done(DONE)
+		println("TRANSPORT TROLLEY | picked up, send end action to WS.")
+		replyTo pickup_request with pickup_done : pickup_done(DONE)
 		
 	}
 	
@@ -178,15 +187,16 @@ QActor transporttrolley context ctxWasteService {
 	
 	State move_to_ContainerP{
 		printCurrentMessage
-		println("transportTrolley | moving to plastic container ")
+		println("TRANSPORT TROLLEY | moving to plastic container ")
 		[# Status = "WORKING" #]
 		emit trolley_status : trolley_status(Status)
 		delay 500 
-		println("transportTrolley | arrived to plastic container")
+		println("TRANSPORT TROLLEY | arrived to plastic container")
 		[# Position = "CONTAINERP" #]
 		emit trolley_position : trolley_position(Position)
-		println("transportTrolley | settling plastic")
+		println("TRANSPORT TROLLEY | settling plastic")
 		delay 300
+		forward wasteservice -m withdrawal_done : withdrawal_done(DONE)
 		[# Status = "IDLE" #]
 		emit trolley_status : trolley_status(Status)
 	}
@@ -195,15 +205,16 @@ QActor transporttrolley context ctxWasteService {
 	
 	State move_to_ContainerG{
 		printCurrentMessage
-		println("transportTrolley | moving to glass container ")
+		println("TRANSPORT TROLLEY | moving to glass container ")
 		[# Status = "WORKING" #]
 		emit trolley_status : trolley_status(Status)
 		delay 500 
-		println("transportTrolley | arrived to glass container")
+		println("TRANSPORT TROLLEY | arrived to glass container")
 		[# Position = "CONTAINERG" #]
 		emit trolley_position : trolley_position(Position)
-		println("transportTrolley | settling glass")
+		println("TRANSPORT TROLLEY | settling glass")
 		delay 300
+		forward wasteservice -m withdrawal_done : withdrawal_done(DONE)
 		[# Status = "IDLE" #]
 		emit trolley_status : trolley_status(Status)
 	}
@@ -212,9 +223,9 @@ QActor transporttrolley context ctxWasteService {
 	
 	State move_to_HOME{
 		printCurrentMessage
-		println("transportTrolley | coming back to HOME ")
+		println("TRANSPORTTROLLEY | coming back to HOME ")
 		delay 500 
-		println("transportTrolley | arrived HOME")
+		println("TRANSPORTTROLLEY | arrived HOME")
 		[# Position = "HOME" #]
 		emit trolley_position : trolley_position(Position)
 	}
