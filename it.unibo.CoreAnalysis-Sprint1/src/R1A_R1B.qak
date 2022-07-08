@@ -1,0 +1,115 @@
+System r1ar1b
+
+Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
+Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
+Reply loadrejected : loadrejected(MATERIAL, TRUCKLOAD)
+
+Dispatch free_Indoor : free_Indoor(FREE)
+
+Context ctxWasteService ip [ host="localhost" port=8025 ]
+
+QActor wastetruck context ctxWasteService {
+	
+	[#
+		var Material 	= "";
+		var TruckLoad 	= 0L;
+		var Materials = arrayListOf<String>("glass", "plastic");
+	#]
+	
+	State s0 initial {
+		printCurrentMessage
+		println("the WasteTruck is waiting..")
+		delay 3000
+		
+		[# 
+			val Load = kotlin.random.Random.nextLong(10,100) 
+			val Mat = Materials[kotlin.random.Random.nextInt(1,2)]
+		#]
+		
+		request wasteservice -m waste_request : waste_request($Mat, $Load)
+		println("WASTETRUCK | sent request of $Mat load $Load")
+	}
+	
+	Transition t0 whenReply loadaccept -> accepted
+				  whenReply loadrejected -> rejected 
+				  
+	State accepted {
+		printCurrentMessage
+		onMsg(loadaccept : loadaccept(MATERIAL, TRUCKLOAD)) {
+			[#
+				Material 	= payloadArg(0);
+				TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WASTETRUCK | accepted $Material load with weight $TruckLoad")
+		}
+	}
+	
+	Transition t1 whenMsg free_Indoor -> leave_Indoor
+	
+	State rejected {
+		printCurrentMessage
+		onMsg(loadrejected : loadrejected(MATERIAL, TRUCKLOAD)) {
+			[#
+				Material 	= payloadArg(0);
+				TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WASTETRUCK | rejected $Material load with weight $TruckLoad")
+		}
+	}
+	
+	Goto leave_Indoor
+	
+	State leave_Indoor {
+		println("WASTETRUCK | WasteTruck left Indoor area.")
+	}
+
+	//Goto s0
+}
+
+QActor wasteservice context ctxWasteService {
+	
+	[# 
+		var MAXPB 	= 500L;
+		var MAXGB 	= 500L;
+		var CurrentPB = 0L;
+		var CurrentGB = 0L;
+	#]
+	
+	State s0 initial {
+		printCurrentMessage
+		println("the WasteService is waiting..")
+	}
+	
+	Transition t0 whenRequest waste_request -> handle_request
+				  
+	State handle_request {
+		printCurrentMessage
+		onMsg(waste_request : waste_request(MATERIAL, TRUCKLOAD)) {
+			[#
+				var Material 	= payloadArg(0);
+				var TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WASTESERVICE | arrived request: $Material load with weight $TruckLoad")
+			if [# Material.equals("plastic") #] {
+				if [# TruckLoad + CurrentPB <= MAXPB #]{
+					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
+					[# CurrentPB += TruckLoad #]
+					println("WASTESERVICE | current plastic weight: $CurrentPB")
+				} else {
+					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
+				}
+			} else {
+				if [# TruckLoad + CurrentGB <= MAXGB #]{
+					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
+					[# CurrentGB += TruckLoad #]
+					println("WASTESERVICE | current glass weight: $CurrentGB")
+				} else {
+					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
+				}
+			}
+		}
+	}
+	
+	Goto s0
+	
+}

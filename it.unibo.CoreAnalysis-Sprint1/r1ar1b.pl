@@ -1,5 +1,5 @@
 %====================================================================================
-% wasteservicecore description   
+% r1ar1b description   
 %====================================================================================
 context(ctxwasteservice, "localhost",  "TCP", "8025").
  qactor( wastetruck, ctxwasteservice, "it.unibo.wastetruck.Wastetruck").

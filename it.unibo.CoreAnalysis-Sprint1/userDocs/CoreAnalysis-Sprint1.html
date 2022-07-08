@@ -286,7 +286,9 @@ div.imagedesc{
   <h4><a href="#R1B">R1B</a></h4>
   <div class="remark" id="R1B">
     <kc>Formalization</kc>: The WasteService sends a <kr>reply</kr> to the WasteTruck <ks>loadaccept</ks> if the final content of proper container will not surpass the maximum value allowed (MAXPB or MAXGB). Otherwise, it sends the <kr>reply</kr> to the TruckDriver <ks>loadrejecetd</ks> and the Waste truck leaves the INDOOR area.
-
+  </div>
+  <div>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.WasteServiceCore/src/R1A_R1B.qak" > <ks>R1A-R1B Executable model</ks></a>
   </div>
   <h4><a href="#R1C-core">R1C-core</a></h4>
   <div class="remark" id="R1C-core">
@@ -296,7 +298,9 @@ div.imagedesc{
      <li>goes to the proper container:  the transport_trolley moves to the correspondent container.</li>  
      <li>settles the material: the transport_trolley deposit the load picked in the container.</li> 
   </div>
-  
+  <div>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.WasteServiceCore/src/CoreWasteService.qak" > <ks>Core Executable model</ks></a>
+  </div>
   <h3>Non-functional requirements</h3>
   <div class="remark" id="proactive">
     <kc>Proactive</kc>: the TransportTrolley has to move and to do actions autonomously.
@@ -438,16 +442,14 @@ The proposed solution then implements the dispatch version.
   <h3>Logical Architecture</h3>
   From the previous considerations on the components of the system it is possible to define a first logical architecture: <br><br>
   <center><img src="images/CoreLogicalArchitecture.png" alt="core_logical_architecture" width="100%"></center>
-
-<a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.WasteServiceCore/src/CoreWasteService.qak" > <ks>Core Executable model</ks></a>
-
 </div>
 
 
 <h2>Test plans</h2>
 <div id="test_plans">
   <div class="remark">
-    Test plans are coded in Java (JUnit); they are not executable because we don't have done the real implementations yet, but they are the traces that must be followed to implement the Core requirements tests.
+    Test plans are coded in Java (JUnit). 
+    Since both tests develop more functionality of the System, both are integration tests.
 
     <h3>TestPlan: waste_request</h3>
     <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestWasteRequest.java" >TestWasteRequest</a>
