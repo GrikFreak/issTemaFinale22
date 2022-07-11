@@ -1,4 +1,5 @@
 import it.unibo.ctxWasteService.MainCtxWasteServiceKt;
+import it.unibo.ctxbasicrobot.MainCtxbasicrobotKt;
 import it.unibo.kactor.ActorBasic;
 import it.unibo.kactor.QakContext;
 import org.junit.*;
@@ -15,14 +16,14 @@ public class TestPickUp {
 		waitForWasteService();
   	}
 
- 	protected void waitForWasteService(){
-		ActorBasic wasteservice = QakContext.Companion.getActor("wasteservice");
-		while( wasteservice == null ){
-			ColorsOut.outappl("TestPickUp waits for WS ... " , ColorsOut.GREEN);
-			CommUtils.delay(200);
-			wasteservice = QakContext.Companion.getActor("wasteservice");
-		}
-	}
+ 	protected void waitForWasteService() {
+        ActorBasic wasteservice = QakContext.Companion.getActor("wasteservice");
+        while (wasteservice == null) {
+            ColorsOut.outappl("TestPickUp waits for WS ... ", ColorsOut.GREEN);
+            CommUtils.delay(200);
+            wasteservice = QakContext.Companion.getActor("wasteservice");
+        }
+    }
 
     @After
     public void down() {
@@ -31,8 +32,8 @@ public class TestPickUp {
 
     @Test
     public void testPickUpDone() {
-        ColorsOut.outappl("testExecute STARTS", ColorsOut.BLUE);
-        String wasteServicePickUpStr = "msg(pickup_request,request,service,transporttrolley,pickup_request(plastic,60),1)";
+        ColorsOut.outappl("testPickUpDone STARTS", ColorsOut.BLUE);
+        String wasteServicePickUpStr = "msg(pickup_request,request,service,transporttrolley,pickup_request(wwww,plastic),1)";
         try {
             ConnTcp connTcp = new ConnTcp("localhost", 8025);
             String answer = connTcp.request(wasteServicePickUpStr);

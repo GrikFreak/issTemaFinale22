@@ -17,7 +17,7 @@ Event trolley_position : trolley_position(POSITION)
 
 Context ctxWasteService ip [ host="localhost" port=8025 ]
 
-QActor wastetruck context ctxWasteService {
+QActor wastetruckmock context ctxWasteService {
 	
 	[#
 		var Material 	= "";
@@ -128,7 +128,7 @@ QActor wasteservice context ctxWasteService {
 	
 	State pickup_Done {
 		printCurrentMessage
-		forward wastetruck -m free_Indoor : free_Indoor(FREE)
+		forward wastetruckmock -m free_Indoor : free_Indoor(FREE)
 		println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
 	}
 	

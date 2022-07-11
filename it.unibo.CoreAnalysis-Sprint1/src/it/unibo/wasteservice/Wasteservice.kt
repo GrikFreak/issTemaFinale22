@@ -11,7 +11,7 @@ import kotlinx.coroutines.runBlocking
 class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scope ){
 
 	override fun getInitialState() : String{
-		return "s0"
+		return "init"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		 
@@ -19,11 +19,33 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 				var MAXGB 	= 500L;
 				var CurrentPB = 0L;
 				var CurrentGB = 0L;
+				var Material = "";
+				var PathHome = "";
+				var PathIndoor = "";
+				var PathContainer = "";
+				val XIndoor = 0;
+				val YIndoor = 4;
+				val XContainerP = 6;
+				val YContainerP = 4;
+				val XContainerG = 6;
+				val YContainerG = 0;
+				val XHome = 0;
+				val YHome = 0;
 		return { //this:ActionBasciFsm
+				state("init") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						println("WASTESERVICE | Start.")
+						unibo.kotlin.planner22Util.loadRoomMap( "map.txt"  )
+						unibo.kotlin.planner22Util.initAI(  )
+						unibo.kotlin.planner22Util.showCurrentRobotState(  )
+					}
+					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
+				}	 
 				state("s0") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
-						println("the WasteService is waiting..")
+						println("WASTESERVICE | is waiting for a request..")
 					}
 					 transition(edgeName="t03",targetState="handle_request",cond=whenRequest("waste_request"))
 				}	 
@@ -33,14 +55,22 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						if( checkMsgContent( Term.createTerm("waste_request(MATERIAL,TRUCKLOAD)"), Term.createTerm("waste_request(MATERIAL,TRUCKLOAD)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								
-												var Material 	= payloadArg(0);
+												Material = payloadArg(0);
 												var TruckLoad 	= payloadArg(1).toLong();
-								println("WASTESERVICE | arrived request: $Material load with weight $TruckLoad")
+								println("WASTESERVICE | arrived request: $Material with load $TruckLoad")
 								if(  Material.equals("plastic")  
 								 ){if(  TruckLoad + CurrentPB <= MAXPB  
 								 ){answer("waste_request", "loadaccept", "loadaccept($Material,$TruckLoad)"   )  
 								 CurrentPB += TruckLoad  
-								println("WASTESERVICE | current plastic weight: $CurrentPB")
+								println("WASTESERVICE | current container plastic weight: $CurrentPB")
+								unibo.kotlin.planner22Util.setGoal( XIndoor, YIndoor  )
+								 PathIndoor = unibo.kotlin.planner22Util.doPlan().toString()
+														.replace(" ","")
+														.replace(",","")
+														.replace("[","")
+														.replace("]","")
+								request("pickup_request", "pickup_request($PathIndoor,$Material)" ,"transporttrolley" )  
+								println("WASTESERVICE | Sent pickup request to TransportTrolley, indoor path $PathIndoor.")
 								}
 								else
 								 {answer("waste_request", "loadrejected", "loadrejected($Material,$TruckLoad)"   )  
@@ -50,13 +80,82 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 {if(  TruckLoad + CurrentGB <= MAXGB  
 								  ){answer("waste_request", "loadaccept", "loadaccept($Material,$TruckLoad)"   )  
 								  CurrentGB += TruckLoad  
-								 println("WASTESERVICE | current glass weight: $CurrentGB")
+								 println("WASTESERVICE | current container glass weight: $CurrentGB")
+								 unibo.kotlin.planner22Util.setGoal( XIndoor, YIndoor  )
+								  PathIndoor = unibo.kotlin.planner22Util.doPlan().toString()
+								 						.replace(" ","")
+								 						.replace(",","")
+								 						.replace("[","")
+								 						.replace("]","")
+								 request("pickup_request", "pickup_request($PathIndoor,$Material)" ,"transporttrolley" )  
+								 println("WASTESERVICE | Sent pickup request to TransportTrolley, first path $PathIndoor")
 								 }
 								 else
 								  {answer("waste_request", "loadrejected", "loadrejected($Material,$TruckLoad)"   )  
 								  }
 								 }
+								emit("containers_weight", "containers_weight(CurrentGB,CurrentPB)" ) 
 						}
+					}
+					 transition(edgeName="t14",targetState="handle_storage",cond=whenReply("pickup_done"))
+				}	 
+				state("handle_storage") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						forward("free_Indoor", "free_Indoor(FREE)" ,"wastetruckmock" ) 
+						println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
+						if(  Material.equals("plastic")  
+						 ){unibo.kotlin.planner22Util.setGoal( XContainerP, YContainerP  )
+						 PathContainer = unibo.kotlin.planner22Util.doPlan().toString()
+										.replace(" ","")
+										.replace(",","")
+										.replace("[","")
+										.replace("]","")
+						}
+						else
+						 {unibo.kotlin.planner22Util.setGoal( XContainerG, YContainerG  )
+						  PathContainer = unibo.kotlin.planner22Util.doPlan().toString()
+						 				.replace(" ","")
+						 				.replace(",","")
+						 				.replace("[","")
+						 				.replace("]","")
+						 }
+						println("WASTESERVICE | send request to store to the transport trolley.")
+						request("storage_request", "storage_request($PathContainer)" ,"transporttrolley" )  
+					}
+					 transition(edgeName="t25",targetState="storage_Done",cond=whenReply("storage_done"))
+				}	 
+				state("storage_Done") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						println("WASTESERVICE | Storage done. Handle queue...")
+						stateTimer = TimerActor("timer_storage_Done", 
+							scope, context!!, "local_tout_wasteservice_storage_Done", 100.toLong() )
+					}
+					 transition(edgeName="t36",targetState="move_home",cond=whenTimeout("local_tout_wasteservice_storage_Done"))   
+					transition(edgeName="t37",targetState="handle_request",cond=whenRequest("waste_request"))
+				}	 
+				state("move_home") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						println("WASTESERVICE | No Queue, send Transport trolley to HOME")
+						unibo.kotlin.planner22Util.setGoal( XHome, YHome  )
+						
+								PathHome = unibo.kotlin.planner22Util.doPlan().toString() 
+									.replace(" ","")
+									.replace(",","")
+									.replace("[","")
+									.replace("]","")
+						request("home_request", "home_request($PathHome)" ,"transporttrolley" )  
+					}
+					 transition(edgeName="t48",targetState="back_done",cond=whenReply("home_done"))
+				}	 
+				state("back_done") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						println("WASTESERVICE | the trolley is arrived at HOME")
+						unibo.kotlin.planner22Util.updateMapWithPath( PathHome  )
+						unibo.kotlin.planner22Util.showCurrentRobotState(  )
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 

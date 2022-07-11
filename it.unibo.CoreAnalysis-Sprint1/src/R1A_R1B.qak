@@ -8,7 +8,7 @@ Dispatch free_Indoor : free_Indoor(FREE)
 
 Context ctxWasteService ip [ host="localhost" port=8025 ]
 
-QActor wastetruck context ctxWasteService {
+QActor wastetruckmock context ctxWasteService {
 	
 	[#
 		var Material 	= "";

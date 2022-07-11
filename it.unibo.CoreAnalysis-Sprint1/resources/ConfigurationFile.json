@@ -1,0 +1,6 @@
+{
+    "MAXPB" : 500,  //plastic container capacity
+    "MAXGB" : 500,  //glass container capacity
+    "RD" : 1,       //robot side dim
+    "dlimit" :20    //sonar distance 
+}

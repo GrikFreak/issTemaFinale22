@@ -1,0 +1,558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<style type="text/css">
+body
+{
+    margin-left:  30px;
+    margin-right: 30px;
+};
+
+P
+{
+    font-family: Tahoma;
+    font-size: 10pt;
+};
+
+a, a:visited, a:active, a:link, a:hover {
+    text-decoration: underline;
+    color: #545454;
+    background-color: transparent;
+	font-size: 93%;
+}
+
+a:hover {
+    background-color: #cccccc;
+}
+
+
+hr {
+    clear: both;
+    height: 1px;
+    color: #242424;
+    background-color: transparent;
+}
+
+h1, h2, h3 {
+    color: #242424;
+    clear: left;
+    font: 100% Tahoma, Helvetica, Arial, sans-serif;
+    margin-bottom: 0.5em;
+    padding-top: 0.5em;
+	border-radius: 10px;
+	padding: 5px;
+}
+
+top {
+	width: 100%;
+}
+
+
+#i {
+    color: #ff1010;
+}
+tt{
+	font-family: "Arial";
+    font-size: 90%;
+	color: #006600;
+}
+em{
+	font-family: "Arial";
+    font-size: 80%;
+	font-weight: bold;
+	border-style:solid;
+	border-color: #abe876;
+    color: #1632cc;
+}
+bc{
+	font-family: "Arial";
+	font-size: 90%;
+	font-weight: bold;
+    color: #990000;
+	background-color: #fcf8c7;
+}
+ks{
+	font-family: "Arial";
+	font-weight: bold;
+    color: #0000CD	;
+	font-size: 90%;
+}
+kc{
+	font-family: "Arial";
+	font-weight: bold;
+    color: #008000	;
+	font-size: 90%;
+}
+kr{
+	font-family: "Arial";
+	font-weight: bold;
+    color: #ff0000	;
+	font-size: 90%;
+}
+pre{
+	font-family: "Consolas";
+	font-size: 85%;
+	background-color: #f5f5f5;
+	border: 1.5px solid silver;
+	padding: 5px;
+}
+m{
+	font-family: "Helvetica";
+	line-height: 100%;
+ 	font-size: 75%;
+}
+div.body{
+
+    font-size: 18px;
+}
+k{
+    color: #990000;
+	font-weight: bold;
+	font-size: 90%;
+}
+h1 {
+    font-size: 150%;
+    background-color: #b2c0ff;
+	padding: 10px;
+}
+
+h2 {
+    background-color: #9ed8ff;
+    font-size: 130%;
+}
+
+h3 {
+	background-color: #e6ccff;
+    font-size: 100%;
+}
+h4 {
+    background-color: #ccffcc;
+    font-size: 100%;
+	width: 95%;
+	border-radius: 5px;
+	padding: 2px;
+}
+h5 {
+    background-color: #d5ffb0;
+    font-size: 100%;
+
+}
+div.req{
+	background-color: #d9ffb3;
+    font-size: 18px;
+	width: 700px;
+    border: 3px solid green;
+    padding: 15px;
+    margin: 10px;
+}
+div.remark{
+	background-color: #E3F2FD;
+    border: 1.5px solid #d5f2ed;
+    padding: 15px;
+    margin: 10px;
+	border-radius: 25px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+#exampleclass tbody,
+#exampleclass thead,
+#exampleclass th {
+  border: 0;
+}
+
+ol, ul, li {
+  margin: 0;
+  margin-left: 10px;
+  padding: 0;
+  padding-bottom: 5px;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
+
+img {
+	border: 1.5px solid #d5f2ed
+
+}
+
+a, a:visited, a:active, a:link, a:hover {
+    text-decoration: underline;
+    color: #545454;
+    background-color: transparent;
+}
+
+div.wrapdesc{
+	width: 90%;
+	margin: auto;
+}
+
+div.imagedesc{
+	width: 85%;
+	margin: auto;
+}
+</style>
+
+<head>
+
+<title>Final task ISS-2022: Waste service</title></head>
+
+<body>
+<div id="top">
+<h1>Final task ISS-2022: Waste service<font size="5"></font> </h1>
+</div>
+
+<div class="body">
+
+
+<h2>Introduction</h2>
+<div id="Introduction">
+  This document deals with the design, build and development of a software system, named <ks>WasteService</ks>,
+  which implements a series of functions to separate collection of waste.
+</div>
+<h2>Requirements</h2>
+<div id="Requirements" class="remark">
+    <p>A company intends to build a <span class="blue">WasteService</span> for the <em>separate collection of waste</em>,  composed of a set of elements:</p>
+    <ol class="arabic">
+    <li><p>a service area (rectangular, flat) that includes:</p>
+    <ul class="simple">
+    <li><p>an <span class="blue">INDOOR</span> port, to enter waste material</p></li>
+    <li><p>a <span class="blue">PlasticBox</span> container, devoted to store objects made of plastic, upto <strong>MAXPB</strong> kg of material.</p></li>
+    <li><p>a <span class="blue">GlassBox</span> container, devoted to store objects made of glass, upto <strong>MAXGB</strong> kg of material.</p></li>
+    </ul>
+    <p>The service area is free from internal obstacles, as shown in the following picture:</p>
+    <blockquote>
+    <div><a class="reference internal image-reference" href="images/WasteServiceRoom.PNG"><img alt="images/WasteServiceRoom.PNG" class="align-center" src="images/WasteServiceRoom.PNG" style="width: 60%;" /></a>
+    </div></blockquote>
+    </li>
+    <li><p>a DDR robot working as a <span class="blue">transport trolley</span>, that is intially situated in its <span class="blue">HOME</span> location.
+    The transport trolley has  the form of a square of side length <strong>RD</strong>.</p>
+    <p>The <cite>transport trolley</cite> is used to performa a <span class="blue">deposit action</span> that consists in the following phases:</p>
+    <ol class="arabic simple">
+    <li><p>pick up a waste-load from a <span class="blue">Waste truck</span> located on the <cite>INDOOR</cite></p></li>
+    <li><p>go from the <cite>INDOOR</cite> to the proper waste container</p></li>
+    <li><p>deposit the waste-load in the container</p></li>
+    </ol>
+    </li>
+    <li><p>a <span class="blue">Service-manager</span> (an human being) which supervises the state of the service-area by using a
+    <span class="blue">WasteServiceStatusGUI</span>.</p></li>
+    <li><p>a <span class="blue">Sonar</span> and a <span class="blue">Led</span> connected to a RaspnerryPi. <a id="R3">(R3)</a>The <cite>Led</cite> is used as a <em>warning devices</em>,
+    according to the following scheme:</p>
+    <ul class="simple">
+    <li><p><a id="R3A">(R3A)</a>the <cite>Led</cite> is <strong>off</strong> when the  <cite>transport trolley</cite> is at <cite>HOME</cite></p></li>
+    <li><p>the <cite>Led</cite> <strong>blinks</strong> while the <cite>transport trolley</cite> is moving</p></li>
+    <li><p><a id="R3B">(R3B)</a>the <cite>Led</cite> is <strong>on</strong> when <cite>transport trolley</cite> is stopped.</p></li>
+    </ul>
+    <p><a id="R4">(R4)</a>The <cite>Sonar</cite> is used as an ‘alarm device’: when it measures a distance less that a prefixed value <strong>DLIMT</strong>,
+    the <cite>transport trolley</cite> must be stopped.
+    It will be resumed when <cite>Sonar</cite> detects again a distance higher than  <strong>DLIMT</strong>.</p>
+    </li>
+    </ol>
+    <h2>TFRequirements</h2>
+    <p><a id="R1">(R1)</a>The main goal of the <span class="blue">WasteService</span> software is to allow a <span class="blue">Waste truck</span> to deposit its load of
+    <strong>TruckLoad</strong> kg plastic or glass in the proper container.</p>
+    <p>The global story can be described as follows:</p>
+    <ol class="arabic simple">
+    <li><p><a id="R1A">(R1A)</a>The <cite>Waste truck</cite> driver approaches the <cite>INDOOR</cite> and sends (using a smart device) a request to store the load,
+    by specifyng the <cite>type of  the material</cite> (plastic or glass) and its <cite>TruckLoad</cite>.</p></li>
+    <li><p><a id="R1B">(R1B)</a>The <cite>WasteService</cite> sends the answer <em>loadaccept</em> if the final content of proper container will not surpass the
+    maximum value allowed (<em>MAXPB</em> or <em>MAXGB</em>). Otherwise, it sends the answer <em>loadrejecetd</em> and the  <cite>Waste truck</cite>
+    leaves the <cite>INDOOR</cite> area.</p></li>
+    <li><p><a id="R1C-core">(R1C-core)</a>When the load is accepted, the <cite>transport trolley</cite> reaches the <cite>INDOOR</cite>, picks up the material, goes to the
+    proper container and settles the material. <a id="R1C-led">(R1C-led)</a>During this activity, the <cite>WasteService</cite> <strong>blinks</strong> the <cite>Led</cite></p></li>
+    <li><p>When the deposit action is terminated, the <cite>transport trolley</cite>  excutes another deposit command (if any)
+    or returns to its <cite>HOME</cite>.</p></li>
+    </ol>
+    <p><a id="R2">(R2)</a>The <cite>WasteService</cite> must create a <span class="blue">WasteServiceStatusGUI</span> that shows to the <em>Service-manager</em>:</p>
+    <ul>
+    <li><p><a id="R2A">(R2A)</a>the current state of the <cite>transport trolley</cite> and it position in the room</p></li>
+    <li><p><a id="R2B">(R2B)</a>the current weigth of the material stored in the two waste-containers</p></li>
+    <li><p><a id="R2C">(R2C)</a>the current state of the <cite>Led</cite></p>
+</div>
+
+<h2>Requirement analysis</h2>
+<div class="remark">
+<br>
+<h2>Requirements analysis</h2>
+<div class="remark" id = "Requirements_analysis">
+  <h3>Core requirements</h3>
+  <h4><a href="#R1A">R1A</a></h4>
+  <div class="remark" id="R1A">
+    <kc>Formalization</kc>: the WasteTruck approaches the INDOOR and sends to WasteService a <kr>request</kr>  called <ks>waste_request(material, TruckLoad)</ks> to store the load specifyng the type of the material (plastic or glass) and its TruckLoad.
+  </div>
+  <h4><a href="#R1B">R1B</a></h4>
+  <div class="remark" id="R1B">
+    <kc>Formalization</kc>: The WasteService sends a <kr>reply</kr> to the WasteTruck <ks>loadaccept</ks> if the final content of proper container will not surpass the maximum value allowed (MAXPB or MAXGB). Otherwise, it sends the <kr>reply</kr> to the TruckDriver <ks>loadrejecetd</ks> and the Waste truck leaves the INDOOR area.
+  </div>
+  <div>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/src/R1A_R1B.qak" > <ks>R1A-R1B Executable model</ks></a>
+  </div>
+  <h4><a href="#R1C-core">R1C-core</a></h4>
+  <div class="remark" id="R1C-core">
+    <kc>Formalization</kc>: When the TruckDriver receives the <ks>loadaccept</ks>, the transport trolley riceives a massage from the WasteService  called <ks>execute</ks> and executes a <kr>deposit action</kr>:
+     <li>reaches the INDOOR : the transport_trolley moves to INDOOR port. </li>
+     <li>picks up the material: the transport_trolley takes the specified material from INDOOR.</li>
+     <li>goes to the proper container:  the transport_trolley moves to the correspondent container.</li>  
+     <li>settles the material: the transport_trolley deposit the load picked in the container.</li> 
+  </div>
+  <div>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/src/CoreWasteService.qak" > <ks>Core Executable model</ks></a>
+  </div>
+  <h3>Non-functional requirements</h3>
+  <div class="remark" id="proactive">
+    <kc>Proactive</kc>: the TransportTrolley has to move and to do actions autonomously.
+  </div>
+  <div class="remark" id="reactive">
+    <kc>Reactive</kc>:the TransportTrolley has to be stoppend due to sonar alarm.
+  </div>
+  
+</div>
+<h2>Problem analysis</h2>
+<div class="remark">
+  <div>
+   In this first  phase of the analysis we will focus on the BusinessCoreAnalysis referred to the requirements : <a href="#R1A">R1A</a>,<a href="#R1B">R1B</a>,<a href="#R1C-core">R1C-core</a>.
+   The components used in this phase are the <kr>WasteTruck</kr> ,  <kr>WasteService</kr> and the <kr>TransportTrolley</kr>.
+   In order to give to the client a first executable model we don't consider the Sonar and the Led in this phase.
+</div>
+<h3>WasteTruck</h3>
+<div class="remark" id="WasteTruck">
+  The <kr>WasteTruck</kr> is in charge to make a <kr>request</kr> to the WasteService to deposit the waste (<ks>waste_request(material, TruckLoad)</ks>).
+  <h4>Core Problem n°1: When the WasteTruck can leave the INDOOR port.</h4>  
+  The WasteTruck have to leave the INDOOR area after the Transport Trolley has taken the waste.
+  We thought of two possible solutions:
+ <li>through an <kr>event</kr>: however communication problems would cause a total block of the software, becuse the INDOOR area will remain occupiede forever.</li> 
+ <li>through a <kr>dispatch</kr>: this solution is certainly the best because it strengthens communication and avoids the loss of messages.</li> 
+  
+</div>
+<table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
+  <tr>
+    <td style="border: 0px">
+        <center><img src="images/wasteTruck.png" alt="waste_truck" width="60%"><center>
+    </td>
+    <td style="border: 0px">
+      <center><table cellpadding="5%">
+        <tbody><tr>
+            <th>Message</th>
+            <th>Semantic</th>
+        </tr>
+        <tr>
+            <td rowspan="1">waste_request(material, TruckLoad)</td>
+            <td rowspan="1">request</td>
+        </tr>
+        <tr>
+          <td rowspan="1">free_Indoor</td>
+          <td rowspan="1">dispatch</td>
+      </tr>
+    </tbody></table></center>
+  </td>
+</tr>
+</table>
+<h3>WasteService </h3>
+<div class="remark" id="WasteService">
+ The <kr>WasteService</kr> sends to the WasteTruck a <kr>reply</kr> (could be <ks>loadaccept</ks> or <ks>loadrejecetd</ks> ).
+ If the reply is <ks>loadaccept</ks> the <kr>WasteService</kr> needs to communicate to the Transport Trolley to execute the deposit action.
+ <h4>Core Problem n°2: How to send the start of deposit action.</h4>  
+ To approach this problem we thought of three possible solutions : 
+ <li>A <ks>dispatch</ks>  :  This is the simplest solution because we need only to send a command to the Transport Trolley. 
+  Furthermore ,by requirements , we have to active a series of action and the Waste Service doesn't need to know when the deposit action is ended.</li>
+ <li>Another possible solution is to send an <ks>event</ks>, in this way the WasteService doesn't need to know the transport trolley and also there is the possibility to handle one or more trolleys.
+  Otherwise this solution can create communication problem because, if the event isn't arrived to the trolley, it may block the system.</li> 
+ <li>Another one is throught a  <ks>request</ks>  and a <ks>replay</ks> : this solution allows to solve the problem of errors during communication, however, as previously mentioned, the WasteService doesn't need to receive a response from the Trolley.
+  The main problem is that the Waste Truck is waiting to leave the INDOOR area, it would be appreciate that he can free it as soon as possible.</li>
+  So we thought that after the WasteService sends the request to the TransportTrolley, it waits his reply , and as soon as the Waste Service receives the reply it can say to the Waste Truck to leave the
+  Indoor area. 
+ <a id="wasteservice"></a>
+
+</div>
+<table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
+  <tr>
+    <td style="border: 0px">
+        <center><img src="images/CoreWS.png" alt="core_waste_service" width="70%"><center>
+    </td>
+    <td style="border: 0px">
+      <center><table cellpadding="5%">
+        <tbody><tr>
+            <th>Message</th>
+            <th>Semantic</th>
+        </tr>
+        <tr>
+            <td rowspan="1">loadaccept</td>
+            <td rowspan="1">reply</td>
+        </tr>
+        <tr>
+            <td rowspan="1">loadrejected</td>
+            <td rowspan="1">reply</td>
+        </tr>
+        <tr>
+          <td rowspan="1">pickup_request</td>
+          <td rowspan="1">request</td>
+          </tr>
+          <tr>
+          <td rowspan="1">pickup_done</td>
+          <td rowspan="1">reply</td>
+        </tr>
+
+    </tbody></table></center>
+  </td>
+</tr>
+</table>
+
+<div>
+
+  <h3> Transport trolley </h3>
+<div class="remark" id="problem_analysis_transport_trolley">
+  The trolley must send a message to the WasteService to communicate that it has finished the pick-up from the WasteTruck, so the WT can leave the INDOOR port.
+  <h4>Core Problem n°4: How to communicate the end of the pick-up to WasteService.</h4>  
+  To do this, there are various solutions:
+  <li>a <ks>dispatch</ks>: this solution does not present communication problems, however in this case the trolley needs to know the existence of the WS</li>
+  <li>an <ks>event</ks>: this solution would allow the trolley not to know the existence of the WS, however in case of an error the WasteService would remain blocked causing problems</li>
+  <li>a <ks>request - replay</ks>: by implementing this solution, the trolley could exploit the replay of the point described above (<a href="#wasteservice">here</a>). This solution can be considered if we consider only the BusinessCoreAnalysis, which has no other elements such as LED or SONAR.
+  From a global point of view, however, the WasteService will remain waiting for the replay from the moment the execute is sent, making it impossible, for example, to change the status of the LED.</li>
+The proposed solution then implements the dispatch version.
+
+</div>
+<br>
+<table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
+  <tr>
+    <td style="border: 0px">
+        <center><img src="images/CoreTrolley.png" alt="core_trolley" width="70%"><center>
+    </td>
+    <td style="border: 0px">
+      <center><table cellpadding="5%">
+        <tbody><tr>
+            <th>Message</th>
+            <th>Semantic</th>
+        </tr>
+        <tr>
+          <td rowspan="1">withdrawal_done</td>
+          <td rowspan="1">dispatch</td>
+      </tr>
+      </tr>
+    </tbody></table></center>
+  </td>
+</tr>
+</table>
+<br>
+
+<div id="logical_architecture">
+  <h3>Logical Architecture</h3>
+  From the previous considerations on the components of the system it is possible to define a first logical architecture: <br><br>
+  <center><img src="images/CoreLogicalArchitecture.png" alt="core_logical_architecture" width="100%"></center>
+</div>
+
+<div id="robot_components">
+<h3>Robot Components</h3>
+In addition to the basic robot, the customer provides components for the construction of the transport trolley. This facilitates the management of the trolley movement.
+<div>
+<br>
+The trolley must follow a <b>path</b> to do a deposit action. Now  is necessary to consider if the trolly is implemented by a  static path or a dinamic one.
+If the Trolley use a Static Path means that all the possible paths are known by the Waste Service.<br>
+Instead, if the Trolley uses a Dinamic Path the Application need to compute the path, in this case we could use a planner.
+</div>
+<div>1) <a href="https://github.com/anatali/issLab2022/tree/main/unibo.planner22"><ks>Planner</ks></a>: which finds the best route for the TransportTrolley to take. </div>
+<div>2) <a href="https://github.com/anatali/issLab2022/tree/main/unibo.pathexecutor"><ks>Pathexecutor</ks></a>: which performs the actions determined by the planner one at a time. </div>
+<div>
+  <br>
+  The path, which is made up of a series of movements that the trolley must perform, can be understood in two ways, dipendently on how the Trolley can move in the map:
+  The map in which the Trolley is moving could be divided in cell with side RD. Then the Trolley could move in it by 
+  accessing only adjacent cells (therefore only those with one side in common) or also accessing those placed diagonally.
+  If the trolley could move only to the adjacent cells the implementation would be easier but the size of the Path would be greater.
+  Instead if it could go also diagonally it would be faster but a new pathfinding logic would need to be implemented for this case.
+</div>
+<!-- 
+<h3>Configuration file</h3>
+To make easier and more flexible the implementation we thought to use a configuration file, in which there are all the set information, like MAXPB and MAXGB.
+There is also the possibility to save and then access to the coordinates (X, Y) of each relevant position in the map.
+<br>It could have been written in JSON.<br>
+<a href="../resources/ConfigurationFile.json">Configuration file json</a><br>
+<br> -->
+<h3>Problems</h3>
+With the addition of the Planner and the Path Executor the problems we incurred were about the communication between these new components and the transport trolley.
+<br>The planner has been integrated in the WasteService, before the request to the transport trolley, we ask to plan the path that it has to do.
+<br>After that, the WasteService has to communicate with the trolley to let him know the path.
+<br><br>A <b>dispatch</b> cannot be the best solution because the WS need to know when the trolley has ended its action, to give it a new path to execute.
+<br>An <b>event</b> incurr in the same dispatch problem and then could incourring some comunication problems.
+<br>A <b>request-reply</b> is a better solution. In this way the WS send the request and wait to the Transport Trolley to reply; then we execute this actions for each trolley movement (home -> indoor -> container -> home/indoor).
+<br><br><a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/src/CoreWSBasicRobot.qak"> <ks>Core with Robot Executable model</ks></a>
+<h3>Architecture updated</h3>
+<center><img src="images/CoreRobotArchitecture.png" alt="corerobot_logical_architecture" width="100%"></center>
+Due to the addition of the new components we decided to change the message that the trolley sends to the WS when it finishes the deposit action. 
+<br>The dispatch <ks>withdrawal_done</ks> becomes the reply (<ks>storage_done</ks>) of the new request <ks>storage_request</ks>, because these had the same role in the architecture.
+To also communicate the Path to Home for the same reasons said before we added a reply and a request respectively <ks>home_rquest</ks> and <ks>home_done</ks>
+We have also added a PathExectur to perform the trolley steps planned by the planner.
+</div>
+
+
+</div>
+
+<h2>Test plans</h2>
+<div id="test_plans">
+  <div class="remark">
+    Test plans are coded in Java (JUnit). 
+    Since both tests develop more functionality of the System, both are integration tests.
+
+    <h3>TestPlan: waste_request</h3>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestWasteRequest.java" >TestWasteRequest</a>
+    
+    <div><ks>Test loadRejecetd</ks>:</div>
+    <div>The waste_truck sends a waste request to the WasteService for a waste quantity that is greater then the container capacity and this replies with a loadrejected. </li> 
+    
+    <div><ks>Test loadAccepted</ks>:</div> 
+    <div>The waste truck sends a waste request to the WasteServicefor a waste quantity that is lower then the container capacity and this replies with a loadaccept.</div> 
+    
+    <h3>TestPlan: pickup_request</h3> 
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestPickUp</a>
+    
+    <div><ks>Test testPickUpDone</ks>:</div>
+    <div>When the waste load is accepted, the WasteService sends to the transport_trolley a request and the TransportTrolley reply with a pickup_done when it has finished the pickup action.</div> 
+   </div>
+
+   <h3>TestPlan: storage_request</h3> 
+   <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestStorage</a>
+   
+   <div><ks>Test testStorageDone</ks>:</div>
+   <div>After the Waste Service recieved the pickup_done reply it sends to the TransportTrolley the <ks>storage_request</ks> and then the  TransportTrolley sends the reply <ks>storage_done</ks>.</div> 
+   <h3>TestPlan: home_request</h3> 
+   <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestHome</a>
+  
+   <div><ks>Test testHomeDone</ks>:</div>
+   <div>After the Waste Service recieved the storage_done reply , if it has no request from a WasteTruck in its queue, it sends to the TransportTrolley the <ks>home_request</ks> to send it to Home and then the  TransportTrolley sends the reply <ks>home_done</ks> when it is at home.</div> 
+
+  </div>
+
+ </div>
+</div>
+
+<h2>Work Plan</h2>
+<div id="work_plan">
+  <div class="remark">
+    
+  </div>
+</div>
+
+
+<h2>Project</h2>
+
+</div>
+
+<h2>Testing</h2>
+
+
+<h2>Deployment</h2>
+
+
+<h2>Maintenance</h2>
+
+<br/><br/>
+</div>
+
+<div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
+<li>By Bignami Filippo, Greco Davide</li>
+<li>email: filippo.bignami@studio.unibo.it,  davide.greco4@studio.unibo.it</li>
+<li>GitHub repository: https://github.com/GrikFreak/issTemaFinale22</li>
+</div>
+</body>
+</html>
