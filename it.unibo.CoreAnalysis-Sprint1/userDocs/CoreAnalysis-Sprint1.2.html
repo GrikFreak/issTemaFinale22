@@ -516,7 +516,7 @@ We have also added a PathExectur to perform the trolley steps planned by the pla
    <div><ks>Test testStorageDone</ks>:</div>
    <div>After the Waste Service recieved the pickup_done reply it sends to the TransportTrolley the <ks>storage_request</ks> and then the  TransportTrolley sends the reply <ks>storage_done</ks>.</div> 
    <h3>TestPlan: home_request</h3> 
-   <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestHome</a>
+   <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestHome.java" >TestHome</a>
   
    <div><ks>Test testHomeDone</ks>:</div>
    <div>After the Waste Service recieved the storage_done reply , if it has no request from a WasteTruck in its queue, it sends to the TransportTrolley the <ks>home_request</ks> to send it to Home and then the  TransportTrolley sends the reply <ks>home_done</ks> when it is at home.</div> 
@@ -526,25 +526,36 @@ We have also added a PathExectur to perform the trolley steps planned by the pla
  </div>
 </div>
 
-<h2>Work Plan</h2>
-<div id="work_plan">
-  <div class="remark">
-    
+<h2>Recap analysis</h2>
+<div>
+  <center><img src="images/CoreRobotArchitecture.png" alt="corerobot_logical_architecture" width="100%"></center>
+  <br>
+  <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/src/CoreWSBasicRobot.qak"> <ks>Core with Robot Executable model</ks></a>
+  <br><br>
+  <div> <b>Relevant tests:</b>
+    <br><br>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestWasteRequest.java" >TestWasteRequest</a>
+    <br>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestPickUp</a>
   </div>
 </div>
 
-
-<h2>Project</h2>
 
 </div>
 
 <h2>Testing</h2>
 
-
-<h2>Deployment</h2>
-
-
-<h2>Maintenance</h2>
+<h2>Work Plan</h2>
+<div id="work_plan">
+  <div class="remark">
+   At the end of Sprint 1 to complete the work are necessary two other sprints:
+    <ul>
+     <li>Sprint 2: to introduct the LED and the SONAR</li>
+     <li>Sprint 3: to introduct the GUI</li>
+    </ul>
+    This order can let us complete some features that we cannot implent in the Sprint 3.
+  </div>
+</div>
 
 <br/><br/>
 </div>

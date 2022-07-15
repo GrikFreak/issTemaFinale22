@@ -1,0 +1,407 @@
+System sprint2
+
+Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
+Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
+Reply loadrejected : loadrejected(MATERIAL, TRUCKLOAD)
+
+Request pickup_request : pickup_request(PATH_TO_INDOOR, MATERIAL)
+Reply pickup_done : pickup_done(DONE)
+
+Request storage_request : storage_request(PATH_TO_CONTAINER)
+Reply storage_done : storage_done(DONE)
+
+Request home_request : home_request(PATH_TO_HOME)
+Reply home_done : home_done(DONE)
+
+Dispatch free_Indoor : free_Indoor(FREE)
+
+Event start_sonar : start_sonar(START)
+
+Event sonar_alarm : sonar_alarm(STOP)
+Event sonar_resume : sonar_resume(OK)
+
+Event containers_weight : containers_weight(GWEIGHT, PWEIGHT)
+
+Event trolley_status : trolley_status(STATUS)
+Event trolley_position : trolley_position(POSITION)
+Event led_status : led_status(STATUS)
+
+//Per path executor
+Request  dopath    : dopath( PATH  )
+Reply dopathdone   : dopathdone( ARG )
+Reply dopathfail   : dopathfail( ARG )
+
+Context ctxledqak22 ip [ host="127.0.0.1" port=8030 ]  
+Context ctxsonarqak22 ip [ host="127.0.0.1" port=8035 ]  
+Context ctxbasicrobot  ip [ host="127.0.0.1" port=8020 ]  
+
+Context ctxWasteService ip [ host="localhost" port=8025 ]
+
+ExternalQActor pathexec context ctxbasicrobot
+ExternalQActor led context ctxledqak22
+ExternalQActor sonar context ctxsonarqak22
+
+//we use a Mock, cause it's not an Actor
+QActor wastetruckmock context ctxWasteService {
+	
+	[#
+		var Material 	= "";
+		var TruckLoad 	= 0L;
+		var Materials = arrayListOf<String>("glass", "plastic");
+	#]
+	
+	State s0 initial {
+		printCurrentMessage
+		println("WASTETRUCK | starts.")
+		delay 3000
+		
+		[# 
+			val Load = kotlin.random.Random.nextLong(10,100) 
+			val randomIndex = kotlin.random.Random.nextInt(Materials.size);
+   			val Mat = Materials[randomIndex]
+		#]
+		
+		request wasteservice -m waste_request : waste_request($Mat, $Load)
+		println("WASTETRUCK | sent request of $Mat with load $Load.")
+	}
+	
+	Transition t0 whenReply loadaccept -> accepted
+				  whenReply loadrejected -> rejected 
+				  
+	State accepted {
+		printCurrentMessage
+		onMsg(loadaccept : loadaccept(MATERIAL, TRUCKLOAD)) {
+			[#
+				Material 	= payloadArg(0);
+				TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WASTETRUCK | accepted $Material with load $TruckLoad.")
+		}
+	}
+	
+	Transition t1 whenMsg free_Indoor -> leave_Indoor
+	
+	State rejected {
+		printCurrentMessage
+		onMsg(loadrejected : loadrejected(MATERIAL, TRUCKLOAD)) {
+			[#
+				Material 	= payloadArg(0);
+				TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WASTETRUCK | rejected $Material load with weight $TruckLoad")
+		}
+	}
+	
+	Goto leave_Indoor
+	
+	State leave_Indoor {
+		println("WASTETRUCK | WasteTruck left Indoor area.")
+	}
+
+	Goto s0
+}
+
+QActor wasteservice context ctxWasteService {
+	
+	[# 
+		var MAXPB 	= 500L;
+		var MAXGB 	= 500L;
+		var CurrentPB = 0L;
+		var CurrentGB = 0L;
+		var Material = "";
+		var PathHome = "";
+		var PathIndoor = "";
+		var PathContainer = "";
+		val XIndoor = 0;
+		val YIndoor = 5;
+		val XContainerP = 6;
+		val YContainerP = 5;
+		val XContainerG = 6;
+		val YContainerG = 0;
+		val XHome = 0;
+		val YHome = 0;
+	#]
+	
+	State init initial {
+		printCurrentMessage
+		println("WASTESERVICE | Start.")
+		run unibo.kotlin.planner22Util.createRoomMapFromTextfile( "map.txt" )	
+   		run unibo.kotlin.planner22Util.initAI() 
+  		run unibo.kotlin.planner22Util.showCurrentRobotState()
+	}
+	
+	Goto s0 
+	
+	State s0 {
+		printCurrentMessage
+		println("WASTESERVICE | is waiting for a request..")
+	}
+	
+	Transition t0 whenRequest waste_request -> handle_request
+				  
+	State handle_request {
+		printCurrentMessage
+		onMsg(waste_request : waste_request(MATERIAL, TRUCKLOAD)) {
+			[#
+				Material = payloadArg(0);
+				var TruckLoad 	= payloadArg(1).toLong();
+			#]
+			println("WASTESERVICE | arrived request: $Material with load $TruckLoad")
+			if [# Material.equals("plastic") #] {
+				if [# TruckLoad + CurrentPB <= MAXPB #]{
+					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
+					[# CurrentPB += TruckLoad #]
+					println("WASTESERVICE | current container plastic weight: $CurrentPB")
+					
+					run unibo.kotlin.planner22Util.setGoal(XIndoor,YIndoor) 
+					[# PathIndoor = unibo.kotlin.planner22Util.doPlan().toString()
+						.replace(" ","")
+						.replace(",","")
+						.replace("[","")
+						.replace("]","")
+					#]  
+					
+					request transporttrolley -m pickup_request : pickup_request($PathIndoor, $Material)
+					println("WASTESERVICE | Sent pickup request to TransportTrolley, indoor path $PathIndoor.")
+					
+				} else {
+					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
+				}
+			} else {
+				if [# TruckLoad + CurrentGB <= MAXGB #]{
+					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
+					[# CurrentGB += TruckLoad #]
+					println("WASTESERVICE | current container glass weight: $CurrentGB")
+				
+					run unibo.kotlin.planner22Util.setGoal(XIndoor,YIndoor) 
+					[# PathIndoor = unibo.kotlin.planner22Util.doPlan().toString()
+						.replace(" ","")
+						.replace(",","")
+						.replace("[","")
+						.replace("]","")
+					#]  
+					
+					request transporttrolley -m pickup_request : pickup_request($PathIndoor, $Material)
+					println("WASTESERVICE | Sent pickup request to TransportTrolley, first path $PathIndoor")
+					
+				} else {
+					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
+				}
+			}
+			emit containers_weight : containers_weight(CurrentGB, CurrentPB)
+		}
+	}
+	
+	Transition t1 whenReply pickup_done -> handle_storage 
+	
+	State handle_storage {
+		printCurrentMessage
+		forward wastetruckmock -m free_Indoor : free_Indoor(FREE)
+		println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
+		if [# Material.equals("plastic") #]{
+			run unibo.kotlin.planner22Util.setGoal(XContainerP,YContainerP) 
+			[# PathContainer = unibo.kotlin.planner22Util.doPlan().toString()
+				.replace(" ","")
+				.replace(",","")
+				.replace("[","")
+				.replace("]","")
+			#]  
+		} else {
+			run unibo.kotlin.planner22Util.setGoal(XContainerG,YContainerG) 
+			[# PathContainer = unibo.kotlin.planner22Util.doPlan().toString()
+				.replace(" ","")
+				.replace(",","")
+				.replace("[","")
+				.replace("]","")
+			#]  
+		}
+		println("WASTESERVICE | send request to store to the transport trolley.")
+		request transporttrolley -m storage_request : storage_request($PathContainer)
+	}
+	
+	Transition t2 whenReply storage_done -> storage_Done 
+	
+	State storage_Done {
+		printCurrentMessage
+		println("WASTESERVICE | Storage done. Handle queue...")
+	}
+	
+	Transition t3 whenTime 100 -> move_home
+				whenRequest waste_request -> handle_request
+				
+	State move_home {
+		printCurrentMessage
+		println("WASTESERVICE | No Queue, send Transport trolley to HOME")
+		
+		run unibo.kotlin.planner22Util.setGoal(XHome,YHome) 
+		
+		[#
+		PathHome = unibo.kotlin.planner22Util.doPlan().toString() 
+			.replace(" ","")
+			.replace(",","")
+			.replace("[","")
+			.replace("]","")
+		#]
+			
+		request transporttrolley -m home_request: home_request($PathHome)
+	}
+	
+	Transition t4 whenReply home_done -> back_done
+	
+	State back_done{
+		printCurrentMessage
+		println("WASTESERVICE | the trolley is arrived at HOME")
+		run  unibo.kotlin.planner22Util.updateMapWithPath( PathHome )
+		run  unibo.kotlin.planner22Util.showCurrentRobotState()
+	}
+	
+	Goto s0
+	
+}
+
+QActor transporttrolley context ctxWasteService {
+	
+	[#
+		var Status	= "IDLE";	
+		var Position = "HOME";
+		var Material = "";
+		var PathHome = "";
+		var PathIndoor = "";
+		var PathContainer = "";
+		
+		var PathToDo = ""
+		var LastState = ""
+	#]
+	
+	State s0 initial {
+		printCurrentMessage
+		println("the TransportTrolley is waiting..")
+		emit start_sonar : start_sonar(START)
+	}
+	
+	Transition t0 whenRequest pickup_request -> move_to_INDOOR
+					whenEvent sonar_alarm -> handle_alarm
+	
+	State move_to_INDOOR {
+		onMsg(pickup_request : pickup_request(PATH_TO_INDOOR, MATERIAL)){
+		 	[# 
+		 		PathIndoor = payloadArg(0)
+		 		Material = payloadArg(1)
+		 	#]
+		}
+		printCurrentMessage
+		println("TRANSPORT TROLLEY | execute the path $PathIndoor to INDOOR.")
+		request pathexec -m dopath : dopath($PathIndoor)
+		[# Status = "WORKING" #]
+		[# Position = "GENERIC" #] 
+		emit led_status : led_status(BLINKS)
+		emit trolley_status : trolley_status($Status) 
+		emit trolley_position : trolley_position($Position)
+		[# LastState = "to_INDOOR" #]
+	}
+	
+	Transition t1 whenEvent sonar_alarm -> handle_alarm
+					whenReply dopathdone -> pickup_action
+					whenReply dopathfail -> pathfail
+				  
+				
+	State pickup_action {
+		onMsg (dopathdone : dopathdone( ARG )) {
+			delay 3000
+			run  unibo.kotlin.planner22Util.updateMapWithPath( PathIndoor )
+			run  unibo.kotlin.planner22Util.showCurrentRobotState()
+			println("TRANSPORT TROLLEY | arrived to INDOOR.")
+			[# Position = "INDOOR" #]
+			emit led_status : led_status(BLINKS)
+			emit trolley_position : trolley_position($Position)
+			replyTo pickup_request with pickup_done : pickup_done(DONE)
+			println("TRANSPORT TROLLEY | pick up done.")
+		}
+	}			
+	
+	Transition t2 whenRequest storage_request -> move_to_Container
+					  
+	State pathfail {
+		printCurrentMessage
+		println("TRANSPORT TROLLEY| Error: Path fail!") 
+	}
+	
+	State move_to_Container{
+		printCurrentMessage
+		onMsg(storage_request : storage_request(PATH_TO_CONTAINER)){
+		 	[# 
+		 		PathContainer = payloadArg(0)
+		 	#]
+		}
+		println("TRANSPORT TROLLEY | execute the path $PathContainer to $Material container ")
+		[# Status = "WORKING" #]
+		emit led_status : led_status(BLINKS)
+		emit trolley_status : trolley_status($Status)
+		request pathexec -m dopath : dopath($PathContainer) 
+		[# LastState = "to_CONTAINER" #]
+	}
+	
+	Transition t3 whenEvent sonar_alarm -> handle_alarm
+					whenReply dopathdone -> settle_action
+				  	whenReply dopathfail -> pathfail
+				 
+				
+	State settle_action {
+		onMsg (dopathdone   : dopathdone( ARG )) {
+			delay 3000
+			run  unibo.kotlin.planner22Util.updateMapWithPath( PathContainer )
+			run  unibo.kotlin.planner22Util.showCurrentRobotState()
+			println("TRANSPORT TROLLEY | arrived to $Material container")
+			if[# Material.equals("plastic")#]{
+				[# Position = "CONTAINERP" #]
+			} else {
+				[# Position = "CONTAINERG" #]
+			}
+		}
+		emit led_status : led_status(ON)
+		emit trolley_position : trolley_position($Position)
+		[# Status = "IDLE" #]
+		emit trolley_status : trolley_status($Status)
+		run  unibo.kotlin.planner22Util.showCurrentRobotState()
+		delay 1500
+		println("TRANSPORT TROLLEY | settled $Material on the Container.")
+		replyTo storage_request with storage_done : storage_done(DONE)	
+	}
+	
+	Transition t4 whenRequest pickup_request -> move_to_INDOOR
+	 			  whenRequest home_request -> move_to_HOME
+	
+	State move_to_HOME{
+		printCurrentMessage
+		println("TRANSPORT TROLLEY | coming back to HOME ")
+		onMsg(home_request : home_request(PATH_TO_HOME)){
+			[#
+				PathHome = payloadArg(0)
+			#]
+			request pathexec -m dopath : dopath($PathHome)
+			delay 1500
+		}
+		onMsg (dopathdone   : dopathdone( ARG )) {
+			println("TRANSPORT TROLLEY | arrived HOME.")
+			[# Position = "HOME" #]
+			emit led_status : led_status(OFF)
+			run  unibo.kotlin.planner22Util.showCurrentRobotState()
+			emit trolley_position : trolley_position($Position)
+			replyTo home_request with home_done : home_done(DONE)
+		}
+	}
+	
+	Transition t5 whenReply dopathdone -> move_to_HOME
+				  whenReply dopathfail -> pathfail
+				  whenRequest pickup_request -> move_to_INDOOR
+				  
+	State handle_alarm{
+		println("TRANSPORT TROLLEY | Stopped by sonar")
+		emit led_status : led_status(ON)
+	}
+	
+	Transition t6 // whenEvent sonar_resume and [# LastState == "to_HOME" #] -> move_to_HOME
+				  whenEvent sonar_resume and [# LastState == "to_INDOOR" #] -> pickup_action
+				  whenEvent sonar_resume and [# LastState == "to_CONTAINER" #] -> settle_action
+	
+}

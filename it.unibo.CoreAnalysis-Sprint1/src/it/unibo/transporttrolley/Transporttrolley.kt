@@ -52,7 +52,7 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 					action { //it:State
 						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								delay(1000) 
+								delay(3000) 
 								unibo.kotlin.planner22Util.updateMapWithPath( PathIndoor  )
 								unibo.kotlin.planner22Util.showCurrentRobotState(  )
 								println("TRANSPORT TROLLEY | arrived to INDOOR.")
@@ -83,14 +83,14 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						emit("trolley_status", "trolley_status(Status)" ) 
 						request("dopath", "dopath($PathContainer)" ,"pathexec" )  
 					}
-					 transition(edgeName="t213",targetState="settle_action",cond=whenReply("dopathdone"))
-					transition(edgeName="t214",targetState="pathfail",cond=whenReply("dopathfail"))
+					 transition(edgeName="t313",targetState="settle_action",cond=whenReply("dopathdone"))
+					transition(edgeName="t314",targetState="pathfail",cond=whenReply("dopathfail"))
 				}	 
 				state("settle_action") { //this:State
 					action { //it:State
 						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								delay(1000) 
+								delay(3000) 
 								unibo.kotlin.planner22Util.updateMapWithPath( PathContainer  )
 								unibo.kotlin.planner22Util.showCurrentRobotState(  )
 								println("TRANSPORT TROLLEY | arrived to $Material container")
@@ -105,12 +105,12 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						 Status = "IDLE"  
 						emit("trolley_status", "trolley_status(Status)" ) 
 						unibo.kotlin.planner22Util.showCurrentRobotState(  )
-						delay(500) 
+						delay(1500) 
 						println("TRANSPORT TROLLEY | settled $Material on the Container.")
 						answer("storage_request", "storage_done", "storage_done(DONE)"   )  
 					}
-					 transition(edgeName="t315",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
-					transition(edgeName="t316",targetState="move_to_HOME",cond=whenRequest("home_request"))
+					 transition(edgeName="t415",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
+					transition(edgeName="t416",targetState="move_to_HOME",cond=whenRequest("home_request"))
 				}	 
 				state("move_to_HOME") { //this:State
 					action { //it:State
@@ -121,7 +121,7 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								
 												PathHome = payloadArg(0)
 								request("dopath", "dopath($PathHome)" ,"pathexec" )  
-								delay(1000) 
+								delay(1500) 
 						}
 						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList

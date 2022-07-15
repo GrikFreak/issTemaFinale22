@@ -1,0 +1,52 @@
+/*
+ * sonarqak22
+ * Usa MQTT
+ */
+
+System /*-trace*/ sonarqak22
+mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo.sonarqak22"
+ 
+Event sonar_alarm  : sonar_alarm(STOP)
+Event sonar_resume  : sonar_resume(OK)
+Event start_sonar : start_sonar(START)
+Event alarm : alarm(KO)
+
+Context ctxbasicrobot  ip [ host="127.0.0.1" port=8020 ]  
+Context ctxWasteService  ip [ host="127.0.0.1" port=8025 ]  
+
+Context ctxsonarqak22 ip [host="localhost" port=8035]  
+
+ExternalQActor pathexec context ctxbasicrobot
+ExternalQActor transporttrolley context ctxWasteService
+
+QActor sonarqak22 context ctxsonarqak22{
+	[# var stopped = false; #]
+	State s0 initial {
+		println("Sonar STARTS")
+		
+	}
+	
+	Transition t0 whenEvent start_sonar -> active
+	
+	State active {
+		[#
+			var Distance = kotlin.random.Random.nextLong(1,100);
+			
+		#]
+		if [# Distance <= 20 /* && !stopped */ #]{
+			emit sonar_alarm : sonar_alarm(STOP)
+			emit alarm : alarm(KO)
+			[# stopped = true #]
+			println("SONAR | stop with distance $Distance")
+		} else{
+			if [# Distance > 20 && stopped #]{
+				emit sonar_resume : sonar_resume(OK)
+				[# stopped = false #]
+				println("SONAR | resume with distance $Distance")
+			}
+		} 
+	}
+	
+	Transition t1 whenTime 3000 -> active
+	
+}

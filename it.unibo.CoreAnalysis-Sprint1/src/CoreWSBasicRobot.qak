@@ -102,9 +102,9 @@ QActor wasteservice context ctxWasteService {
 		var PathIndoor = "";
 		var PathContainer = "";
 		val XIndoor = 0;
-		val YIndoor = 4;
+		val YIndoor = 5;
 		val XContainerP = 6;
-		val YContainerP = 4;
+		val YContainerP = 5;
 		val XContainerG = 6;
 		val YContainerG = 0;
 		val XHome = 0;
@@ -114,7 +114,7 @@ QActor wasteservice context ctxWasteService {
 	State init initial {
 		printCurrentMessage
 		println("WASTESERVICE | Start.")
-		run unibo.kotlin.planner22Util.loadRoomMap( "map.txt" )	
+		run unibo.kotlin.planner22Util.createRoomMapFromTextfile( "map.txt" )	
    		run unibo.kotlin.planner22Util.initAI() 
   		run unibo.kotlin.planner22Util.showCurrentRobotState()
 	}
@@ -287,7 +287,7 @@ QActor transporttrolley context ctxWasteService {
 				
 	State pickup_action {
 		onMsg (dopathdone : dopathdone( ARG )) {
-			delay 1000
+			delay 3000
 			run  unibo.kotlin.planner22Util.updateMapWithPath( PathIndoor )
 			run  unibo.kotlin.planner22Util.showCurrentRobotState()
 			println("TRANSPORT TROLLEY | arrived to INDOOR.")
@@ -318,12 +318,12 @@ QActor transporttrolley context ctxWasteService {
 		request pathexec -m dopath : dopath($PathContainer) 
 	}
 	
-	Transition t2 whenReply dopathdone -> settle_action
+	Transition t3 whenReply dopathdone -> settle_action
 				  whenReply dopathfail -> pathfail
 				
 	State settle_action {
 		onMsg (dopathdone   : dopathdone( ARG )) {
-			delay 1000
+			delay 3000
 			run  unibo.kotlin.planner22Util.updateMapWithPath( PathContainer )
 			run  unibo.kotlin.planner22Util.showCurrentRobotState()
 			println("TRANSPORT TROLLEY | arrived to $Material container")
@@ -337,12 +337,12 @@ QActor transporttrolley context ctxWasteService {
 		[# Status = "IDLE" #]
 		emit trolley_status : trolley_status(Status)
 		run  unibo.kotlin.planner22Util.showCurrentRobotState()
-		delay 500
+		delay 1500
 		println("TRANSPORT TROLLEY | settled $Material on the Container.")
 		replyTo storage_request with storage_done : storage_done(DONE)	
 	}
 	
-	Transition t3 whenRequest pickup_request -> move_to_INDOOR
+	Transition t4 whenRequest pickup_request -> move_to_INDOOR
 	 			  whenRequest home_request -> move_to_HOME
 	
 	State move_to_HOME{
@@ -353,7 +353,7 @@ QActor transporttrolley context ctxWasteService {
 				PathHome = payloadArg(0)
 			#]
 			request pathexec -m dopath : dopath($PathHome)
-			delay 1000
+			delay 1500
 		}
 		onMsg (dopathdone   : dopathdone( ARG )) {
 			println("TRANSPORT TROLLEY | arrived HOME.")

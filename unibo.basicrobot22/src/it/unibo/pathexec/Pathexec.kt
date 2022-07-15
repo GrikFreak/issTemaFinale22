@@ -15,12 +15,12 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		 var CurMoveTodo = ""    //Upcase, since var to be used in guards
-		   var StepTime    = "300"
+		   var StepTime    = "292"
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						  CurMoveTodo = "" 
-									StepTime = unibo.robot.robotSupport.readStepTime()
+									
 						println("pathexec ready. StepTime=$StepTime")
 					}
 					 transition(edgeName="t09",targetState="doThePath",cond=whenRequest("dopath"))
@@ -57,7 +57,7 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 					action { //it:State
 						forward("cmd", "cmd($CurMoveTodo)" ,"basicrobot" ) 
 						stateTimer = TimerActor("timer_doMoveTurn", 
-							scope, context!!, "local_tout_pathexec_doMoveTurn", 300.toLong() )
+							scope, context!!, "local_tout_pathexec_doMoveTurn", 292.toLong() )
 					}
 					 transition(edgeName="t010",targetState="nextMove",cond=whenTimeout("local_tout_pathexec_doMoveTurn"))   
 				}	 

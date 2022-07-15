@@ -174,12 +174,12 @@ QActor envsonarhandler context ctxbasicrobot{
  
 QActor pathexec context ctxbasicrobot{ 
 [# var CurMoveTodo = ""    //Upcase, since var to be used in guards
-   var StepTime    = "300"
+   var StepTime    = "292"
 #]
 	State s0 initial{  	
 		//printCurrentMessage
 		[#  CurMoveTodo = "" 
-			StepTime = unibo.robot.robotSupport.readStepTime()
+			
 		#]
 		println("pathexec ready. StepTime=$StepTime") 
 	}	
@@ -212,7 +212,7 @@ QActor pathexec context ctxbasicrobot{
 		//printCurrentMessage
 		forward basicrobot -m cmd : cmd($CurMoveTodo) //asynch !!!		
 	}
-	Transition t0 whenTime 300 ->  nextMove  //wait for move done ...
+	Transition t0 whenTime 292 ->  nextMove  //wait for move done ...
   
  	State doMoveW{
 		//printCurrentMessage
