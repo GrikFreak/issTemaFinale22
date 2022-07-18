@@ -17,8 +17,14 @@ Dispatch free_Indoor : free_Indoor(FREE)
 
 Event start_sonar : start_sonar(START)
 
-Event sonar_alarm : sonar_alarm(STOP)
-Event sonar_resume : sonar_resume(OK)
+//handle sonar stop
+Dispatch sonar_alarm : sonar_alarm(STOP)
+Dispatch sonar_resume : sonar_resume(OK)
+
+Dispatch stop_trolley : stop_trolley(STOP)
+Dispatch resume_trolley : resume_trolley(OK)
+
+Event stop_pathexec : stop_pathexec(STOP)
 
 Event containers_weight : containers_weight(GWEIGHT, PWEIGHT)
 
@@ -120,6 +126,8 @@ QActor wasteservice context ctxWasteService {
 		val YContainerG = 0;
 		val XHome = 0;
 		val YHome = 0;
+		
+		var TrolleyStatus = "IDLE";
 	#]
 	
 	State init initial {
@@ -138,7 +146,7 @@ QActor wasteservice context ctxWasteService {
 	}
 	
 	Transition t0 whenRequest waste_request -> handle_request
-				  
+					
 	State handle_request {
 		printCurrentMessage
 		onMsg(waste_request : waste_request(MATERIAL, TRUCKLOAD)) {
@@ -182,6 +190,9 @@ QActor wasteservice context ctxWasteService {
 					#]  
 					
 					request transporttrolley -m pickup_request : pickup_request($PathIndoor, $Material)
+					[# TrolleyStatus = "WORKING" #]
+					emit trolley_status : trolley_status($TrolleyStatus)
+					emit led_status : led_status(BLINKS)
 					println("WASTESERVICE | Sent pickup request to TransportTrolley, first path $PathIndoor")
 					
 				} else {
@@ -193,6 +204,7 @@ QActor wasteservice context ctxWasteService {
 	}
 	
 	Transition t1 whenReply pickup_done -> handle_storage 
+					whenMsg sonar_alarm -> handle_stop
 	
 	State handle_storage {
 		printCurrentMessage
@@ -220,6 +232,7 @@ QActor wasteservice context ctxWasteService {
 	}
 	
 	Transition t2 whenReply storage_done -> storage_Done 
+					whenMsg sonar_alarm -> handle_stop
 	
 	State storage_Done {
 		printCurrentMessage
@@ -242,20 +255,45 @@ QActor wasteservice context ctxWasteService {
 			.replace("[","")
 			.replace("]","")
 		#]
-			
 		request transporttrolley -m home_request: home_request($PathHome)
 	}
 	
 	Transition t4 whenReply home_done -> back_done
+					whenMsg sonar_alarm -> handle_stop
 	
 	State back_done{
 		printCurrentMessage
 		println("WASTESERVICE | the trolley is arrived at HOME")
+		[# TrolleyStatus = "IDLE" #]
+		emit trolley_status : trolley_status($TrolleyStatus)
+		emit led_status : led_status(IDLE)
 		run  unibo.kotlin.planner22Util.updateMapWithPath( PathHome )
 		run  unibo.kotlin.planner22Util.showCurrentRobotState()
 	}
 	
 	Goto s0
+	
+	State handle_stop {
+		println("WASTESERVICE | Trolley stopped by the sonar, wait for resume..")
+		[# TrolleyStatus = "STOPPED" #]
+		emit led_status : led_status(ON)
+		emit trolley_status : trolley_status(STOPPED)
+		forward transporttrolley -m stop_trolley : stop_trolley(STOP)
+	} 
+	
+	Transition t5 whenMsg sonar_resume -> handle_resume
+					
+	State handle_resume {
+		println("WASTESERVICE | resume trolley after sonar resume message.")
+		[# TrolleyStatus = "WORKING" #]
+		emit led_status : led_status(BLINKS)
+		emit trolley_status : trolley_status(WORKING)
+		forward transporttrolley -m resume_trolley : resume_trolley(OK)
+	}
+	
+	Transition t6 whenReply pickup_done -> handle_storage
+		 			whenReply storage_done -> storage_Done
+					whenReply home_done -> back_done
 	
 }
 
@@ -269,18 +307,17 @@ QActor transporttrolley context ctxWasteService {
 		var PathIndoor = "";
 		var PathContainer = "";
 		
-		var PathToDo = ""
-		var LastState = ""
+		var PathToDo = "";
+		var LastState = "";
 	#]
 	
 	State s0 initial {
 		printCurrentMessage
 		println("the TransportTrolley is waiting..")
-		emit start_sonar : start_sonar(START)
 	}
 	
 	Transition t0 whenRequest pickup_request -> move_to_INDOOR
-					whenEvent sonar_alarm -> handle_alarm
+					
 	
 	State move_to_INDOOR {
 		onMsg(pickup_request : pickup_request(PATH_TO_INDOOR, MATERIAL)){
@@ -294,14 +331,12 @@ QActor transporttrolley context ctxWasteService {
 		request pathexec -m dopath : dopath($PathIndoor)
 		[# Status = "WORKING" #]
 		[# Position = "GENERIC" #] 
-		emit led_status : led_status(BLINKS)
 		emit trolley_status : trolley_status($Status) 
 		emit trolley_position : trolley_position($Position)
 		[# LastState = "to_INDOOR" #]
 	}
 	
-	Transition t1 whenEvent sonar_alarm -> handle_alarm
-					whenReply dopathdone -> pickup_action
+	Transition t1 whenReply dopathdone -> pickup_action
 					whenReply dopathfail -> pathfail
 				  
 				
@@ -312,7 +347,6 @@ QActor transporttrolley context ctxWasteService {
 			run  unibo.kotlin.planner22Util.showCurrentRobotState()
 			println("TRANSPORT TROLLEY | arrived to INDOOR.")
 			[# Position = "INDOOR" #]
-			emit led_status : led_status(BLINKS)
 			emit trolley_position : trolley_position($Position)
 			replyTo pickup_request with pickup_done : pickup_done(DONE)
 			println("TRANSPORT TROLLEY | pick up done.")
@@ -341,8 +375,7 @@ QActor transporttrolley context ctxWasteService {
 		[# LastState = "to_CONTAINER" #]
 	}
 	
-	Transition t3 whenEvent sonar_alarm -> handle_alarm
-					whenReply dopathdone -> settle_action
+	Transition t3 whenReply dopathdone -> settle_action
 				  	whenReply dopathfail -> pathfail
 				 
 				
@@ -395,13 +428,27 @@ QActor transporttrolley context ctxWasteService {
 				  whenReply dopathfail -> pathfail
 				  whenRequest pickup_request -> move_to_INDOOR
 				  
-	State handle_alarm{
-		println("TRANSPORT TROLLEY | Stopped by sonar")
+	State handle_stop {
+		println("WASTESERVICE | Trolley stopped by the sonar, wait for resume..")
+		[# TrolleyStatus = "STOPPED" #]
 		emit led_status : led_status(ON)
+		emit trolley_status : trolley_status(STOPPED)
+		forward transporttrolley -m stop_trolley : stop_trolley(STOP)
+	} 
+	
+	Transition t5 whenMsg sonar_resume -> handle_resume
+					
+	State handle_resume {
+		println("WASTESERVICE | resume trolley after sonar resume message.")
+		[# TrolleyStatus = "WORKING" #]
+		emit led_status : led_status(BLINKS)
+		emit trolley_status : trolley_status(WORKING)
+		forward transporttrolley -m resume_trolley : resume_trolley(OK)
 	}
 	
-	Transition t6 // whenEvent sonar_resume and [# LastState == "to_HOME" #] -> move_to_HOME
-				  whenEvent sonar_resume and [# LastState == "to_INDOOR" #] -> pickup_action
-				  whenEvent sonar_resume and [# LastState == "to_CONTAINER" #] -> settle_action
+	Transition t6 whenReply pickup_done -> handle_storage
+		 			whenReply storage_done -> storage_Done
+					whenReply home_done -> back_done
+
 	
 }

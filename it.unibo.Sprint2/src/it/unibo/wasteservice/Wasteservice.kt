@@ -31,6 +31,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 				val YContainerG = 0;
 				val XHome = 0;
 				val YHome = 0;
+				
+				var TrolleyStatus = "IDLE";
+				var LastState = "home";
 		return { //this:ActionBasciFsm
 				state("init") { //this:State
 					action { //it:State
@@ -88,6 +91,10 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 						.replace("[","")
 								 						.replace("]","")
 								 request("pickup_request", "pickup_request($PathIndoor,$Material)" ,"transporttrolley" )  
+								  LastState = "to_PickUp"  
+								  TrolleyStatus = "WORKING"  
+								 emit("trolley_status", "trolley_status($TrolleyStatus)" ) 
+								 emit("led_status", "led_status(BLINKS)" ) 
 								 println("WASTESERVICE | Sent pickup request to TransportTrolley, first path $PathIndoor")
 								 }
 								 else
@@ -98,6 +105,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						}
 					}
 					 transition(edgeName="t14",targetState="handle_storage",cond=whenReply("pickup_done"))
+					transition(edgeName="t15",targetState="handle_stop",cond=whenDispatch("sonar_alarm"))
 				}	 
 				state("handle_storage") { //this:State
 					action { //it:State
@@ -122,8 +130,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						 }
 						println("WASTESERVICE | send request to store to the transport trolley.")
 						request("storage_request", "storage_request($PathContainer)" ,"transporttrolley" )  
+						 LastState = "to_Storage"  
 					}
-					 transition(edgeName="t25",targetState="storage_Done",cond=whenReply("storage_done"))
+					 transition(edgeName="t26",targetState="storage_Done",cond=whenReply("storage_done"))
 				}	 
 				state("storage_Done") { //this:State
 					action { //it:State
@@ -132,8 +141,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						stateTimer = TimerActor("timer_storage_Done", 
 							scope, context!!, "local_tout_wasteservice_storage_Done", 100.toLong() )
 					}
-					 transition(edgeName="t36",targetState="move_home",cond=whenTimeout("local_tout_wasteservice_storage_Done"))   
-					transition(edgeName="t37",targetState="handle_request",cond=whenRequest("waste_request"))
+					 transition(edgeName="t37",targetState="move_home",cond=whenTimeout("local_tout_wasteservice_storage_Done"))   
+					transition(edgeName="t38",targetState="handle_request",cond=whenRequest("waste_request"))
 				}	 
 				state("move_home") { //this:State
 					action { //it:State
@@ -146,18 +155,36 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 									.replace(",","")
 									.replace("[","")
 									.replace("]","")
+						 LastState = "to_Home"  
 						request("home_request", "home_request($PathHome)" ,"transporttrolley" )  
 					}
-					 transition(edgeName="t48",targetState="back_done",cond=whenReply("home_done"))
+					 transition(edgeName="t49",targetState="back_done",cond=whenReply("home_done"))
 				}	 
 				state("back_done") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("WASTESERVICE | the trolley is arrived at HOME")
+						 TrolleyStatus = "IDLE"  
+						emit("trolley_status", "trolley_status($TrolleyStatus)" ) 
+						emit("led_status", "led_status(IDLE)" ) 
 						unibo.kotlin.planner22Util.updateMapWithPath( PathHome  )
 						unibo.kotlin.planner22Util.showCurrentRobotState(  )
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
+				}	 
+				state("handle_stop") { //this:State
+					action { //it:State
+						println("WASTESERVICE | Trolley stopped by the sonar, wait for resume..")
+						 TrolleyStatus = "STOPPED"  
+						emit("led_status", "led_status(ON)" ) 
+						emit("trolley_status", "trolley_status(STOPPED)" ) 
+					}
+					 transition(edgeName="t510",targetState="handle_storage",cond=whenDispatchGuarded("sonar_resume",{ LastState == "to_PickUp"  
+					}))
+					transition(edgeName="t511",targetState="handle_request",cond=whenDispatchGuarded("sonar_resume",{ LastState == "to_Storage"  
+					}))
+					transition(edgeName="t512",targetState="back_done",cond=whenDispatchGuarded("sonar_resume",{ LastState == "to_Home"  
+					}))
 				}	 
 			}
 		}

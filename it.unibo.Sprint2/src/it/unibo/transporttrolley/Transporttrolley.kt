@@ -31,8 +31,7 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						println("the TransportTrolley is waiting..")
 						emit("start_sonar", "start_sonar(START)" ) 
 					}
-					 transition(edgeName="t09",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
-					transition(edgeName="t010",targetState="handle_alarm",cond=whenEvent("sonar_alarm"))
+					 transition(edgeName="t013",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
 				}	 
 				state("move_to_INDOOR") { //this:State
 					action { //it:State
@@ -47,14 +46,12 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						request("dopath", "dopath($PathIndoor)" ,"pathexec" )  
 						 Status = "WORKING"  
 						 Position = "GENERIC"  
-						emit("led_status", "led_status(BLINKS)" ) 
 						emit("trolley_status", "trolley_status($Status)" ) 
 						emit("trolley_position", "trolley_position($Position)" ) 
 						 LastState = "to_INDOOR"  
 					}
-					 transition(edgeName="t111",targetState="handle_alarm",cond=whenEvent("sonar_alarm"))
-					transition(edgeName="t112",targetState="pickup_action",cond=whenReply("dopathdone"))
-					transition(edgeName="t113",targetState="pathfail",cond=whenReply("dopathfail"))
+					 transition(edgeName="t114",targetState="pickup_action",cond=whenReply("dopathdone"))
+					transition(edgeName="t115",targetState="pathfail",cond=whenReply("dopathfail"))
 				}	 
 				state("pickup_action") { //this:State
 					action { //it:State
@@ -65,13 +62,12 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								unibo.kotlin.planner22Util.showCurrentRobotState(  )
 								println("TRANSPORT TROLLEY | arrived to INDOOR.")
 								 Position = "INDOOR"  
-								emit("led_status", "led_status(BLINKS)" ) 
 								emit("trolley_position", "trolley_position($Position)" ) 
 								answer("pickup_request", "pickup_done", "pickup_done(DONE)"   )  
 								println("TRANSPORT TROLLEY | pick up done.")
 						}
 					}
-					 transition(edgeName="t214",targetState="move_to_Container",cond=whenRequest("storage_request"))
+					 transition(edgeName="t216",targetState="move_to_Container",cond=whenRequest("storage_request"))
 				}	 
 				state("pathfail") { //this:State
 					action { //it:State
@@ -94,9 +90,8 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						request("dopath", "dopath($PathContainer)" ,"pathexec" )  
 						 LastState = "to_CONTAINER"  
 					}
-					 transition(edgeName="t315",targetState="handle_alarm",cond=whenEvent("sonar_alarm"))
-					transition(edgeName="t316",targetState="settle_action",cond=whenReply("dopathdone"))
-					transition(edgeName="t317",targetState="pathfail",cond=whenReply("dopathfail"))
+					 transition(edgeName="t317",targetState="settle_action",cond=whenReply("dopathdone"))
+					transition(edgeName="t318",targetState="pathfail",cond=whenReply("dopathfail"))
 				}	 
 				state("settle_action") { //this:State
 					action { //it:State
@@ -122,8 +117,8 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						println("TRANSPORT TROLLEY | settled $Material on the Container.")
 						answer("storage_request", "storage_done", "storage_done(DONE)"   )  
 					}
-					 transition(edgeName="t418",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
-					transition(edgeName="t419",targetState="move_to_HOME",cond=whenRequest("home_request"))
+					 transition(edgeName="t419",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
+					transition(edgeName="t420",targetState="move_to_HOME",cond=whenRequest("home_request"))
 				}	 
 				state("move_to_HOME") { //this:State
 					action { //it:State
@@ -146,19 +141,9 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								answer("home_request", "home_done", "home_done(DONE)"   )  
 						}
 					}
-					 transition(edgeName="t520",targetState="move_to_HOME",cond=whenReply("dopathdone"))
-					transition(edgeName="t521",targetState="pathfail",cond=whenReply("dopathfail"))
-					transition(edgeName="t522",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
-				}	 
-				state("handle_alarm") { //this:State
-					action { //it:State
-						println("TRANSPORT TROLLEY | Stopped by sonar")
-						emit("led_status", "led_status(ON)" ) 
-					}
-					 transition(edgeName="t623",targetState="pickup_action",cond=whenEventGuarded("sonar_resume",{ LastState == "to_INDOOR"  
-					}))
-					transition(edgeName="t624",targetState="settle_action",cond=whenEventGuarded("sonar_resume",{ LastState == "to_CONTAINER"  
-					}))
+					 transition(edgeName="t521",targetState="move_to_HOME",cond=whenReply("dopathdone"))
+					transition(edgeName="t522",targetState="pathfail",cond=whenReply("dopathfail"))
+					transition(edgeName="t523",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
 				}	 
 			}
 		}

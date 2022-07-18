@@ -6,8 +6,8 @@
 System /*-trace*/ sonarqak22
 mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo.sonarqak22"
  
-Event sonar_alarm  : sonar_alarm(STOP)
-Event sonar_resume  : sonar_resume(OK)
+Dispatch sonar_alarm  : sonar_alarm(STOP)
+Dispatch sonar_resume  : sonar_resume(OK)
 Event start_sonar : start_sonar(START)
 Event alarm : alarm(KO)
 
@@ -17,7 +17,7 @@ Context ctxWasteService  ip [ host="127.0.0.1" port=8025 ]
 Context ctxsonarqak22 ip [host="localhost" port=8035]  
 
 ExternalQActor pathexec context ctxbasicrobot
-ExternalQActor transporttrolley context ctxWasteService
+ExternalQActor wasteservice context ctxWasteService
 
 QActor sonarqak22 context ctxsonarqak22{
 	[# var stopped = false; #]
@@ -34,13 +34,12 @@ QActor sonarqak22 context ctxsonarqak22{
 			
 		#]
 		if [# Distance <= 20 /* && !stopped */ #]{
-			emit sonar_alarm : sonar_alarm(STOP)
-			emit alarm : alarm(KO)
+			forward wasteservice -m sonar_alarm : sonar_alarm(STOP)
 			[# stopped = true #]
 			println("SONAR | stop with distance $Distance")
 		} else{
 			if [# Distance > 20 && stopped #]{
-				emit sonar_resume : sonar_resume(OK)
+				forward wasteservice -m sonar_resume : sonar_resume(OK)
 				[# stopped = false #]
 				println("SONAR | resume with distance $Distance")
 			}

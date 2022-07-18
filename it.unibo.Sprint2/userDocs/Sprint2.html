@@ -241,35 +241,46 @@ div.imagedesc{
     <kc>Formalization</kc>: The Sonar is used as an ‘alarm device’: when it measures a distance less that a prefixed value DLIMT, the transport trolley must be stopped. It will be resumed when Sonar detects again a distance higher than DLIMT.
   </div>
   <div>
-    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.Sprint2/src/sprint2.qak" > <ks>R1A-R1B Executable model</ks></a>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.Sprint2/src/sprint2.qak" > <ks>R3-R4 Executable model</ks></a>
   </div>
 
   <h3>Non-functional requirements</h3>
   <h4>Sonar</h4>
   <div class="remark" id="proactive">
-    <kc>Proactive</kc>: the TransportTrolley has to move and to do actions autonomously.
+    <kc>Proactive</kc>: The Sonar is a proactive actor because is in charge of compute the distance from an obstacle. 
   </div>
   <div class="remark" id="reactive">
-    <kc>Reactive</kc>:the TransportTrolley has to be stoppend due to sonar alarm.
+    <kc>Reactive</kc>:The Sonar is also a reactive actor, because i the begging is started from the TransportTrolley.
+  </div>
+  <h4>Led</h4>
+  <div class="remark" id="reactive">
+    <kc>Reactive</kc>: The Led is only a reactive actor because it receives its status from the Waste Service
   </div>
   
 </div>
 <h2>Problem analysis</h2>
 <div class="remark">
   <div>
-   In this first  phase of the analysis we will focus on the BusinessCoreAnalysis referred to the requirements : <a href="#R1A">R1A</a>,<a href="#R1B">R1B</a>,<a href="#R1C-core">R1C-core</a>.
-   The components used in this phase are the <kr>WasteTruck</kr> ,  <kr>WasteService</kr> and the <kr>TransportTrolley</kr>.
-   In order to give to the client a first executable model we don't consider the Sonar and the Led in this phase.
+   In this second sprint we will discuss the problematic concerned to the introduction of two new components, given by the commitment: 
+   the <a href="https://github.com/anatali/issLab2022/tree/main/unibo.sonarqak22">SONAR</a> and the <a href="https://github.com/anatali/issLab2022/tree/main/unibo.ledqak22">LED</a>.
+   Furthermore, the main problem that we have to handle is the way that these compenents will communicate each others. 
 </div>
-<h3>WasteTruck</h3>
-<div class="remark" id="WasteTruck">
-  The <kr>WasteTruck</kr> is in charge to make a <kr>request</kr> to the WasteService to deposit the waste (<ks>waste_request(material, TruckLoad)</ks>).
-  <h4>Core Problem n°1: When the WasteTruck can leave the INDOOR port.</h4>  
-  The WasteTruck have to leave the INDOOR area after the Transport Trolley has taken the waste.
-  We thought of two possible solutions:
- <li>through an <kr>event</kr>: however communication problems would cause a total block of the software, becuse the INDOOR area will remain occupiede forever.</li> 
- <li>through a <kr>dispatch</kr>: this solution is certainly the best because it strengthens communication and avoids the loss of messages.</li> 
-  
+<h3>Led</h3>
+<div class="remark" id=Led">
+  The <kr>Led</kr> needs to update its status when the TransportTrolley changes its status.
+  <h4>Problem n°0:How the transport Trolley comunicate its status to the WasteService</h4> 
+
+  As it's the WasteService to command the TransportTrolley, to solve this problem
+   we can keep track of the status and position of the trolley within the wasteService 
+  <h4>Led Problem n°1: How to communicate the update of the Led status.</h4>  
+
+  The WasteService needs to comunicate to the Led to change its status we could do it by two type of comunincation.
+ <li>through an <kr>event</kr>: it's the easiest way , but if a comunication prolem occur the Led won't receive the message.
+  Furthermore, if we use an event other components could receive the message.</li> 
+ <li>through a <kr>dispatch</kr>: the strenght of the comunication is greater but in this way the Waste Service needs to know the existace of the Led. </li> 
+
+ 
+ 
 </div>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
@@ -283,32 +294,42 @@ div.imagedesc{
             <th>Semantic</th>
         </tr>
         <tr>
-            <td rowspan="1">waste_request(material, TruckLoad)</td>
-            <td rowspan="1">request</td>
+            <td rowspan="1">led_status</td>
+            <td rowspan="1">event</td>
         </tr>
-        <tr>
-          <td rowspan="1">free_Indoor</td>
-          <td rowspan="1">dispatch</td>
-      </tr>
     </tbody></table></center>
   </td>
 </tr>
 </table>
-<h3>WasteService </h3>
-<div class="remark" id="WasteService">
- The <kr>WasteService</kr> sends to the WasteTruck a <kr>reply</kr> (could be <ks>loadaccept</ks> or <ks>loadrejecetd</ks> ).
- If the reply is <ks>loadaccept</ks> the <kr>WasteService</kr> needs to communicate to the Transport Trolley to execute the deposit action.
- <h4>Core Problem n°2: How to send the start of deposit action.</h4>  
- To approach this problem we thought of three possible solutions : 
- <li>A <ks>dispatch</ks>  :  This is the simplest solution because we need only to send a command to the Transport Trolley. 
-  Furthermore ,by requirements , we have to active a series of action and the Waste Service doesn't need to know when the deposit action is ended.</li>
- <li>Another possible solution is to send an <ks>event</ks>, in this way the WasteService doesn't need to know the transport trolley and also there is the possibility to handle one or more trolleys.
-  Otherwise this solution can create communication problem because, if the event isn't arrived to the trolley, it may block the system.</li> 
- <li>Another one is throught a  <ks>request</ks>  and a <ks>replay</ks> : this solution allows to solve the problem of errors during communication, however, as previously mentioned, the WasteService doesn't need to receive a response from the Trolley.
-  The main problem is that the Waste Truck is waiting to leave the INDOOR area, it would be appreciate that he can free it as soon as possible.</li>
-  So we thought that after the WasteService sends the request to the TransportTrolley, it waits his reply , and as soon as the Waste Service receives the reply it can say to the Waste Truck to leave the
-  Indoor area. 
- <a id="wasteservice"></a>
+<h3>Sonar </h3>
+<div class="remark" id="Sonar">
+  <h4>Problem n°1: Who is the best receiver of the distance emitted by the sonar?</h4>
+The main role of sonar is to emit a continuous stream of data (measured distance) and send it to the Waste Service.
+As it is a continous stream is not recommended to use dispatches or reply/request, but events;
+with the help of events, the data emitted by the sonar can be received by several different entities:
+
+<ks>TransportTrolley:</ks>
+	<ul>
+		<li><kr>Pros</kr> : if the data were received directly from the trolley, it could automatically process the distances and stop itself.</li>
+		<li><kr>Cons</kr>:the structure of the Trolley would be more complicated, giving up the role of pure actuator.</li>
+	
+	</ul>
+	<ks>WasteService:</ks>
+	<ul>
+		<li><kr>Pros</kr>:If the data were received by the WasteService, it would become even more the fulcrum of the system.</li>
+		<li><kr>Cons</kr>:the structure of the WasteService would be more complicated, and it would be  needed  to communicate the stop/resume action to the TransportTrolley.</li>
+	</ul>
+
+  <h4>Problem n°2: How the TransportTrolley receives the command Stop/Resume ? And from who ? </h4>
+  If the Sonar data is received directly from the TransportTrolley then it will automatically stop based on the data received from the Sonar.
+  If instead the data is received by the WasteService, it will be he who will send the command to the Trolley, which will keep the task of pure actuator in the system.
+  The WasteService could send the command <ks>stop/resume</ks> in three different ways:
+
+<li>through an <kr>event</kr>: it's the easiest way , but if a comunication prolem occur the TransportTrolley won't receive the message , causing dangerous consequences.</li> 
+<li>through a <kr>dispatch</kr>: the strenght of the comunication is greater and so we don't have to think of possibile communication problems. </li> 
+<li>through a <kr>request/reply</kr>: the strenght of the comunication is great, but the WasteService will have to wait a reply from the TransportTrolley.</li> 
+
+<h4>Problem n°3: How to keep track of the TransportTrolley status when it's stopped? </h4>
 
 </div>
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
@@ -344,42 +365,7 @@ div.imagedesc{
 </tr>
 </table>
 
-<div>
 
-  <h3> Transport trolley </h3>
-<div class="remark" id="problem_analysis_transport_trolley">
-  The trolley must send a message to the WasteService to communicate that it has finished the pick-up from the WasteTruck, so the WT can leave the INDOOR port.
-  <h4>Core Problem n°4: How to communicate the end of the pick-up to WasteService.</h4>  
-  To do this, there are various solutions:
-  <li>a <ks>dispatch</ks>: this solution does not present communication problems, however in this case the trolley needs to know the existence of the WS</li>
-  <li>an <ks>event</ks>: this solution would allow the trolley not to know the existence of the WS, however in case of an error the WasteService would remain blocked causing problems</li>
-  <li>a <ks>request - replay</ks>: by implementing this solution, the trolley could exploit the replay of the point described above (<a href="#wasteservice">here</a>). This solution can be considered if we consider only the BusinessCoreAnalysis, which has no other elements such as LED or SONAR.
-  From a global point of view, however, the WasteService will remain waiting for the replay from the moment the execute is sent, making it impossible, for example, to change the status of the LED.</li>
-The proposed solution then implements the dispatch version.
-
-</div>
-<br>
-<table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
-  <tr>
-    <td style="border: 0px">
-        <center><img src="images/CoreTrolley.png" alt="core_trolley" width="70%"><center>
-    </td>
-    <td style="border: 0px">
-      <center><table cellpadding="5%">
-        <tbody><tr>
-            <th>Message</th>
-            <th>Semantic</th>
-        </tr>
-        <tr>
-          <td rowspan="1">withdrawal_done</td>
-          <td rowspan="1">dispatch</td>
-      </tr>
-      </tr>
-    </tbody></table></center>
-  </td>
-</tr>
-</table>
-<br>
 
 <div id="logical_architecture">
   <h3>Logical Architecture</h3>
