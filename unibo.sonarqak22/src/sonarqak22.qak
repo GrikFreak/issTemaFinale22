@@ -8,15 +8,13 @@ mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo.sonarqak22"
  
 Dispatch sonar_alarm  : sonar_alarm(STOP)
 Dispatch sonar_resume  : sonar_resume(OK)
-Event start_sonar : start_sonar(START)
+Dispatch start_sonar : start_sonar(START)
 Event alarm : alarm(KO)
-
-Context ctxbasicrobot  ip [ host="127.0.0.1" port=8020 ]  
-Context ctxWasteService  ip [ host="127.0.0.1" port=8025 ]  
+ 
+Context ctxWasteService ip [ host="127.0.0.1" port=8025 ]  
 
 Context ctxsonarqak22 ip [host="localhost" port=8035]  
 
-ExternalQActor pathexec context ctxbasicrobot
 ExternalQActor wasteservice context ctxWasteService
 
 QActor sonarqak22 context ctxsonarqak22{
@@ -26,19 +24,19 @@ QActor sonarqak22 context ctxsonarqak22{
 		
 	}
 	
-	Transition t0 whenEvent start_sonar -> active
+	Transition t0 whenMsg start_sonar -> active
 	
 	State active {
 		[#
-			var Distance = kotlin.random.Random.nextLong(1,100);
+			var Distance = kotlin.random.Random.nextLong(1,1000);
 			
 		#]
-		if [# Distance <= 20 /* && !stopped */ #]{
+		if [# Distance <= 90 /* && !stopped */ #]{
 			forward wasteservice -m sonar_alarm : sonar_alarm(STOP)
 			[# stopped = true #]
 			println("SONAR | stop with distance $Distance")
 		} else{
-			if [# Distance > 20 && stopped #]{
+			if [# Distance > 90 && stopped #]{
 				forward wasteservice -m sonar_resume : sonar_resume(OK)
 				[# stopped = false #]
 				println("SONAR | resume with distance $Distance")
@@ -48,4 +46,17 @@ QActor sonarqak22 context ctxsonarqak22{
 	
 	Transition t1 whenTime 3000 -> active
 	
+}
+
+QActor sonarmock context ctxsonarqak22 {
+	State s0 initial {
+		println("SONARMOCK | Mock started the sonar")
+		forward sonarqak22 -m start_sonar : start_sonar(START)
+	}
+	
+	Transition t0 whenTime 1000000000 -> turn_off
+	
+	State turn_off {
+		println("SONARMOCK | Turned off the sonar")
+	}
 }

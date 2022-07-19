@@ -17,7 +17,7 @@ Dispatch free_Indoor : free_Indoor(FREE)
 
 Event start_sonar : start_sonar(START)
 
-//handle sonar stop
+//handle sonar stop from sonar
 Dispatch sonar_alarm : sonar_alarm(STOP)
 Dispatch sonar_resume : sonar_resume(OK)
 
@@ -136,6 +136,7 @@ QActor wasteservice context ctxWasteService {
 		run unibo.kotlin.planner22Util.createRoomMapFromTextfile( "map.txt" )	
    		run unibo.kotlin.planner22Util.initAI() 
   		run unibo.kotlin.planner22Util.showCurrentRobotState()
+  		emit led_status : led_status(OFF)
 	}
 	
 	Goto s0 
@@ -308,7 +309,7 @@ QActor transporttrolley context ctxWasteService {
 		var PathContainer = "";
 		
 		var PathToDo = "";
-		var LastState = "";
+		var LastState = ""; //to_indoor, to_container, to_home
 	#]
 	
 	State s0 initial {
@@ -317,6 +318,7 @@ QActor transporttrolley context ctxWasteService {
 	}
 	
 	Transition t0 whenRequest pickup_request -> move_to_INDOOR
+					whenMsg stop_trolley -> trolley_stopped
 					
 	
 	State move_to_INDOOR {
@@ -333,12 +335,12 @@ QActor transporttrolley context ctxWasteService {
 		[# Position = "GENERIC" #] 
 		emit trolley_status : trolley_status($Status) 
 		emit trolley_position : trolley_position($Position)
-		[# LastState = "to_INDOOR" #]
+		[# LastState = "to_indoor" #]
 	}
 	
 	Transition t1 whenReply dopathdone -> pickup_action
 					whenReply dopathfail -> pathfail
-				  
+				  	whenMsg stop_trolley -> trolley_stopped
 				
 	State pickup_action {
 		onMsg (dopathdone : dopathdone( ARG )) {
@@ -372,11 +374,12 @@ QActor transporttrolley context ctxWasteService {
 		emit led_status : led_status(BLINKS)
 		emit trolley_status : trolley_status($Status)
 		request pathexec -m dopath : dopath($PathContainer) 
-		[# LastState = "to_CONTAINER" #]
+		[# LastState = "to_container" #]
 	}
 	
 	Transition t3 whenReply dopathdone -> settle_action
 				  	whenReply dopathfail -> pathfail
+				  	whenMsg stop_trolley -> trolley_stopped
 				 
 				
 	State settle_action {
@@ -391,7 +394,7 @@ QActor transporttrolley context ctxWasteService {
 				[# Position = "CONTAINERG" #]
 			}
 		}
-		emit led_status : led_status(ON)
+		emit led_status : led_status(BLINKS)
 		emit trolley_position : trolley_position($Position)
 		[# Status = "IDLE" #]
 		emit trolley_status : trolley_status($Status)
@@ -414,6 +417,14 @@ QActor transporttrolley context ctxWasteService {
 			request pathexec -m dopath : dopath($PathHome)
 			delay 1500
 		}
+		[# LastState = "to_home" #]	
+	}
+	
+	Transition t5 whenReply dopathdone -> back_to_home
+				  	whenReply dopathfail -> pathfail
+				  	whenMsg stop_trolley -> trolley_stopped
+	
+	State back_to_home {
 		onMsg (dopathdone   : dopathdone( ARG )) {
 			println("TRANSPORT TROLLEY | arrived HOME.")
 			[# Position = "HOME" #]
@@ -424,31 +435,73 @@ QActor transporttrolley context ctxWasteService {
 		}
 	}
 	
-	Transition t5 whenReply dopathdone -> move_to_HOME
-				  whenReply dopathfail -> pathfail
-				  whenRequest pickup_request -> move_to_INDOOR
+	Transition t6 whenRequest pickup_request -> move_to_INDOOR
 				  
 	State handle_stop {
 		println("WASTESERVICE | Trolley stopped by the sonar, wait for resume..")
-		[# TrolleyStatus = "STOPPED" #]
-		emit led_status : led_status(ON)
+		//[# TrolleyStatus = "STOPPED" #]
 		emit trolley_status : trolley_status(STOPPED)
 		forward transporttrolley -m stop_trolley : stop_trolley(STOP)
 	} 
 	
-	Transition t5 whenMsg sonar_resume -> handle_resume
+	Goto savepath 
+	
+	State savepath {
+		printCurrentMessage
+		onMsg(dopathfail: dopathfail(PATH)){
+			[#
+				PathToDo = payloadArg(0);
+			#]	
+		}
+		println("TRANSPORT TROLLEY | SAVE PATH: $PathToDo")
+	} 
+	
+	Goto trolley_stopped
+	
+	State trolley_stopped {
+		printCurrentMessage
+		println("TRANSPORT TROLLEY | STOPPED")
+		//[# TrolleyStatus = "STOPPED" #]
+		//emit led_status : led_status(ON)
+		//emit trolley_status : trolley_status(STOPPED)
+	}
+	
+	Transition t7 whenMsg resume_trolley -> handle_resume
 					
 	State handle_resume {
 		println("WASTESERVICE | resume trolley after sonar resume message.")
-		[# TrolleyStatus = "WORKING" #]
+		//[# TrolleyStatus = "WORKING" #]
 		emit led_status : led_status(BLINKS)
 		emit trolley_status : trolley_status(WORKING)
 		forward transporttrolley -m resume_trolley : resume_trolley(OK)
 	}
 	
-	Transition t6 whenReply pickup_done -> handle_storage
-		 			whenReply storage_done -> storage_Done
-					whenReply home_done -> back_done
-
+	Goto trolley_resumed
+	
+	State trolley_resumed {
+		printCurrentMessage
+		println("TRANSPORT TROLLEY | RESUME")
+		//[# TrolleyStatus = "WORKING" #]
+		//emit led_status : led_status(BLINKS)
+		//emit trolley_status : trolley_status(WORKING)
+		//forward transporttrolley -m resume_trolley : resume_trolley(OK)
+		onMsg(resume_trolley : resume_trolley(STATE)){
+			[#
+				LastState = payloadArg(0)
+			#]	
+		}
+		println("TRASNSPORT TROLLEY | Last state of trolley: $LastState")
+		
+		//if [# RemainPath != "" #]{
+		request pathexec -m dopath : dopath($PathToDo) 
+		//}
+		[# PathToDo = "" #]
+		
+	}
+	
+	Transition t8 whenReply dopathdone and [# LastState == "to_indoor" #] -> pickup_action
+				  whenReply dopathdone and [# LastState == "to_container" #] -> settle_action
+				  whenReply dopathdone and [# LastState == "to_home" #] -> back_to_home
+				  whenReply dopathfail -> pathfail
 	
 }

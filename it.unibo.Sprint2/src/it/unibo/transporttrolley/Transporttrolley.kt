@@ -22,16 +22,16 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 				var PathIndoor = "";
 				var PathContainer = "";
 				
-				var PathToDo = ""
-				var LastState = ""
+				var PathToDo = "";
+				var LastState = ""; //to_indoor, to_container, to_home
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the TransportTrolley is waiting..")
-						emit("start_sonar", "start_sonar(START)" ) 
 					}
-					 transition(edgeName="t013",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
+					 transition(edgeName="t016",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
+					transition(edgeName="t017",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_INDOOR") { //this:State
 					action { //it:State
@@ -48,10 +48,11 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						 Position = "GENERIC"  
 						emit("trolley_status", "trolley_status($Status)" ) 
 						emit("trolley_position", "trolley_position($Position)" ) 
-						 LastState = "to_INDOOR"  
+						 LastState = "to_indoor"  
 					}
-					 transition(edgeName="t114",targetState="pickup_action",cond=whenReply("dopathdone"))
-					transition(edgeName="t115",targetState="pathfail",cond=whenReply("dopathfail"))
+					 transition(edgeName="t118",targetState="pickup_action",cond=whenReply("dopathdone"))
+					transition(edgeName="t119",targetState="pathfail",cond=whenReply("dopathfail"))
+					transition(edgeName="t120",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("pickup_action") { //this:State
 					action { //it:State
@@ -67,7 +68,7 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								println("TRANSPORT TROLLEY | pick up done.")
 						}
 					}
-					 transition(edgeName="t216",targetState="move_to_Container",cond=whenRequest("storage_request"))
+					 transition(edgeName="t221",targetState="move_to_Container",cond=whenRequest("storage_request"))
 				}	 
 				state("pathfail") { //this:State
 					action { //it:State
@@ -88,10 +89,11 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						emit("led_status", "led_status(BLINKS)" ) 
 						emit("trolley_status", "trolley_status($Status)" ) 
 						request("dopath", "dopath($PathContainer)" ,"pathexec" )  
-						 LastState = "to_CONTAINER"  
+						 LastState = "to_container"  
 					}
-					 transition(edgeName="t317",targetState="settle_action",cond=whenReply("dopathdone"))
-					transition(edgeName="t318",targetState="pathfail",cond=whenReply("dopathfail"))
+					 transition(edgeName="t322",targetState="settle_action",cond=whenReply("dopathdone"))
+					transition(edgeName="t323",targetState="pathfail",cond=whenReply("dopathfail"))
+					transition(edgeName="t324",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("settle_action") { //this:State
 					action { //it:State
@@ -108,7 +110,7 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 { Position = "CONTAINERG"  
 								 }
 						}
-						emit("led_status", "led_status(ON)" ) 
+						emit("led_status", "led_status(BLINKS)" ) 
 						emit("trolley_position", "trolley_position($Position)" ) 
 						 Status = "IDLE"  
 						emit("trolley_status", "trolley_status($Status)" ) 
@@ -117,8 +119,8 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						println("TRANSPORT TROLLEY | settled $Material on the Container.")
 						answer("storage_request", "storage_done", "storage_done(DONE)"   )  
 					}
-					 transition(edgeName="t419",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
-					transition(edgeName="t420",targetState="move_to_HOME",cond=whenRequest("home_request"))
+					 transition(edgeName="t425",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
+					transition(edgeName="t426",targetState="move_to_HOME",cond=whenRequest("home_request"))
 				}	 
 				state("move_to_HOME") { //this:State
 					action { //it:State
@@ -131,6 +133,14 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								request("dopath", "dopath($PathHome)" ,"pathexec" )  
 								delay(1500) 
 						}
+						 LastState = "to_home"  
+					}
+					 transition(edgeName="t527",targetState="back_to_home",cond=whenReply("dopathdone"))
+					transition(edgeName="t528",targetState="pathfail",cond=whenReply("dopathfail"))
+					transition(edgeName="t529",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+				}	 
+				state("back_to_home") { //this:State
+					action { //it:State
 						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								println("TRANSPORT TROLLEY | arrived HOME.")
@@ -141,9 +151,64 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								answer("home_request", "home_done", "home_done(DONE)"   )  
 						}
 					}
-					 transition(edgeName="t521",targetState="move_to_HOME",cond=whenReply("dopathdone"))
-					transition(edgeName="t522",targetState="pathfail",cond=whenReply("dopathfail"))
-					transition(edgeName="t523",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
+					 transition(edgeName="t630",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
+				}	 
+				state("handle_stop") { //this:State
+					action { //it:State
+						println("WASTESERVICE | Trolley stopped by the sonar, wait for resume..")
+						emit("trolley_status", "trolley_status(STOPPED)" ) 
+						forward("stop_trolley", "stop_trolley(STOP)" ,"transporttrolley" ) 
+					}
+					 transition( edgeName="goto",targetState="savepath", cond=doswitch() )
+				}	 
+				state("savepath") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						if( checkMsgContent( Term.createTerm("dopathfail(ARG)"), Term.createTerm("dopathfail(PATH)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								
+												PathToDo = payloadArg(0);
+						}
+						println("TRANSPORT TROLLEY | SAVE PATH: $PathToDo")
+					}
+					 transition( edgeName="goto",targetState="trolley_stopped", cond=doswitch() )
+				}	 
+				state("trolley_stopped") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						println("TRANSPORT TROLLEY | STOPPED")
+					}
+					 transition(edgeName="t731",targetState="handle_resume",cond=whenDispatch("resume_trolley"))
+				}	 
+				state("handle_resume") { //this:State
+					action { //it:State
+						println("WASTESERVICE | resume trolley after sonar resume message.")
+						emit("led_status", "led_status(BLINKS)" ) 
+						emit("trolley_status", "trolley_status(WORKING)" ) 
+						forward("resume_trolley", "resume_trolley(OK)" ,"transporttrolley" ) 
+					}
+					 transition( edgeName="goto",targetState="trolley_resumed", cond=doswitch() )
+				}	 
+				state("trolley_resumed") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						println("TRANSPORT TROLLEY | RESUME")
+						if( checkMsgContent( Term.createTerm("resume_trolley(OK)"), Term.createTerm("resume_trolley(STATE)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								
+												LastState = payloadArg(0)
+						}
+						println("TRASNSPORT TROLLEY | Last state of trolley: $LastState")
+						request("dopath", "dopath($PathToDo)" ,"pathexec" )  
+						 PathToDo = ""  
+					}
+					 transition(edgeName="t832",targetState="pickup_action",cond=whenReplyGuarded("dopathdone",{ LastState == "to_indoor"  
+					}))
+					transition(edgeName="t833",targetState="settle_action",cond=whenReplyGuarded("dopathdone",{ LastState == "to_container"  
+					}))
+					transition(edgeName="t834",targetState="back_to_home",cond=whenReplyGuarded("dopathdone",{ LastState == "to_home"  
+					}))
+					transition(edgeName="t835",targetState="pathfail",cond=whenReply("dopathfail"))
 				}	 
 			}
 		}

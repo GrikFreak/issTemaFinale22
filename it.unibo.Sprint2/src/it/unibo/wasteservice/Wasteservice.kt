@@ -33,7 +33,6 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 				val YHome = 0;
 				
 				var TrolleyStatus = "IDLE";
-				var LastState = "home";
 		return { //this:ActionBasciFsm
 				state("init") { //this:State
 					action { //it:State
@@ -42,6 +41,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						unibo.kotlin.planner22Util.createRoomMapFromTextfile( "map.txt"  )
 						unibo.kotlin.planner22Util.initAI(  )
 						unibo.kotlin.planner22Util.showCurrentRobotState(  )
+						emit("led_status", "led_status(OFF)" ) 
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
@@ -91,7 +91,6 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 						.replace("[","")
 								 						.replace("]","")
 								 request("pickup_request", "pickup_request($PathIndoor,$Material)" ,"transporttrolley" )  
-								  LastState = "to_PickUp"  
 								  TrolleyStatus = "WORKING"  
 								 emit("trolley_status", "trolley_status($TrolleyStatus)" ) 
 								 emit("led_status", "led_status(BLINKS)" ) 
@@ -130,9 +129,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						 }
 						println("WASTESERVICE | send request to store to the transport trolley.")
 						request("storage_request", "storage_request($PathContainer)" ,"transporttrolley" )  
-						 LastState = "to_Storage"  
 					}
 					 transition(edgeName="t26",targetState="storage_Done",cond=whenReply("storage_done"))
+					transition(edgeName="t27",targetState="handle_stop",cond=whenDispatch("sonar_alarm"))
 				}	 
 				state("storage_Done") { //this:State
 					action { //it:State
@@ -141,8 +140,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						stateTimer = TimerActor("timer_storage_Done", 
 							scope, context!!, "local_tout_wasteservice_storage_Done", 100.toLong() )
 					}
-					 transition(edgeName="t37",targetState="move_home",cond=whenTimeout("local_tout_wasteservice_storage_Done"))   
-					transition(edgeName="t38",targetState="handle_request",cond=whenRequest("waste_request"))
+					 transition(edgeName="t38",targetState="move_home",cond=whenTimeout("local_tout_wasteservice_storage_Done"))   
+					transition(edgeName="t39",targetState="handle_request",cond=whenRequest("waste_request"))
 				}	 
 				state("move_home") { //this:State
 					action { //it:State
@@ -155,10 +154,10 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 									.replace(",","")
 									.replace("[","")
 									.replace("]","")
-						 LastState = "to_Home"  
 						request("home_request", "home_request($PathHome)" ,"transporttrolley" )  
 					}
-					 transition(edgeName="t49",targetState="back_done",cond=whenReply("home_done"))
+					 transition(edgeName="t410",targetState="back_done",cond=whenReply("home_done"))
+					transition(edgeName="t411",targetState="handle_stop",cond=whenDispatch("sonar_alarm"))
 				}	 
 				state("back_done") { //this:State
 					action { //it:State
@@ -178,13 +177,21 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						 TrolleyStatus = "STOPPED"  
 						emit("led_status", "led_status(ON)" ) 
 						emit("trolley_status", "trolley_status(STOPPED)" ) 
+						forward("stop_trolley", "stop_trolley(STOP)" ,"transporttrolley" ) 
 					}
-					 transition(edgeName="t510",targetState="handle_storage",cond=whenDispatchGuarded("sonar_resume",{ LastState == "to_PickUp"  
-					}))
-					transition(edgeName="t511",targetState="handle_request",cond=whenDispatchGuarded("sonar_resume",{ LastState == "to_Storage"  
-					}))
-					transition(edgeName="t512",targetState="back_done",cond=whenDispatchGuarded("sonar_resume",{ LastState == "to_Home"  
-					}))
+					 transition(edgeName="t512",targetState="handle_resume",cond=whenDispatch("sonar_resume"))
+				}	 
+				state("handle_resume") { //this:State
+					action { //it:State
+						println("WASTESERVICE | resume trolley after sonar resume message.")
+						 TrolleyStatus = "WORKING"  
+						emit("led_status", "led_status(BLINKS)" ) 
+						emit("trolley_status", "trolley_status(WORKING)" ) 
+						forward("resume_trolley", "resume_trolley(OK)" ,"transporttrolley" ) 
+					}
+					 transition(edgeName="t613",targetState="handle_storage",cond=whenReply("pickup_done"))
+					transition(edgeName="t614",targetState="storage_Done",cond=whenReply("storage_done"))
+					transition(edgeName="t615",targetState="back_done",cond=whenReply("home_done"))
 				}	 
 			}
 		}

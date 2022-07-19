@@ -20,20 +20,20 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 					action { //it:State
 						println("Sonar STARTS")
 					}
-					 transition(edgeName="t00",targetState="active",cond=whenEvent("start_sonar"))
+					 transition(edgeName="t00",targetState="active",cond=whenDispatch("start_sonar"))
 				}	 
 				state("active") { //this:State
 					action { //it:State
 						
-									var Distance = kotlin.random.Random.nextLong(1,100);
+									var Distance = kotlin.random.Random.nextLong(1,1000);
 									
-						if(  Distance <= 20 /* && !stopped */  
+						if(  Distance <= 90 /* && !stopped */  
 						 ){forward("sonar_alarm", "sonar_alarm(STOP)" ,"wasteservice" ) 
 						 stopped = true  
 						println("SONAR | stop with distance $Distance")
 						}
 						else
-						 {if(  Distance > 20 && stopped  
+						 {if(  Distance > 90 && stopped  
 						  ){forward("sonar_resume", "sonar_resume(OK)" ,"wasteservice" ) 
 						  stopped = false  
 						 println("SONAR | resume with distance $Distance")
