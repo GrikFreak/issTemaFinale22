@@ -1,7 +1,8 @@
 System /*-trace*/ ledqak22
-mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo.ledqak22"
 
-Event  sonardata       : distance( V )   //for the application level
+mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo/ledqak22"
+
+//Event  sonardata       : distance( V )   //for the application level
 Event  led_status          : led_status(STATUS)
 
 Context ctxledqak22 ip [host="localhost" port=8030] 

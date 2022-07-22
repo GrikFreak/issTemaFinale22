@@ -307,9 +307,9 @@ div.imagedesc{
 The main role of sonar is to emit a continuous stream of data (measured distance) and send it to the Waste Service.
 As it is a continous stream is not recommended to use dispatches or reply/request, but events;
 with the help of events, the data emitted by the sonar can be received by several different entities:
-
+<ul>
 <ks>TransportTrolley:</ks>
-	<ul>
+	
 		<li><kr>Pros</kr> : if the data were received directly from the trolley, it could automatically process the distances and stop itself.</li>
 		<li><kr>Cons</kr>:the structure of the Trolley would be more complicated, giving up the role of pure actuator.</li>
 	
@@ -330,40 +330,57 @@ with the help of events, the data emitted by the sonar can be received by severa
 <li>through a <kr>request/reply</kr>: the strenght of the comunication is great, but the WasteService will have to wait a reply from the TransportTrolley.</li> 
 
 <h4>Problem n°3: How to keep track of the TransportTrolley status when it's stopped? </h4>
+When The TransportTrolley is stopped we need to keep in track which was its position and its status, and we need do resume it from the point it was left.
+To solve this problem we need to discuss two cases:
+
+<li> <kr>case 1:</kr>The TransportTrolley is <ks>moving</ks>.</li> 
+<li> <kr>case 2:</kr>: the TransportTrolley is executing an action in a specific area.</li> 
+
+<h5>CASE 1</h5>
+if the TransportTrolley is moving ,  when the TransportTrolley is stopped, we need to remember the path remaining to complete the action and 
+when it's resume we need to comunicate to the path executor the remaing path.
+<h5>CASE 2</h5>
+In this case we need to remember only the last state in which was the TransportTrolley , and resume it from the next one.
+The problem that arise in this case is that we need to make sure that the Trolley has done everything in the last state otherwise we could encounter comunication problem if 
+a reply, for example , is left behind.
+<div>
+  <h5>Where we save the status of the TransportTrolley?</h5>
+The status of the Trolley could be saved in :
+
+<li><kr>TransportTrolley:</kr> 
+	<ul>
+		<li><kr>Pros</kr>: With this solution we semplificate the computations of the WasteService </li>
+		<li><kr>Cons</kr>:The WasteService needs to know anyway the Status of the Trolley.</li>
+	</ul></li>
+  <li><kr>WasteService:</kr> 
+    <ul>
+      <li><kr>Pros</kr>: It needs to know anyway the Status of the Trolley to compute other action , like changing the led status or comunicating it to the GUI.</li>
+      <li><kr>Cons</kr>:the computational cost of the Waste Service is higher..</li>
+    </ul></li>
 
 </div>
-<table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
-  <tr>
-    <td style="border: 0px">
-        <center><img src="images/CoreWS.png" alt="core_waste_service" width="70%"><center>
-    </td>
-    <td style="border: 0px">
-      <center><table cellpadding="5%">
-        <tbody><tr>
-            <th>Message</th>
-            <th>Semantic</th>
-        </tr>
-        <tr>
-            <td rowspan="1">loadaccept</td>
-            <td rowspan="1">reply</td>
-        </tr>
-        <tr>
-            <td rowspan="1">loadrejected</td>
-            <td rowspan="1">reply</td>
-        </tr>
-        <tr>
-          <td rowspan="1">pickup_request</td>
-          <td rowspan="1">request</td>
-          </tr>
-          <tr>
-          <td rowspan="1">pickup_done</td>
-          <td rowspan="1">reply</td>
-        </tr>
+<div>
+  <h5>How to save the status of the TransportTrolley</h5>
+  To save the status in which the Trolley is stopped we could use :
+  
+  <li><kr>A variable:</kr> 
+    <ul>
+      We could use a variable to save the status of the Trolley when is stopped and one to save the path remaining.
+      This solution as an high computational cost because we need to update this 
+      variable each time we change status. 
+     </ul>
+  </li>
+    <li><kr>Interrupt:</kr>(<a href="https://htmlpreview.github.io/?https://github.com/anatali/issLab2022/blob/main/it.unibo.issLabStart/userDocs/Dispense/lezioni/html/RobotCleaner.html#stop-resume-un-nuovo-abstraction-gap">Interrupt_link</a>): 
+      <ul>
+        We could model a procedure call mechanism for the QAK language, in such  way we could memorize the state in which the TransportTrolley is ,  before the execution of the stop command.
+        In this way we are  able to restore the Trolley correctly after the arrival of a resume.
+      </ul>
+    </li>
+  </div>
+  
 
-    </tbody></table></center>
-  </td>
-</tr>
-</table>
+
+
 
 
 
@@ -374,8 +391,8 @@ with the help of events, the data emitted by the sonar can be received by severa
 </div>
 
 <div id="robot_components">
-<h3>Robot Components</h3>
-In addition to the basic robot, the customer provides components for the construction of the transport trolley. This facilitates the management of the trolley movement.
+<h3>Sonar and Led Components</h3>
+The customer provides components for the construction of the Led and the Sonar.
 <div>
 <br>
 The trolley must follow a <b>path</b> to do a deposit action. Now  is necessary to consider if the trolly is implemented by a  static path or a dinamic one.
@@ -391,28 +408,6 @@ Instead, if the Trolley uses a Dinamic Path the Application need to compute the 
   accessing only adjacent cells (therefore only those with one side in common) or also accessing those placed diagonally.
   If the trolley could move only to the adjacent cells the implementation would be easier but the size of the Path would be greater.
   Instead if it could go also diagonally it would be faster but a new pathfinding logic would need to be implemented for this case.
-</div>
-<!-- 
-<h3>Configuration file</h3>
-To make easier and more flexible the implementation we thought to use a configuration file, in which there are all the set information, like MAXPB and MAXGB.
-There is also the possibility to save and then access to the coordinates (X, Y) of each relevant position in the map.
-<br>It could have been written in JSON.<br>
-<a href="../resources/ConfigurationFile.json">Configuration file json</a><br>
-<br> -->
-<h3>Problems</h3>
-With the addition of the Planner and the Path Executor the problems we incurred were about the communication between these new components and the transport trolley.
-<br>The planner has been integrated in the WasteService, before the request to the transport trolley, we ask to plan the path that it has to do.
-<br>After that, the WasteService has to communicate with the trolley to let him know the path.
-<br><br>A <b>dispatch</b> cannot be the best solution because the WS need to know when the trolley has ended its action, to give it a new path to execute.
-<br>An <b>event</b> incurr in the same dispatch problem and then could incourring some comunication problems.
-<br>A <b>request-reply</b> is a better solution. In this way the WS send the request and wait to the Transport Trolley to reply; then we execute this actions for each trolley movement (home -> indoor -> container -> home/indoor).
-<br><br><a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/src/CoreWSBasicRobot.qak"> <ks>Core with Robot Executable model</ks></a>
-<h3>Architecture updated</h3>
-<center><img src="images/CoreRobotArchitecture.png" alt="corerobot_logical_architecture" width="100%"></center>
-Due to the addition of the new components we decided to change the message that the trolley sends to the WS when it finishes the deposit action. 
-<br>The dispatch <ks>withdrawal_done</ks> becomes the reply (<ks>storage_done</ks>) of the new request <ks>storage_request</ks>, because these had the same role in the architecture.
-To also communicate the Path to Home for the same reasons said before we added a reply and a request respectively <ks>home_rquest</ks> and <ks>home_done</ks>
-We have also added a PathExectur to perform the trolley steps planned by the planner.
 </div>
 
 

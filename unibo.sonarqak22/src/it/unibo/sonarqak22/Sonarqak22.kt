@@ -28,19 +28,14 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 									var Distance = kotlin.random.Random.nextLong(1,1000);
 									
 						if(  Distance <= 90 /* && !stopped */  
-						 ){forward("sonar_alarm", "sonar_alarm(STOP)" ,"wasteservice" ) 
+						 ){println("SONAR | send sonar_alarm")
+						forward("sonar_alarm", "sonar_alarm(STOP)" ,"wastetruckmock" ) 
+						println("$name in ${currentState.stateName} | $currentMsg")
 						 stopped = true  
 						println("SONAR | stop with distance $Distance")
 						}
-						else
-						 {if(  Distance > 90 && stopped  
-						  ){forward("sonar_resume", "sonar_resume(OK)" ,"wasteservice" ) 
-						  stopped = false  
-						 println("SONAR | resume with distance $Distance")
-						 }
-						 }
 						stateTimer = TimerActor("timer_active", 
-							scope, context!!, "local_tout_sonarqak22_active", 3000.toLong() )
+							scope, context!!, "local_tout_sonarqak22_active", 1000.toLong() )
 					}
 					 transition(edgeName="t11",targetState="active",cond=whenTimeout("local_tout_sonarqak22_active"))   
 				}	 

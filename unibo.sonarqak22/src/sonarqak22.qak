@@ -4,18 +4,18 @@
  */
 
 System /*-trace*/ sonarqak22
-mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo.sonarqak22"
+mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo/sonarqak22"
  
 Dispatch sonar_alarm  : sonar_alarm(STOP)
 Dispatch sonar_resume  : sonar_resume(OK)
 Dispatch start_sonar : start_sonar(START)
 Event alarm : alarm(KO)
  
-Context ctxWasteService ip [ host="127.0.0.1" port=8025 ]  
+Context ctxWasteService ip [ host="10.5.5.1" port=8025 ]  
 
-Context ctxsonarqak22 ip [host="localhost" port=8035]  
+Context ctxsonarqak22 ip [host="localhost" port=8085]  
 
-ExternalQActor wasteservice context ctxWasteService
+ExternalQActor wastetruckmock context ctxWasteService
 
 QActor sonarqak22 context ctxsonarqak22{
 	[# var stopped = false; #]
@@ -32,19 +32,21 @@ QActor sonarqak22 context ctxsonarqak22{
 			
 		#]
 		if [# Distance <= 90 /* && !stopped */ #]{
-			forward wasteservice -m sonar_alarm : sonar_alarm(STOP)
+			println("SONAR | send sonar_alarm")
+			forward wastetruckmock -m sonar_alarm : sonar_alarm(STOP)
+			printCurrentMessage
 			[# stopped = true #]
 			println("SONAR | stop with distance $Distance")
-		} else{
+		 } /*else{
 			if [# Distance > 90 && stopped #]{
 				forward wasteservice -m sonar_resume : sonar_resume(OK)
 				[# stopped = false #]
 				println("SONAR | resume with distance $Distance")
 			}
-		} 
+		} */
 	}
 	
-	Transition t1 whenTime 3000 -> active
+	Transition t1 whenTime 1000 -> active
 	
 }
 
