@@ -403,7 +403,7 @@ The status of the Trolley could be saved in :
 
     <div>
       <h5>FIRST DISTRIBUTION</h5>
-      On the Raspberry there are two components of the system: the LED and the SONAR. 
+      On the Raspberry there are two components of the system: the Led and the Sonar. 
       We could use only one application containing both the Led and the Sonar , in this case the distribution would 
       be easier buth the system will be less flessible and less extensible.
       Or we could use two applications, in this case we need to separate the Led and the sonar.
@@ -457,33 +457,34 @@ The status of the Trolley could be saved in :
     Test plans are coded in Java (JUnit). 
     Since both tests develop more functionality of the System, both are integration tests.
 
-    <h3>TestPlan: waste_request</h3>
-    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestWasteRequest.java" >TestWasteRequest</a>
+    <h3>TestPlan: Sprint2</h3>
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.Sprint2/test/TestSprint2.java" >TestSprint2</a>
     
-    <div><ks>Test loadRejecetd</ks>:</div>
-    <div>The waste_truck sends a waste request to the WasteService for a waste quantity that is greater then the container capacity and this replies with a loadrejected. </li> 
+    <div><ks>Test LedOnAfterStop</ks>:</div>
+    <div>in this test  we verifie the correct operation of the LED  when the wasteService receives a stop. </li> 
     
-    <div><ks>Test loadAccepted</ks>:</div> 
-    <div>The waste truck sends a waste request to the WasteServicefor a waste quantity that is lower then the container capacity and this replies with a loadaccept.</div> 
+    <div><ks>Test ResumeAfterStop</ks>:</div>
+    <div>in this test  we verifie the correct operation of the LED  when the wasteService receives a resume. </div> 
     
-    <h3>TestPlan: pickup_request</h3> 
-    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestPickUp</a>
+    <h3>TestPlan: Led</h3> 
+    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/unibo.ledqak22/test/TestLed.java" >TestLed</a>
     
-    <div><ks>Test testPickUpDone</ks>:</div>
-    <div>When the waste load is accepted, the WasteService sends to the transport_trolley a request and the TransportTrolley reply with a pickup_done when it has finished the pickup action.</div> 
-   </div>
-
-   <h3>TestPlan: storage_request</h3> 
-   <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestStorage</a>
-   
-   <div><ks>Test testStorageDone</ks>:</div>
-   <div>After the Waste Service recieved the pickup_done reply it sends to the TransportTrolley the <ks>storage_request</ks> and then the  TransportTrolley sends the reply <ks>storage_done</ks>.</div> 
-   <h3>TestPlan: home_request</h3> 
-   <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestHome.java" >TestHome</a>
+    <div><ks>Test testLedOn</ks>:</div>
+    <div>It simulates that the WasteService sends a dispatch to turn the Led ON and verifiy the correct status of the Led. </div> 
   
-   <div><ks>Test testHomeDone</ks>:</div>
-   <div>After the Waste Service recieved the storage_done reply , if it has no request from a WasteTruck in its queue, it sends to the TransportTrolley the <ks>home_request</ks> to send it to Home and then the  TransportTrolley sends the reply <ks>home_done</ks> when it is at home.</div> 
+    <div><ks>Test testLedOff</ks>:</div>
+    <div>It simulates that the WasteService sends a dispatch to turn the Led OFF and verifiy the correct status of the Led. </div> 
+    
+    <div><ks>Test testLedBlinks</ks>:</div>
+    <div>It simulates that the WasteService sends a dispatch to BLINS the Led  and verifiy the correct status of the Led. </div> 
+  
+  </div>
+   
+  
+  
+  </div>
 
+   
   </div>
 
  </div>
