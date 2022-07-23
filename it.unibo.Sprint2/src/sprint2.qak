@@ -38,12 +38,13 @@ Reply dopathdone   : dopathdone( ARG )
 Reply dopathfail   : dopathfail( ARG )
 
 Context ctxbasicrobot  ip [ host="127.0.0.1" port=8020 ]  
-Context ctxraspberrypi ip [ host="192.168.1.131" port=8030 ] 
+Context ctxledqak22 ip [ host="127.0.0.1" port=8030 ] 
+Context ctxsonarqak22 ip [ host="192.168.1.131" port=8035 ] 
 
 Context ctxWasteService ip [ host="localhost" port=8025 ]
 
 ExternalQActor pathexec context ctxbasicrobot
-ExternalQActor led context ctxraspberrypi
+ExternalQActor led context ctxledqak22
 
 //we use a Mock, cause it's not an Actor
 QActor wastetruckmock context ctxWasteService {

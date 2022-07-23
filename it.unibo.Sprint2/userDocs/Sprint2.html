@@ -271,14 +271,16 @@ div.imagedesc{
   <h4>Problem n°0:How the transport Trolley comunicate its status to the WasteService</h4> 
 
   As it's the WasteService to command the TransportTrolley, to solve this problem
-   we can keep track of the status and position of the trolley within the wasteService 
+   we can keep track of the status and position of the trolley within the WasteService.
+
   <h4>Led Problem n°1: How to communicate the update of the Led status.</h4>  
 
-  The WasteService needs to comunicate to the Led to change its status we could do it by two type of comunincation.
- <li>through an <kr>event</kr>: it's the easiest way , but if a comunication prolem occur the Led won't receive the message.
+  The WasteService needs to comunicate to the Led to change its status; we could do it by two type of comunincation.
+ <li>through an <kr>event</kr>: it's the easiest way , but if a comunication prolem occurs the Led won't receive the message.
   Furthermore, if we use an event other components could receive the message.</li> 
  <li>through a <kr>dispatch</kr>: the strenght of the comunication is greater but in this way the Waste Service needs to know the existace of the Led. </li> 
 
+  In our solution we use a dispatch.
  
  
 </div>
@@ -295,7 +297,7 @@ div.imagedesc{
         </tr>
         <tr>
             <td rowspan="1">led_status</td>
-            <td rowspan="1">event</td>
+            <td rowspan="1">dispatch</td>
         </tr>
     </tbody></table></center>
   </td>
@@ -322,7 +324,7 @@ with the help of events, the data emitted by the sonar can be received by severa
 
   <h4>Problem n°2: How the TransportTrolley receives the command Stop/Resume ? And from who ? </h4>
   If the Sonar data is received directly from the TransportTrolley then it will automatically stop based on the data received from the Sonar.
-  If instead the data is received by the WasteService, it will be he who will send the command to the Trolley, which will keep the task of pure actuator in the system.
+  If instead the data is received by the WasteService, it will be it who will send the command to the Trolley, which will keep the task of pure actuator in the system.
   The WasteService could send the command <ks>stop/resume</ks> in three different ways:
 
 <li>through an <kr>event</kr>: it's the easiest way , but if a comunication prolem occur the TransportTrolley won't receive the message , causing dangerous consequences.</li> 
@@ -377,7 +379,61 @@ The status of the Trolley could be saved in :
       </ul>
     </li>
   </div>
-  
+
+  <div>
+    <h5>How to comunicate to the path executor to stop</h5>
+    To stop the Trolley when it's moving we need to send an alarm also to the path executor , which will stop the Trolley and sennd bach a path_fail
+    with the path remaining to the trolley.
+    To send the alarm to the path_executor we could use :
+    <li> an <kr>event</kr>: it's the easiest way , but if a comunication prolem occurs the Led won't receive the message.
+      Furthermore, if we use an event other components could receive the message.</li> 
+     <li> a <kr>dispatch</kr>: the strenght of the comunication is greater but in this way the Waste Service needs to know the existace of the Led. </li> 
+    
+     For now we decided to eùuse an event base on the precedence considerations.
+     
+    </div>
+    <div>
+     <h5>Which data we comuicate to the WasteService?</h5>
+     The commitment gives us the Sonar component that includes a Distance clearear and a Distance Filter which eliminate
+     the distances that we don't want to send to the WasteService.
+     So , then the sonar can filter the distances and sends directly a dispatch <ks>stop/resume</ks> to the WasteService. 
+
+
+    </div>
+
+    <div>
+      <h5>FIRST DISTRIBUTION</h5>
+      On the Raspberry there are two components of the system: the LED and the SONAR. 
+      We could use only one application containing both the Led and the Sonar , in this case the distribution would 
+      be easier buth the system will be less flessible and less extensible.
+      Or we could use two applications, in this case we need to separate the Led and the sonar.
+
+      As there are no specific requests from the client, the designer is left free to choose.
+
+     </div>
+    <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
+      <tr>
+        <td style="border: 0px">
+            <center><img src="images/wasteTruck.png" alt="waste_truck" width="60%"><center>
+        </td>
+        <td style="border: 0px">
+          <center><table cellpadding="5%">
+            <tbody><tr>
+                <th>Message</th>
+                <th>Semantic</th>
+            </tr>
+            <tr>
+                <td rowspan="1">stop</td>
+                <td rowspan="1">dispatch</td>
+            </tr>
+            <tr>
+              <td rowspan="1">resume</td>
+              <td rowspan="1">dispatch</td>
+          </tr>
+        </tbody></table></center>
+      </td>
+    </tr>
+    </table>
 
 
 
@@ -390,25 +446,7 @@ The status of the Trolley could be saved in :
   <center><img src="images/CoreLogicalArchitecture.png" alt="core_logical_architecture" width="100%"></center>
 </div>
 
-<div id="robot_components">
-<h3>Sonar and Led Components</h3>
-The customer provides components for the construction of the Led and the Sonar.
-<div>
-<br>
-The trolley must follow a <b>path</b> to do a deposit action. Now  is necessary to consider if the trolly is implemented by a  static path or a dinamic one.
-If the Trolley use a Static Path means that all the possible paths are known by the Waste Service.<br>
-Instead, if the Trolley uses a Dinamic Path the Application need to compute the path, in this case we could use a planner.
-</div>
-<div>1) <a href="https://github.com/anatali/issLab2022/tree/main/unibo.planner22"><ks>Planner</ks></a>: which finds the best route for the TransportTrolley to take. </div>
-<div>2) <a href="https://github.com/anatali/issLab2022/tree/main/unibo.pathexecutor"><ks>Pathexecutor</ks></a>: which performs the actions determined by the planner one at a time. </div>
-<div>
-  <br>
-  The path, which is made up of a series of movements that the trolley must perform, can be understood in two ways, dipendently on how the Trolley can move in the map:
-  The map in which the Trolley is moving could be divided in cell with side RD. Then the Trolley could move in it by 
-  accessing only adjacent cells (therefore only those with one side in common) or also accessing those placed diagonally.
-  If the trolley could move only to the adjacent cells the implementation would be easier but the size of the Path would be greater.
-  Instead if it could go also diagonally it would be faster but a new pathfinding logic would need to be implemented for this case.
-</div>
+
 
 
 </div>
@@ -451,39 +489,48 @@ Instead, if the Trolley uses a Dinamic Path the Application need to compute the 
  </div>
 </div>
 
-<h2>Recap analysis</h2>
-<div>
-  <center><img src="images/CoreRobotArchitecture.png" alt="corerobot_logical_architecture" width="100%"></center>
-  <br>
-  <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/src/CoreWSBasicRobot.qak"> <ks>Core with Robot Executable model</ks></a>
-  <br><br>
-  <div> <b>Relevant tests:</b>
-    <br><br>
-    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestWasteRequest.java" >TestWasteRequest</a>
-    <br>
-    <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestPickUp</a>
-  </div>
-</div>
+<h2>Project</h2> 
+ <div class="remark">
+  So far we have represented, for ease of notation, SONAR as a single actor. In reality
+  it is implemented through a pipeline of actors. In particular, it is composed of the following actors:
+ <ul>
+	<li>sonarHCSR04Support2021: use the SonarAlone  provided by the customer
+    to get the distances detected by the physical sonar and feed them into the pipeline.</li>
+	<li>dataCleaner:filters the distances passed by the sonar HCSR04Support2021, considering only those included in a
+    certain range. This is necessary since the physical sonar is made to detect distances not
+    too high. </li>
+	<li>distanceFilter:  it has been modified for implementation needs, enriching it with business logic. It processes the distances coming from the dataCleaner sending, when necessary, the dispatch of
+    stop / resume at WasteService (distance higher or lower than DLIMIT). </li>
+ </ul><br>
+ <img src="./img_Sprint2/sonar.png" alt="RF2" width="90%" height="90%"><br><br>
+ As for the LED, however, we decided to create our own version inspired by the code provided by the
+ client for implementation needs. In detail the LED & eacute modeled as an actor and uses bash scripts
+ provided by the customer to switch on (<a href="../../CodiceRasp/led25GpioTurnOn.sh"> led25GpioTurnOn </a>) and switch off (<a href = "../../ CodiceRasp / led25GpioTurnOff.sh" > led25GpioTurnOff </a>)
+ the physical LED. <br> <br>
+ 
+ In addition to this, it was decided to restart the TransportTrolley in the resume phase in the state in which it was stopped,
+ doing so facilitates the implementation of the actor, taking advantage of the transitions already present in the state
+ without changing its structure excessively. <br> <br>
+ 
+ Furthermore, at this stage, we have decided to split the Led and Sonar into two different applications in order to facilitate
+ testing the system and increasing its flexibility and extensibility without overly complicating the distribution. <br> <br>
+ 
+ </div>
+
 
 
 </div>
 
 <h2>Testing</h2>
 
-<h2>Work Plan</h2>
-<div id="work_plan">
-  <div class="remark">
-   At the end of Sprint 1 to complete the work are necessary two other sprints:
-    <ul>
-     <li>Sprint 2: to introduct the LED and the SONAR</li>
-     <li>Sprint 3: to introduct the GUI</li>
-    </ul>
-    This order can let us complete some features that we cannot implent in the Sprint 3.
-  </div>
+<h2>Deployment</h2>
+<div class="remark">
+  Two applications are distributed on the Raspberry, one containing the <a href="../../distribuzione/unibo.led-1.0"> LED </a> and one the <a href = "../../ distribution /unibo.sonar-1.0">SONAR </a>, accompanied with the various
+  codes related to physical LEDs and SONARs. <br>
+  Finally, the remaining part of the system (TROLLEY and WASTE_SERVICE) resides on another node which in this case corresponds to the PC.</div>
 </div>
 
-<br/><br/>
-</div>
+
 
 <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
 <li>By Bignami Filippo, Greco Davide</li>

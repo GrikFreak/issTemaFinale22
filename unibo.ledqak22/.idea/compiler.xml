@@ -2,7 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
-      <module name="it.unibo.ledqak22.test" target="14" />
+      <module name="it.unibo.ledqak22.test.main" target="14" />
+      <module name="it.unibo.ledqak22.test.test" target="14" />
     </bytecodeTargetLevel>
   </component>
 </project>

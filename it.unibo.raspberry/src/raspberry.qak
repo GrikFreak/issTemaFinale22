@@ -14,8 +14,6 @@ Event noobstacle : noobstacle(V)
 // LED
 Dispatch led_status : led_status (CMD)
 
-
-//Context ctxanalisiproblema ip [host="127.0.0.1" port=8078] 
 // mettere ip del proprio pc
 Context ctxWasteService ip [host="192.168.1.131" port=8025]  
 Context ctxraspberrypi ip [host="localhost" port=8030] 
