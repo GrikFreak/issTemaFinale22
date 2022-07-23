@@ -287,7 +287,7 @@ div.imagedesc{
 <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
   <tr>
     <td style="border: 0px">
-        <center><img src="images/wasteTruck.png" alt="Led" width="60%"><center>
+        <center><img src="images/led.png" alt="Led" width="60%"><center>
     </td>
     <td style="border: 0px">
       <center><table cellpadding="5%">
@@ -401,20 +401,11 @@ The status of the Trolley could be saved in :
 
     </div>
 
-    <div>
-      <h5>FIRST DISTRIBUTION</h5>
-      On the Raspberry there are two components of the system: the Led and the Sonar. 
-      We could use only one application containing both the Led and the Sonar , in this case the distribution would 
-      be easier buth the system will be less flessible and less extensible.
-      Or we could use two applications, in this case we need to separate the Led and the sonar.
 
-      As there are no specific requests from the client, the designer is left free to choose.
-
-     </div>
     <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
       <tr>
         <td style="border: 0px">
-            <center><img src="images/sonarArchitecture.png" alt="Sonar" width="60%"><center>
+            <center><img src="images/sonarArchitecture.png" alt="Sonar" width="90%"><center>
         </td>
         <td style="border: 0px">
           <center><table cellpadding="5%">
@@ -439,7 +430,16 @@ The status of the Trolley could be saved in :
 
 
 
+  <div>
+    <h5>FIRST DISTRIBUTION</h5>
+    On the Raspberry there are two components of the system: the Led and the Sonar. 
+    We could use only one application containing both the Led and the Sonar , in this case the distribution would 
+    be easier buth the system will be less flessible and less extensible.
+    Or we could use two applications, in this case we need to separate the Led and the sonar.
 
+    As there are no specific requests from the client, the designer is left free to choose.
+
+    </div>
 <div id="logical_architecture">
   <h3>Logical Architecture</h3>
   From the previous considerations on the components of the system it is possible to define a first logical architecture: <br><br>
@@ -460,12 +460,16 @@ The status of the Trolley could be saved in :
     <h3>TestPlan: Sprint2</h3>
     <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.Sprint2/test/TestSprint2.java" >TestSprint2</a>
     
-    <div><ks>Test LedOnAfterStop</ks>:</div>
-    <div>in this test  we verifie the correct operation of the LED  when the wasteService receives a stop. </li> 
+    <div><ks>TestLedOnAfterStop</ks>:</div>
+    <div>in this test we verify the correct operation of the LED  when the wasteService receives a stop. </li> 
     
-    <div><ks>Test ResumeAfterStop</ks>:</div>
-    <div>in this test  we verifie the correct operation of the LED  when the wasteService receives a resume. </div> 
+    <div><ks>TestResumeAfterStop</ks>:</div>
+    <div>in this test we verify the correct operation of the LED  when the wasteService receives a resume. </div> 
     
+    <div><ks>TestBlinksAfterAcceptedLoad</ks>:</div>
+    <div>in this test we verify the correct operation of the LED  when the wasteService accept a load. </div> 
+    
+
     <h3>TestPlan: Led</h3> 
     <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/unibo.ledqak22/test/TestLed.java" >TestLed</a>
     
@@ -476,18 +480,13 @@ The status of the Trolley could be saved in :
     <div>It simulates that the WasteService sends a dispatch to turn the Led OFF and verifiy the correct status of the Led. </div> 
     
     <div><ks>Test testLedBlinks</ks>:</div>
-    <div>It simulates that the WasteService sends a dispatch to BLINS the Led  and verifiy the correct status of the Led. </div> 
+    <div>It simulates that the WasteService sends a dispatch to BLINKS the Led and verifiy the correct status of the Led. </div> 
   
   </div>
    
   
   
-  </div>
 
-   
-  </div>
-
- </div>
 </div>
 
 <h2>Project</h2> 
@@ -523,13 +522,14 @@ The status of the Trolley could be saved in :
 </div>
 
 <h2>Testing</h2>
+<a href="#testPlan">Test plans</a>
 
-<h2>Deployment</h2>
+<!-- <h2>Deployment</h2>
 <div class="remark">
   Two applications are distributed on the Raspberry, one containing the <a href="../../distribuzione/unibo.led-1.0"> LED </a> and one the <a href = "../../ distribution /unibo.sonar-1.0">SONAR </a>, accompanied with the various
   codes related to physical LEDs and SONARs. <br>
   Finally, the remaining part of the system (TROLLEY and WASTE_SERVICE) resides on another node which in this case corresponds to the PC.</div>
-</div>
+</div> -->
 
 
 
