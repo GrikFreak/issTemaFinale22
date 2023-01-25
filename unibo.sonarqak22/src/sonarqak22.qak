@@ -28,7 +28,8 @@ Event noobstacle : noobstacle(V)
 
  
 // mettere ip del proprio pc
-Context ctxWasteService ip [host="192.168.1.131" port=8025]  
+Context ctxWasteService ip [host="127.0.0.1" port=8025]  
+//Context ctxWasteService ip [host="127.0.0.1" port=8025]  
 Context ctxsonarqak22 ip [host="localhost" port=8035] 
 
 ExternalQActor wasteservice context ctxWasteService

@@ -14,7 +14,7 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 		return "s0"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
-		 val simulate       = true
+		 val simulate       = false
 			   val sonarActorName = "sonarqak22"
 			   val usingDomain    = false
 		return { //this:ActionBasciFsm
@@ -33,6 +33,7 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 						}
 						else
 						 {forward("sonaractivate", "info(ok)" ,"sonardatasource" ) 
+						 println("SONAR DATASOURCE")
 						 }
 					}
 					 transition(edgeName="t02",targetState="handleSonarData",cond=whenEvent("sonar"))

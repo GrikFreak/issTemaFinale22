@@ -50,7 +50,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("WASTESERVICE | is waiting for a request..")
 					}
-					 transition(edgeName="t03",targetState="handle_request",cond=whenRequest("waste_request"))
+					 transition(edgeName="t05",targetState="handle_request",cond=whenRequest("waste_request"))
 				}	 
 				state("handle_request") { //this:State
 					action { //it:State
@@ -101,8 +101,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 }
 						}
 					}
-					 transition(edgeName="t14",targetState="handle_storage",cond=whenReply("pickup_done"))
-					transition(edgeName="t15",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t16",targetState="handle_storage",cond=whenReply("pickup_done"))
+					transition(edgeName="t17",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("handle_storage") { //this:State
 					action { //it:State
@@ -128,8 +128,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						println("WASTESERVICE | send request to store to the transport trolley.")
 						request("storage_request", "storage_request($PathContainer)" ,"transporttrolley" )  
 					}
-					 transition(edgeName="t26",targetState="storage_Done",cond=whenReply("storage_done"))
-					transition(edgeName="t27",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t28",targetState="storage_Done",cond=whenReply("storage_done"))
+					transition(edgeName="t29",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("storage_Done") { //this:State
 					action { //it:State
@@ -138,8 +138,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						stateTimer = TimerActor("timer_storage_Done", 
 							scope, context!!, "local_tout_wasteservice_storage_Done", 100.toLong() )
 					}
-					 transition(edgeName="t38",targetState="move_home",cond=whenTimeout("local_tout_wasteservice_storage_Done"))   
-					transition(edgeName="t39",targetState="handle_request",cond=whenRequest("waste_request"))
+					 transition(edgeName="t310",targetState="move_home",cond=whenTimeout("local_tout_wasteservice_storage_Done"))   
+					transition(edgeName="t311",targetState="handle_request",cond=whenRequest("waste_request"))
 				}	 
 				state("move_home") { //this:State
 					action { //it:State
@@ -154,8 +154,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 									.replace("]","")
 						request("home_request", "home_request($PathHome)" ,"transporttrolley" )  
 					}
-					 transition(edgeName="t410",targetState="back_done",cond=whenReply("home_done"))
-					transition(edgeName="t411",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t412",targetState="back_done",cond=whenReply("home_done"))
+					transition(edgeName="t413",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("back_done") { //this:State
 					action { //it:State
@@ -174,7 +174,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						forward("led_status", "led_status(ON)" ,"led" ) 
 						forward("stop_trolley", "stop_trolley(STOP)" ,"transporttrolley" ) 
 					}
-					 transition(edgeName="t512",targetState="handle_resume",cond=whenDispatch("resume"))
+					 transition(edgeName="t514",targetState="handle_resume",cond=whenDispatch("resume"))
 				}	 
 				state("handle_resume") { //this:State
 					action { //it:State
@@ -183,9 +183,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						forward("led_status", "led_status(BLINKS)" ,"led" ) 
 						forward("resume_trolley", "resume_trolley(OK)" ,"transporttrolley" ) 
 					}
-					 transition(edgeName="t613",targetState="handle_storage",cond=whenReply("pickup_done"))
-					transition(edgeName="t614",targetState="storage_Done",cond=whenReply("storage_done"))
-					transition(edgeName="t615",targetState="back_done",cond=whenReply("home_done"))
+					 transition(edgeName="t615",targetState="handle_storage",cond=whenReply("pickup_done"))
+					transition(edgeName="t616",targetState="storage_Done",cond=whenReply("storage_done"))
+					transition(edgeName="t617",targetState="back_done",cond=whenReply("home_done"))
 				}	 
 			}
 		}

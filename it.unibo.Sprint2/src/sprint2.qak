@@ -19,7 +19,7 @@ Dispatch free_Indoor : free_Indoor(FREE)
 Dispatch stop_trolley : stop_trolley(STOP)
 Dispatch resume_trolley : resume_trolley(OK)
 
-//dispatch sent by sonar
+//dispatch sent by distancefilter
 Dispatch stop : stop(DISTANCE)
 Dispatch resume : resume(OK)
 
@@ -30,16 +30,30 @@ Event alarm : alarm(STOP)
 Event trolley_status : trolley_status(STATUS)
 Event trolley_position : trolley_position(POSITION)
 
+//sonar events
+Event sonar : distance(V)   //emitted by sonarSimulator or sonardatasource	
+Event sonardata : distance(V)   //for the application level
+
 Dispatch led_status : led_status(STATUS)
 
 //Per path executor
-Request  dopath    : dopath( PATH  )
-Reply dopathdone   : dopathdone( ARG )
-Reply dopathfail   : dopathfail( ARG )
+Request dopath : dopath(PATH)
+Reply dopathdone : dopathdone(ARG)
+Reply dopathfail : dopathfail(ARG)
+
+/* Context ctxbasicrobot  ip [ host="127.0.0.1" port=8020 ]  
+Context ctxraspberry ip [ host="196.168.137.2" port=8030 ]
+//Context ctxledqak22 ip [ host="192.168.137.2" port=8030 ] 
+//Context ctxsonarqak22 ip [ host="192.168.1.131" port=8035 ]
+Context ctxWasteService ip [ host="localhost" port=8025 ]
+
+ExternalQActor pathexec context ctxbasicrobot
+ExternalQActor led context ctxraspeberry
+*/
 
 Context ctxbasicrobot  ip [ host="127.0.0.1" port=8020 ]  
+
 Context ctxledqak22 ip [ host="127.0.0.1" port=8030 ] 
-Context ctxsonarqak22 ip [ host="192.168.1.131" port=8035 ] 
 
 Context ctxWasteService ip [ host="localhost" port=8025 ]
 
@@ -105,6 +119,40 @@ QActor wastetruckmock context ctxWasteService {
 
 	Goto s0
 	
+}
+
+QActor distancefilter context ctxWasteService {
+	
+	[#
+		val DistanceLimit = 20
+		var Stopped = false
+	#]
+	
+	State s0 initial{
+		println("DistanceFilter STARTS")
+	}
+	
+	Transition t1 whenEvent sonardata -> handleSonarEvent
+	
+	State handleSonarEvent {
+		onMsg(sonardata: distance(V)){			
+			[# 
+				var Distance = payloadArg(0).toInt()
+			#]
+			println("emitted distance: $Distance")
+			if[# Distance < DistanceLimit && !Stopped #]{
+				[# Stopped=!Stopped #]
+				forward wasteservice -m stop:stop($Distance)
+			}else {
+				if[# Distance >= DistanceLimit && Stopped #]{
+					[# Stopped=!Stopped #]
+					forward wasteservice -m resume:resume($Distance)
+				}
+			}
+		}
+	}
+	
+	Transition t2 whenEvent sonardata -> handleSonarEvent
 }
 
 QActor wasteservice context ctxWasteService {
@@ -279,7 +327,7 @@ QActor wasteservice context ctxWasteService {
 	State handle_stop {
 		println("WASTESERVICE | Trolley stopped by the sonar, wait for resume..")
 		//[# TrolleyStatus = "STOPPED" #]
-			forward led -m led_status : led_status(ON)
+		forward led -m led_status : led_status(ON)
 		//emit trolley_status : trolley_status(STOPPED)
 		forward transporttrolley -m stop_trolley : stop_trolley(STOP)
 	} 

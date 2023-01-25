@@ -35,14 +35,13 @@ CodedQActor distancefilter context ctxraspberrypi className "distanceFilter"
 
 
 QActor sonarqak22 context ctxraspberrypi{
-	[# val simulate       = true
+	[# val simulate       = false
 	   val sonarActorName = "sonarqak22"
 	   val usingDomain    = false
 	#]
 	State s0 initial {
 		//printCurrentMessage
 		run  sonarConfig.configureTheSonar(simulate, sonarActorName, usingDomain)
-		 
 		//ASSUMPTION: the sonar subsystem emits the event sonar:distance(V)
 	}
 	Transition t0 whenMsg sonaractivate   -> activateTheSonar
@@ -52,9 +51,11 @@ QActor sonarqak22 context ctxraspberrypi{
 		printCurrentMessage
 		if[# simulate #]{
 			forward sonarsimulator -m sonaractivate : info(ok) 
+			//println("SONAR SIMULATOR")
 			//run sonarConfig.activateSonarSimulated() //usingDomain
 		}else {
 			 forward sonardatasource -m sonaractivate : info(ok)  
+			 println("SONAR DATASOURCE")
 		}
 	}
 	Transition t0  whenEvent sonar         -> handleSonarData  
@@ -99,7 +100,7 @@ QActor led context ctxraspberrypi {
 		printCurrentMessage
 		println("LED | WAIT CMD")
 		println("LED | OFF")
-		//[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh") #] //led inizialmente spento 
+		[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh") #] // led inizialmente spento 
 	}
 	Transition t0 whenMsg led_status -> esegui_cmd
 	
@@ -129,7 +130,7 @@ QActor led context ctxraspberrypi {
 	State on{
 		printCurrentMessage
 		println("LED | ON")
-		//[#Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")#]
+		[#Runtime.getRuntime().exec("sudo bash ./iss22/bash/led25GpioTurnOn.sh")#]
 		updateResource [# "LED:ON" #]
 			
 	}
@@ -139,7 +140,7 @@ QActor led context ctxraspberrypi {
 	State off{
 		printCurrentMessage
 		println("LED | OFF")
-		//[#Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")#]
+		[#Runtime.getRuntime().exec(" sudo bash ./iss22/bash/led25GpioTurnOff.sh")#]
 		updateResource [# "LED:OFF" #]
 
 	}
@@ -149,13 +150,11 @@ QActor led context ctxraspberrypi {
 		printCurrentMessage
 		updateResource [# "LED:BLINK" #]
 		[#
-			//Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")
-			
+			Runtime.getRuntime().exec("sudo bash ./iss22/bash/led25GpioTurnOn.sh")
 		#]
 		delay 300
 		[#
-			//Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")
-				
+			Runtime.getRuntime().exec("sudo bash ./iss22/bash/led25GpioTurnOff.sh")
 		#]
 		println("LED | BLINKS")
 		
