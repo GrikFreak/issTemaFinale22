@@ -21,7 +21,7 @@ public class TestPath {
     @Test
     public void testStepRequest() {
         ColorsOut.outappl("testStepRequest STARTS", ColorsOut.BLUE);
-        String stepRequestStr = "msg(dopath,request,gino,pathexec,dopath(wwwwwl),1)";
+        String stepRequestStr = "msg(dopath,request,gino,pathexec,dopath(wwwwlwwwwww),1)";
         try {
             ConnTcp connTcp = new ConnTcp("localhost", 8020);
             String answer = connTcp.request(stepRequestStr);

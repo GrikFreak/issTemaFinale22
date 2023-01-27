@@ -4,10 +4,14 @@ Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
 Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
 Reply loadrejected : loadrejected(MATERIAL, TRUCKLOAD)
 
-Request pickup_request : pickup_request(PATH_TO_INDOOR, MATERIAL)
+//Requests and replies from ws to tt
+Request transfer_request : transfer_request(PATH_TO_DO)
+Reply transfer_done : transfer_done(DONE)
+
+Request pickup_request : pickup_request(MATERIAL)
 Reply pickup_done : pickup_done(DONE)
 
-Request storage_request : storage_request(PATH_TO_CONTAINER)
+Request storage_request : storage_request(ARG)
 Reply storage_done : storage_done(DONE)
 
 Request home_request : home_request(PATH_TO_HOME)
@@ -17,7 +21,7 @@ Dispatch free_Indoor : free_Indoor(FREE)
 
 //dispatch sent by ws to trolley to stop/resume it
 Dispatch stop_trolley : stop_trolley(STOP)
-Dispatch resume_trolley : resume_trolley(OK)
+Dispatch resume_trolley : resume_trolley(LASTSTATE)
 
 //dispatch sent by distancefilter
 Dispatch stop : stop(DISTANCE)
@@ -124,8 +128,8 @@ QActor wastetruckmock context ctxWasteService {
 QActor distancefilter context ctxWasteService {
 	
 	[#
-		val DistanceLimit = 20
-		var Stopped = false
+		var DistanceLimit = 20;
+		var Stopped = false;
 	#]
 	
 	State s0 initial{
@@ -139,14 +143,15 @@ QActor distancefilter context ctxWasteService {
 			[# 
 				var Distance = payloadArg(0).toInt()
 			#]
-			println("emitted distance: $Distance")
-			if[# Distance < DistanceLimit && !Stopped #]{
-				[# Stopped=!Stopped #]
-				forward wasteservice -m stop:stop($Distance)
+			if[# Distance <= DistanceLimit && !Stopped #]{
+				[# Stopped = true #]
+				forward wasteservice -m stop : stop($Distance)
+				println("emitted distance: $Distance, distance limit: $DistanceLimit STOP")
 			}else {
-				if[# Distance >= DistanceLimit && Stopped #]{
-					[# Stopped=!Stopped #]
-					forward wasteservice -m resume:resume($Distance)
+				if[# Distance > DistanceLimit && Stopped #]{
+					[# Stopped = false #]
+					forward wasteservice -m resume : resume($Distance)
+					println("emitted distance: $Distance, distance limit: $DistanceLimit RESUME")
 				}
 			}
 		}
@@ -167,21 +172,23 @@ QActor wasteservice context ctxWasteService {
 		var PathIndoor = "";
 		var PathContainer = "";
 		val XIndoor = 0;
-		val YIndoor = 5;
+		val YIndoor = 4;
 		val XContainerP = 6;
-		val YContainerP = 5;
+		val YContainerP = 4;
 		val XContainerG = 6;
 		val YContainerG = 0;
 		val XHome = 0;
 		val YHome = 0;
 		
 		var TrolleyStatus = "IDLE"; //IDLE, WORKING, STOPPED
+		var TrolleyLastState = "TO_INDOOR"; //TO_HOME, TO_CONTAINER, TO_INDOOR, PICKING, STORAGING
+		var TrolleyPosition = "HOME"; //HOME, CONTAINER_P, CONTAINER_G, INDOOR, GENERIC
 	#]
 	
 	State init initial {
 		printCurrentMessage
 		println("WASTESERVICE | Start.")
-		run unibo.kotlin.planner22Util.createRoomMapFromTextfile( "map.txt" )	
+		//run unibo.kotlin.planner22Util.createRoomMapFromTextfile( "map.txt" )	
    		run unibo.kotlin.planner22Util.initAI() 
   		run unibo.kotlin.planner22Util.showCurrentRobotState()
   		forward led -m led_status : led_status(OFF)
@@ -194,10 +201,10 @@ QActor wasteservice context ctxWasteService {
 		println("WASTESERVICE | is waiting for a request..")
 	}
 	
-
-	Transition t0 whenRequest waste_request -> handle_request	
+	Transition t0 whenRequest waste_request -> go_to_Indoor	
+					whenMsg stop -> handle_stop
 			
-	State handle_request {
+	State go_to_Indoor {
 		printCurrentMessage
 		onMsg(waste_request : waste_request(MATERIAL, TRUCKLOAD)) {
 			[#
@@ -219,9 +226,16 @@ QActor wasteservice context ctxWasteService {
 						.replace("]","")
 					#]  
 					
-					request transporttrolley -m pickup_request : pickup_request($PathIndoor, $Material)
-					println("WASTESERVICE | Sent pickup request to TransportTrolley, indoor path $PathIndoor.")
+					request transporttrolley -m transfer_request : transfer_request($PathIndoor)
+					//request transporttrolley -m pickup_request : pickup_request($PathIndoor, $Material)
 					
+					[# 
+						TrolleyStatus = "WORKING";
+						TrolleyLastState = "TO_INDOOR";
+						TrolleyPosition = "GENERIC";
+					#]
+					forward led -m led_status : led_status(BLINKS)
+					println("WASTESERVICE | Sent pickup request to TransportTrolley, indoor path $PathIndoor.")
 				} else {
 					replyTo waste_request with loadrejected : loadrejected($Material, $TruckLoad)
 				}
@@ -239,8 +253,14 @@ QActor wasteservice context ctxWasteService {
 						.replace("]","")
 					#]  
 					
-					request transporttrolley -m pickup_request : pickup_request($PathIndoor, $Material)
-					[# TrolleyStatus = "WORKING" #]
+					request transporttrolley -m transfer_request : transfer_request($PathIndoor)
+					//request transporttrolley -m pickup_request : pickup_request($PathIndoor, $Material)
+					
+					[# 
+						TrolleyStatus = "WORKING";
+						TrolleyLastState = "TO_INDOOR";
+						TrolleyPosition = "GENERIC";
+					#]
 					//emit trolley_status : trolley_status($TrolleyStatus)
 					forward led -m led_status : led_status(BLINKS)
 					println("WASTESERVICE | Sent pickup request to TransportTrolley, first path $PathIndoor")
@@ -253,13 +273,30 @@ QActor wasteservice context ctxWasteService {
 		}
 	}
 	
-	Transition t1 whenReply pickup_done -> handle_storage 
+	//Transition t1 whenReply pickup_done -> handle_storage 
+					//whenMsg stop -> handle_stop
+						
+	Transition t1 whenReply transfer_done -> handle_pickup 
+					whenMsg stop -> handle_stop
+					
+	State handle_pickup {
+		printCurrentMessage
+		[# TrolleyPosition = "INDOOR" #]
+		onMsg(transfer_done : transfer_done(ARG)){
+			request transporttrolley -m pickup_request : pickup_request($Material)
+		}
+		[# TrolleyLastState = "PICKING"#]
+	}
+	
+	Transition t2 whenReply pickup_done -> go_to_Container
 					whenMsg stop -> handle_stop
 	
-	State handle_storage {
+	State go_to_Container {
 		printCurrentMessage
 		forward wastetruckmock -m free_Indoor : free_Indoor(FREE)
 		println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
+		run  unibo.kotlin.planner22Util.updateMapWithPath(PathIndoor)
+		run  unibo.kotlin.planner22Util.showCurrentRobotState()
 		if [# Material.equals("plastic") #]{
 			run unibo.kotlin.planner22Util.setGoal(XContainerP,YContainerP) 
 			[# PathContainer = unibo.kotlin.planner22Util.doPlan().toString()
@@ -268,6 +305,7 @@ QActor wasteservice context ctxWasteService {
 				.replace("[","")
 				.replace("]","")
 			#]  
+			[# TrolleyLastState = "TO_CONTAINER" #]
 		} else {
 			run unibo.kotlin.planner22Util.setGoal(XContainerG,YContainerG) 
 			[# PathContainer = unibo.kotlin.planner22Util.doPlan().toString()
@@ -276,24 +314,44 @@ QActor wasteservice context ctxWasteService {
 				.replace("[","")
 				.replace("]","")
 			#]  
+			[# TrolleyLastState = "TO_CONTAINER" #]
 		}
 		println("WASTESERVICE | send request to store to the transport trolley.")
-		request transporttrolley -m storage_request : storage_request($PathContainer)
-		//forward led -m led_status : led_status(BLINKS)
+		request transporttrolley -m transfer_request : transfer_request($PathContainer)
+		//request transporttrolley -m storage_request : storage_request($PathContainer)
 	}
 	
-	Transition t2 whenReply storage_done -> storage_Done 
+	Transition t3 whenReply transfer_done -> handle_storage
+					whenMsg stop -> handle_stop
+					
+	State handle_storage {
+		printCurrentMessage
+		if [# Material.equals("plastic") #]{
+			[# TrolleyPosition = "CONTAINER_P" #]
+		} else {
+			[# TrolleyPosition = "CONTAINER_G" #]
+		}
+		onMsg(transfer_done : transfer_done(ARG)){	
+			run  unibo.kotlin.planner22Util.updateMapWithPath(PathContainer)
+			run  unibo.kotlin.planner22Util.showCurrentRobotState()
+			request transporttrolley -m storage_request : storage_request($Material)
+		}
+		[# TrolleyLastState = "STORAGING" #]
+	}
+	
+	Transition t4 whenReply storage_done -> waiting_request
 					whenMsg stop -> handle_stop
 	
-	State storage_Done {
+	State waiting_request {
 		printCurrentMessage
-		println("WASTESERVICE | Storage done. Handle queue...")
+		//Mandare cose alla GUI?
 	}
 	
-	Transition t3 whenTime 100 -> move_home
-				whenRequest waste_request -> handle_request
+	Transition t5 whenTime 100 -> go_to_Home
+				whenRequest waste_request -> go_to_Indoor
+				whenMsg stop -> handle_stop
 				
-	State move_home {
+	State go_to_Home {
 		printCurrentMessage
 		println("WASTESERVICE | No Queue, send Transport trolley to HOME")
 		
@@ -306,45 +364,59 @@ QActor wasteservice context ctxWasteService {
 			.replace("[","")
 			.replace("]","")
 		#]
-		request transporttrolley -m home_request: home_request($PathHome)
+		[# 
+			TrolleyLastState = "TO_HOME";
+		#]
+		request transporttrolley -m home_request : home_request($PathHome)
 	}
 	
-	Transition t4 whenReply home_done -> back_done
+	Transition t6 whenReply home_done -> back_to_Home
 					whenMsg stop -> handle_stop
 	
-	State back_done{
+	State back_to_Home{
 		printCurrentMessage
 		println("WASTESERVICE | the trolley is arrived at HOME")
-		[# TrolleyStatus = "IDLE" #]
+		[# 
+			TrolleyStatus = "IDLE"
+			TrolleyPosition = "HOME"
+		#]
+		onMsg(home_done : home_done(ARG)){
+			forward led -m led_status : led_status(OFF)
+			run  unibo.kotlin.planner22Util.updateMapWithPath(PathHome)
+			run  unibo.kotlin.planner22Util.showCurrentRobotState()
+		}
 		//emit trolley_status : trolley_status($TrolleyStatus)
-		forward led -m led_status : led_status(OFF)
-		run  unibo.kotlin.planner22Util.updateMapWithPath( PathHome )
-		run  unibo.kotlin.planner22Util.showCurrentRobotState()
 	}
 	
 	Goto s0
 	
 	State handle_stop {
+		printCurrentMessage
 		println("WASTESERVICE | Trolley stopped by the sonar, wait for resume..")
-		//[# TrolleyStatus = "STOPPED" #]
+		[# TrolleyStatus = "STOPPED" #]
+		forward transporttrolley -m stop_trolley : stop_trolley(STOP)
 		forward led -m led_status : led_status(ON)
 		//emit trolley_status : trolley_status(STOPPED)
-		forward transporttrolley -m stop_trolley : stop_trolley(STOP)
 	} 
 	
-	Transition t5 whenMsg resume -> handle_resume
+	Transition t7 whenMsg resume -> handle_resume
 					
 	State handle_resume {
+		printCurrentMessage
 		println("WASTESERVICE | resume trolley after sonar resume message.")
 		[# TrolleyStatus = "WORKING" #]
 		forward led -m led_status : led_status(BLINKS)
 		//emit trolley_status : trolley_status(WORKING)
-		forward transporttrolley -m resume_trolley : resume_trolley(OK)
+		forward transporttrolley -m resume_trolley : resume_trolley($TrolleyLastState)
+		delay 300
 	}
 	
-	Transition t6 whenReply pickup_done -> handle_storage
-		 			whenReply storage_done -> storage_Done
-					whenReply home_done -> back_done
+	Transition t8 whenReply transfer_done and [# TrolleyLastState == "TO_INDOOR" #] -> handle_pickup
+				 	whenReply transfer_done and [# TrolleyLastState == "TO_CONTAINER" #] -> handle_storage
+				  	whenReply transfer_done and [# TrolleyLastState == "TO_HOME" #] -> back_to_Home
+					whenReply pickup_done -> go_to_Container
+		 			whenReply storage_done -> waiting_request
+					whenMsg stop -> handle_stop
 	
 }
 
@@ -359,7 +431,7 @@ QActor transporttrolley context ctxWasteService {
 		var PathContainer = "";
 		
 		var PathToDo = "";
-		var LastState = ""; //to_indoor, to_container, to_home
+		var LastState = "";
 	#]
 	
 	State s0 initial {
@@ -367,153 +439,148 @@ QActor transporttrolley context ctxWasteService {
 		println("the TransportTrolley is waiting..")
 	}
 	
-	Transition t0 whenRequest pickup_request -> move_to_INDOOR
-					whenMsg stop_trolley -> home_stopped
-					
-	State home_stopped {
-		println("TRANSPORT TROLLEY | Stopped at home")
-	}
-	
-	Transition t1 whenMsg resume_trolley -> s0
+	Transition t0 whenRequest transfer_request -> move_to_INDOOR
+					whenMsg stop_trolley -> trolley_stopped
 	
 	State move_to_INDOOR {
-		onMsg(pickup_request : pickup_request(PATH_TO_INDOOR, MATERIAL)){
+		printCurrentMessage
+		onMsg(transfer_request : transfer_request(PATH_TO_INDOOR)){
 		 	[# 
 		 		PathIndoor = payloadArg(0)
-		 		Material = payloadArg(1)
 		 	#]
+			println("TRANSPORT TROLLEY | execute the path $PathIndoor to INDOOR.")
+		 	request pathexec -m dopath : dopath($PathIndoor)
 		}
-		printCurrentMessage
-		println("TRANSPORT TROLLEY | execute the path $PathIndoor to INDOOR.")
-		request pathexec -m dopath : dopath($PathIndoor)
-		[# Status = "WORKING" #]
-		[# Position = "GENERIC" #] 
-		//emit trolley_status : trolley_status($Status) 
-		//emit trolley_position : trolley_position($Position)
-		[# LastState = "to_indoor" #]
-	}
-	
-	Transition t1 whenReply dopathdone -> pickup_action
-					whenReply dopathfail -> pathfail
-				  	whenMsg stop_trolley -> handle_path
-				
-	State pickup_action {
-		onMsg (dopathdone : dopathdone( ARG )) {
-			delay 3000
-			run  unibo.kotlin.planner22Util.updateMapWithPath( PathIndoor )
-			run  unibo.kotlin.planner22Util.showCurrentRobotState()
+		onMsg (dopathdone : dopathdone(ARG)) {
 			println("TRANSPORT TROLLEY | arrived to INDOOR.")
-			[# Position = "INDOOR" #]
-			//emit trolley_position : trolley_position($Position)
-			replyTo pickup_request with pickup_done : pickup_done(DONE)
-			println("TRANSPORT TROLLEY | pick up done.")
+			replyTo transfer_request with transfer_done : transfer_done(DONE)
 		}
-	}			
-	
-	Transition t2 whenRequest storage_request -> move_to_Container
-					whenMsg stop_trolley -> indoor_stopped
-					
-	State indoor_stopped {
-		println("TRANSPORT TROLLEY | Stopped at Indoor")
+		onMsg(dopathfail : dopathfail(ARG)) {
+			[#
+				var PathToDo = payloadArg(0)
+			#]
+			if [# PathToDo.length != 0  && PathToDo.length != 1 #]{
+				println("TRANSPORT TROLLEY | RESUME, path to do: $PathToDo")
+				request pathexec -m dopath : dopath($PathToDo) 
+			} else {
+				[# PathToDo = "" #]
+				println("TRANSPORT TROLLEY | RESUME")
+				request pathexec -m dopath : dopath($PathToDo) 
+			}
+		}
 	}
 	
-	Transition t3 whenMsg resume_trolley -> pickup_action
+	Transition t1 whenReply dopathdone -> move_to_INDOOR
+					whenReply dopathfail -> move_to_INDOOR
+				  	whenMsg stop_trolley -> handle_path
+					whenRequest pickup_request -> pickup_action
 					  
-	State pathfail {
+	State pickup_action {
 		printCurrentMessage
-		println("TRANSPORT TROLLEY| Error: Path fail!") 
+		onMsg(pickup_request : pickup_request(ARG)){
+			delay 1000
+			replyTo pickup_request with pickup_done : pickup_done(arg)
+		}
+		onMsg (dopathdone : dopathdone(ARG)) {
+			println("TRANSPORT TROLLEY | arrived to Container")
+			replyTo pickup_request with pickup_done : pickup_done(arg)
+		}
 	}
 	
-	State move_to_Container{
+	Transition t2 whenRequest transfer_request -> move_to_CONTAINER
+			  		whenMsg stop_trolley -> trolley_stopped
+	
+	State move_to_CONTAINER{
 		printCurrentMessage
-		onMsg(storage_request : storage_request(PATH_TO_CONTAINER)){
+		onMsg(transfer_request : transfer_request(PATH_TO_CONTAINER)){
 		 	[# 
 		 		PathContainer = payloadArg(0)
 		 	#]
-		}
-		println("TRANSPORT TROLLEY | execute the path $PathContainer to $Material container ")
-		[# Status = "WORKING" #]
-		//emit trolley_status : trolley_status($Status)
-		request pathexec -m dopath : dopath($PathContainer) 
-		[# LastState = "to_container" #]
-	}
-	
-	Transition t4 whenReply dopathdone -> settle_action
-				  	whenReply dopathfail -> pathfail
-				  	whenMsg stop_trolley -> handle_path
-				 
-				
-	State settle_action {
-		onMsg (dopathdone   : dopathdone( ARG )) {
-			delay 3000
-			run  unibo.kotlin.planner22Util.updateMapWithPath( PathContainer )
-			run  unibo.kotlin.planner22Util.showCurrentRobotState()
-			println("TRANSPORT TROLLEY | arrived to $Material container")
-			if[# Material.equals("plastic")#]{
-				[# Position = "CONTAINERP" #]
-			} else {
-				[# Position = "CONTAINERG" #]
-			}
-			//emit trolley_position : trolley_position($Position)
-			[# Status = "IDLE" #]
+		 	println("TRANSPORT TROLLEY | execute the path $PathContainer to $Material container ")
 			//emit trolley_status : trolley_status($Status)
-			run  unibo.kotlin.planner22Util.showCurrentRobotState()
-			delay 1500
-			println("TRANSPORT TROLLEY | settled $Material on the Container.")
-			replyTo storage_request with storage_done : storage_done(DONE)	
+			request pathexec -m dopath : dopath($PathContainer) 
+			[# LastState = "TO_CONTAINER" #]
 		}
-		
+		onMsg (dopathdone : dopathdone(ARG)) {
+			println("TRANSPORT TROLLEY | arrived to Container")
+			replyTo transfer_request with transfer_done : transfer_done(DONE)	
+		}
+		onMsg(dopathfail : dopathfail(ARG)) {
+			[#
+				var PathToDo = payloadArg(0)
+			#]
+			if [# PathToDo.length != 0  && PathToDo.length != 1 #]{
+				request pathexec -m dopath : dopath($PathToDo) 
+			} else {
+				[# PathToDo = "" #]
+				request pathexec -m dopath : dopath($PathToDo) 
+			}
+		}
 	}
 	
-	Transition t5 whenRequest pickup_request -> move_to_INDOOR
-	 			  whenRequest home_request -> move_to_HOME
-	 			  	whenMsg stop_trolley -> container_stopped
-					
-	State container_stopped {
-		println("TRANSPORT TROLLEY | Stopped at container")
+	Transition t3 whenReply dopathdone -> move_to_CONTAINER
+				  	whenReply dopathfail -> move_to_CONTAINER
+				  	whenMsg stop_trolley -> handle_path
+				  	whenRequest storage_request -> storage_action
+				  	
+	State storage_action{
+		printCurrentMessage
+		onMsg(storage_request : storage_request(ARG)){
+			delay 1000
+			replyTo storage_request with storage_done : storage_done(arg)
+		}
+		onMsg (dopathdone : dopathdone(ARG)) {
+			println("TRANSPORT TROLLEY | arrived to Container")
+			replyTo storage_request with storage_done : storage_done(arg)
+		}
 	}
 	
-	Transition t6 whenMsg resume_trolley -> settle_action
+	Transition t4 whenRequest home_request -> move_to_HOME
+					whenRequest transfer_request -> move_to_INDOOR
+					whenMsg stop_trolley -> trolley_stopped
 	
 	State move_to_HOME{
 		printCurrentMessage
-		println("TRANSPORT TROLLEY | coming back to HOME ")
 		onMsg(home_request : home_request(PATH_TO_HOME)){
-			[#
-				PathHome = payloadArg(0)
-			#]
-			request pathexec -m dopath : dopath($PathHome)
-			delay 1500
+		 	[# 
+		 		PathHome = payloadArg(0)
+		 	#]
+			println("TRANSPORT TROLLEY | execute the path $PathHome to HOME.")
+		 	request pathexec -m dopath : dopath($PathHome)
 		}
-		[# LastState = "to_home" #]	
-	}
-	
-	Transition t5 whenReply dopathdone -> back_to_home
-				  	whenReply dopathfail -> pathfail
-				  	whenMsg stop_trolley -> handle_path
-	
-	State back_to_home {
-		onMsg (dopathdone   : dopathdone( ARG )) {
+		onMsg(dopathdone : dopathdone(ARG)) {
 			println("TRANSPORT TROLLEY | arrived HOME.")
-			[# Position = "HOME" #]
-			run  unibo.kotlin.planner22Util.showCurrentRobotState()
-			//emit trolley_position : trolley_position($Position)
 			replyTo home_request with home_done : home_done(DONE)
 		}
+		onMsg(dopathfail : dopathfail(ARG)) {
+			[#
+				var PathToDo = payloadArg(0)
+			#]
+			if [# PathToDo.length != 0  && PathToDo.length != 1 #]{
+				//println("TRANSPORT TROLLEY | RESUME, path to do: $PathToDo")
+				replyTo home_request with home_done : home_done(DONE)
+			} else {
+				//println("TRANSPORT TROLLEY | RESUME")
+				request pathexec -m dopath : dopath($PathToDo) 
+			}
+		}
 	}
 	
-	Transition t6 whenRequest pickup_request -> move_to_INDOOR
-				  
+	Transition t5 whenReply dopathdone -> move_to_HOME
+				  	whenReply dopathfail -> move_to_HOME
+				  	whenMsg stop_trolley -> handle_path
+				  	whenRequest transfer_request -> move_to_INDOOR
+	  
 	State handle_path {
-		println("TRANSPORT TROLLEY | Trolley stopped by the sonar, stop the pathexec..")
+		printCurrentMessage
+		println("TRANSPORT TROLLEY | SEND ALARM TO BASICROBOt.")
 		emit alarm : alarm(STOP)	
 		//[# TrolleyStatus = "STOPPED" #]
 		//emit trolley_status : trolley_status(STOPPED)
 	} 
 	
-	
-	Transition t7 whenReply dopathdone -> trolley_stopped 
-					whenReply dopathfail -> savepath 
+	Transition t7 whenReply dopathfail -> savepath 
+					whenReply dopathdone -> trolley_stopped
 	
 	State savepath {
 		printCurrentMessage
@@ -522,14 +589,14 @@ QActor transporttrolley context ctxWasteService {
 				PathToDo = payloadArg(0);
 			#]	
 		}
-		println("TRANSPORT TROLLEY | SAVE PATH: $PathToDo")
+		//println("TRANSPORT TROLLEY | SAVE PATH: $PathToDo")
 	} 
 	
 	Goto trolley_stopped
 	
 	State trolley_stopped {
 		printCurrentMessage
-		println("TRANSPORT TROLLEY | STOPPED")
+		//println("TRANSPORT TROLLEY | STOPPED")
 		//[# TrolleyStatus = "STOPPED" #]
 		//emit led_status : led_status(ON)
 		//emit trolley_status : trolley_status(STOPPED)
@@ -538,29 +605,40 @@ QActor transporttrolley context ctxWasteService {
 	Transition t7 whenMsg resume_trolley -> handle_resume
 					
 	State handle_resume {
-		println("TRANSPORT TROLLEY | resume trolley after sonar resume message.")
-		//emit trolley_status : trolley_status(WORKING)
-	}
-	
-	Goto trolley_resumed
-	
-	State trolley_resumed {
 		printCurrentMessage
-		println("TRANSPORT TROLLEY | RESUME")
-		//emit trolley_status : trolley_status(WORKING)
-		
-		println("TRASNSPORT TROLLEY | Last state of trolley: $LastState")
-		
-		//if [# RemainPath != "" #]{
-		request pathexec -m dopath : dopath($PathToDo) 
-		//}
-		[# PathToDo = "" #]
-		
+		onMsg(resume_trolley : resume_trolley(ARG)){
+			[#
+				LastState = payloadArg(0);
+			#]	
+			println("TRANSPORT TROLLEY | resume_trolley, need to do: $PathToDo.")
+			if [# PathToDo.equals("none") #]{
+				[# PathToDo = "" #]
+				//println("TRANSPORT TROLLEY | RESUME, path to do: $PathToDo")
+				request pathexec -m dopath : dopath($PathToDo) 
+			} else {
+				request pathexec -m dopath : dopath($PathToDo) 
+			}
+		}
+		onMsg(dopathfail : dopathfail(ARG)) {
+			[#
+				var PathToDo = payloadArg(0)
+			#]
+			if [# PathToDo.length != 0 && PathToDo.length != 1 #]{
+				//println("TRANSPORT TROLLEY | RESUME, path to do: $PathToDo")
+				request pathexec -m dopath : dopath($PathToDo) 
+			} else {
+				[# PathToDo = "" #]
+				//println("TRANSPORT TROLLEY | RESUME")
+				request pathexec -m dopath : dopath($PathToDo) 
+			}
+		}
 	}
 	
-	Transition t8 whenReply dopathdone and [# LastState == "to_indoor" #] -> pickup_action
-				  whenReply dopathdone and [# LastState == "to_container" #] -> settle_action
-				  whenReply dopathdone and [# LastState == "to_home" #] -> back_to_home
-				  whenReply dopathfail -> pathfail
-	
+	Transition t8 whenReply dopathdone and [# LastState == "TO_INDOOR" #] -> move_to_INDOOR
+				  whenReply dopathdone and [# LastState == "PICKING" #] -> pickup_action
+				  whenReply dopathdone and [# LastState == "TO_CONTAINER" #] -> move_to_CONTAINER
+				  whenReply dopathdone and [# LastState == "STORAGING" #] -> storage_action
+				  whenReply dopathdone and [# LastState == "TO_HOME" #] -> move_to_HOME
+				  whenReply dopathfail -> handle_resume
+				  whenMsg stop_trolley -> trolley_stopped
 }

@@ -15,8 +15,8 @@ class Distancefilter ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		
-				val DistanceLimit = 20
-				var Stopped = false
+				var DistanceLimit = 20;
+				var Stopped = false;
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -30,15 +30,16 @@ class Distancefilter ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 
 												var Distance = payloadArg(0).toInt()
-								println("emitted distance: $Distance")
-								if(  Distance < DistanceLimit && !Stopped  
-								 ){ Stopped=!Stopped  
+								if(  Distance <= DistanceLimit && !Stopped  
+								 ){ Stopped = true  
 								forward("stop", "stop($Distance)" ,"wasteservice" ) 
+								println("emitted distance: $Distance, distance limit: $DistanceLimit STOP")
 								}
 								else
-								 {if(  Distance >= DistanceLimit && Stopped  
-								  ){ Stopped=!Stopped  
+								 {if(  Distance > DistanceLimit && Stopped  
+								  ){ Stopped = false  
 								 forward("resume", "resume($Distance)" ,"wasteservice" ) 
+								 println("emitted distance: $Distance, distance limit: $DistanceLimit RESUME")
 								 }
 								 }
 						}

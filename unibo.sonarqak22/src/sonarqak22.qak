@@ -45,7 +45,7 @@ CodedQActor sonardatasource context ctxsonarqak22 className "sonarHCSR04Support2
  */
 
 CodedQActor datacleaner    context ctxsonarqak22 className "dataCleaner"
-CodedQActor distancefilter context ctxsonarqak22 className "distanceFilter"
+// CodedQActor distancefilter context ctxsonarqak22 className "distanceFilter"
 
 
 QActor sonarqak22 context ctxsonarqak22{

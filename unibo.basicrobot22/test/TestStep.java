@@ -32,7 +32,7 @@ public class TestStep {
     @Test
     public void testStepRequest() {
         ColorsOut.outappl("testStepRequest STARTS", ColorsOut.BLUE);
-        String stepRequestStr = "msg(step,request,gino,basicrobot,step(1200),1)";
+        String stepRequestStr = "msg(step,request,gino,basicrobot,step(100),1)";
         try {
             ConnTcp connTcp = new ConnTcp("localhost", 8020);
             String answer = connTcp.request(stepRequestStr);

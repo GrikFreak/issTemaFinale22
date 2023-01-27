@@ -23,153 +23,160 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 				var PathContainer = "";
 				
 				var PathToDo = "";
-				var LastState = ""; //to_indoor, to_container, to_home
+				var LastState = "";
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the TransportTrolley is waiting..")
 					}
-					 transition(edgeName="t018",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
-					transition(edgeName="t019",targetState="home_stopped",cond=whenDispatch("stop_trolley"))
-				}	 
-				state("home_stopped") { //this:State
-					action { //it:State
-						println("TRANSPORT TROLLEY | Stopped at home")
-					}
-					 transition(edgeName="t120",targetState="s0",cond=whenDispatch("resume_trolley"))
+					 transition(edgeName="t027",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
+					transition(edgeName="t028",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_INDOOR") { //this:State
 					action { //it:State
-						if( checkMsgContent( Term.createTerm("pickup_request(PATH_TO_INDOOR,MATERIAL)"), Term.createTerm("pickup_request(PATH_TO_INDOOR,MATERIAL)"), 
+						println("$name in ${currentState.stateName} | $currentMsg")
+						if( checkMsgContent( Term.createTerm("transfer_request(PATH_TO_DO)"), Term.createTerm("transfer_request(PATH_TO_INDOOR)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 
 										 		PathIndoor = payloadArg(0)
-										 		Material = payloadArg(1)
+								println("TRANSPORT TROLLEY | execute the path $PathIndoor to INDOOR.")
+								request("dopath", "dopath($PathIndoor)" ,"pathexec" )  
 						}
-						println("$name in ${currentState.stateName} | $currentMsg")
-						println("TRANSPORT TROLLEY | execute the path $PathIndoor to INDOOR.")
-						request("dopath", "dopath($PathIndoor)" ,"pathexec" )  
-						 Status = "WORKING"  
-						 Position = "GENERIC"  
-						 LastState = "to_indoor"  
+						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								println("TRANSPORT TROLLEY | arrived to INDOOR.")
+								answer("transfer_request", "transfer_done", "transfer_done(DONE)"   )  
+						}
+						if( checkMsgContent( Term.createTerm("dopathfail(ARG)"), Term.createTerm("dopathfail(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								
+												var PathToDo = payloadArg(0)
+								if(  PathToDo.length != 0  && PathToDo.length != 1  
+								 ){println("TRANSPORT TROLLEY | RESUME, path to do: $PathToDo")
+								request("dopath", "dopath($PathToDo)" ,"pathexec" )  
+								}
+								else
+								 { PathToDo = ""  
+								 println("TRANSPORT TROLLEY | RESUME")
+								 request("dopath", "dopath($PathToDo)" ,"pathexec" )  
+								 }
+						}
 					}
-					 transition(edgeName="t121",targetState="pickup_action",cond=whenReply("dopathdone"))
-					transition(edgeName="t122",targetState="pathfail",cond=whenReply("dopathfail"))
-					transition(edgeName="t123",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t129",targetState="move_to_INDOOR",cond=whenReply("dopathdone"))
+					transition(edgeName="t130",targetState="move_to_INDOOR",cond=whenReply("dopathfail"))
+					transition(edgeName="t131",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t132",targetState="pickup_action",cond=whenRequest("pickup_request"))
 				}	 
 				state("pickup_action") { //this:State
 					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						if( checkMsgContent( Term.createTerm("pickup_request(MATERIAL)"), Term.createTerm("pickup_request(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								delay(1000) 
+								answer("pickup_request", "pickup_done", "pickup_done(arg)"   )  
+						}
 						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								delay(3000) 
-								unibo.kotlin.planner22Util.updateMapWithPath( PathIndoor  )
-								unibo.kotlin.planner22Util.showCurrentRobotState(  )
-								println("TRANSPORT TROLLEY | arrived to INDOOR.")
-								 Position = "INDOOR"  
-								answer("pickup_request", "pickup_done", "pickup_done(DONE)"   )  
-								println("TRANSPORT TROLLEY | pick up done.")
+								println("TRANSPORT TROLLEY | arrived to Container")
+								answer("pickup_request", "pickup_done", "pickup_done(arg)"   )  
 						}
 					}
-					 transition(edgeName="t224",targetState="move_to_Container",cond=whenRequest("storage_request"))
-					transition(edgeName="t225",targetState="indoor_stopped",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t233",targetState="move_to_CONTAINER",cond=whenRequest("transfer_request"))
+					transition(edgeName="t234",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
-				state("indoor_stopped") { //this:State
-					action { //it:State
-						println("TRANSPORT TROLLEY | Stopped at Indoor")
-					}
-					 transition(edgeName="t326",targetState="pickup_action",cond=whenDispatch("resume_trolley"))
-				}	 
-				state("pathfail") { //this:State
+				state("move_to_CONTAINER") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
-						println("TRANSPORT TROLLEY| Error: Path fail!")
-					}
-				}	 
-				state("move_to_Container") { //this:State
-					action { //it:State
-						println("$name in ${currentState.stateName} | $currentMsg")
-						if( checkMsgContent( Term.createTerm("storage_request(PATH_TO_CONTAINER)"), Term.createTerm("storage_request(PATH_TO_CONTAINER)"), 
+						if( checkMsgContent( Term.createTerm("transfer_request(PATH_TO_DO)"), Term.createTerm("transfer_request(PATH_TO_CONTAINER)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 
 										 		PathContainer = payloadArg(0)
+								println("TRANSPORT TROLLEY | execute the path $PathContainer to $Material container ")
+								request("dopath", "dopath($PathContainer)" ,"pathexec" )  
+								 LastState = "TO_CONTAINER"  
 						}
-						println("TRANSPORT TROLLEY | execute the path $PathContainer to $Material container ")
-						 Status = "WORKING"  
-						request("dopath", "dopath($PathContainer)" ,"pathexec" )  
-						 LastState = "to_container"  
-					}
-					 transition(edgeName="t427",targetState="settle_action",cond=whenReply("dopathdone"))
-					transition(edgeName="t428",targetState="pathfail",cond=whenReply("dopathfail"))
-					transition(edgeName="t429",targetState="handle_path",cond=whenDispatch("stop_trolley"))
-				}	 
-				state("settle_action") { //this:State
-					action { //it:State
 						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								delay(3000) 
-								unibo.kotlin.planner22Util.updateMapWithPath( PathContainer  )
-								unibo.kotlin.planner22Util.showCurrentRobotState(  )
-								println("TRANSPORT TROLLEY | arrived to $Material container")
-								if(  Material.equals("plastic") 
-								 ){ Position = "CONTAINERP"  
+								println("TRANSPORT TROLLEY | arrived to Container")
+								answer("transfer_request", "transfer_done", "transfer_done(DONE)"   )  
+						}
+						if( checkMsgContent( Term.createTerm("dopathfail(ARG)"), Term.createTerm("dopathfail(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								
+												var PathToDo = payloadArg(0)
+								if(  PathToDo.length != 0  && PathToDo.length != 1  
+								 ){request("dopath", "dopath($PathToDo)" ,"pathexec" )  
 								}
 								else
-								 { Position = "CONTAINERG"  
+								 { PathToDo = ""  
+								 request("dopath", "dopath($PathToDo)" ,"pathexec" )  
 								 }
-								 Status = "IDLE"  
-								unibo.kotlin.planner22Util.showCurrentRobotState(  )
-								delay(1500) 
-								println("TRANSPORT TROLLEY | settled $Material on the Container.")
-								answer("storage_request", "storage_done", "storage_done(DONE)"   )  
 						}
 					}
-					 transition(edgeName="t530",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
-					transition(edgeName="t531",targetState="move_to_HOME",cond=whenRequest("home_request"))
-					transition(edgeName="t532",targetState="container_stopped",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t335",targetState="move_to_CONTAINER",cond=whenReply("dopathdone"))
+					transition(edgeName="t336",targetState="move_to_CONTAINER",cond=whenReply("dopathfail"))
+					transition(edgeName="t337",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t338",targetState="storage_action",cond=whenRequest("storage_request"))
 				}	 
-				state("container_stopped") { //this:State
+				state("storage_action") { //this:State
 					action { //it:State
-						println("TRANSPORT TROLLEY | Stopped at container")
+						println("$name in ${currentState.stateName} | $currentMsg")
+						if( checkMsgContent( Term.createTerm("storage_request(ARG)"), Term.createTerm("storage_request(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								delay(1000) 
+								answer("storage_request", "storage_done", "storage_done(arg)"   )  
+						}
+						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								println("TRANSPORT TROLLEY | arrived to Container")
+								answer("storage_request", "storage_done", "storage_done(arg)"   )  
+						}
 					}
-					 transition(edgeName="t633",targetState="settle_action",cond=whenDispatch("resume_trolley"))
+					 transition(edgeName="t439",targetState="move_to_HOME",cond=whenRequest("home_request"))
+					transition(edgeName="t440",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
+					transition(edgeName="t441",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_HOME") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
-						println("TRANSPORT TROLLEY | coming back to HOME ")
 						if( checkMsgContent( Term.createTerm("home_request(PATH_TO_HOME)"), Term.createTerm("home_request(PATH_TO_HOME)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								
-												PathHome = payloadArg(0)
+								 
+										 		PathHome = payloadArg(0)
+								println("TRANSPORT TROLLEY | execute the path $PathHome to HOME.")
 								request("dopath", "dopath($PathHome)" ,"pathexec" )  
-								delay(1500) 
 						}
-						 LastState = "to_home"  
-					}
-					 transition(edgeName="t534",targetState="back_to_home",cond=whenReply("dopathdone"))
-					transition(edgeName="t535",targetState="pathfail",cond=whenReply("dopathfail"))
-					transition(edgeName="t536",targetState="handle_path",cond=whenDispatch("stop_trolley"))
-				}	 
-				state("back_to_home") { //this:State
-					action { //it:State
 						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								println("TRANSPORT TROLLEY | arrived HOME.")
-								 Position = "HOME"  
-								unibo.kotlin.planner22Util.showCurrentRobotState(  )
 								answer("home_request", "home_done", "home_done(DONE)"   )  
 						}
+						if( checkMsgContent( Term.createTerm("dopathfail(ARG)"), Term.createTerm("dopathfail(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								
+												var PathToDo = payloadArg(0)
+								if(  PathToDo.length != 0  && PathToDo.length != 1  
+								 ){answer("home_request", "home_done", "home_done(DONE)"   )  
+								}
+								else
+								 {request("dopath", "dopath($PathToDo)" ,"pathexec" )  
+								 }
+						}
 					}
-					 transition(edgeName="t637",targetState="move_to_INDOOR",cond=whenRequest("pickup_request"))
+					 transition(edgeName="t542",targetState="move_to_HOME",cond=whenReply("dopathdone"))
+					transition(edgeName="t543",targetState="move_to_HOME",cond=whenReply("dopathfail"))
+					transition(edgeName="t544",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t545",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
 				}	 
 				state("handle_path") { //this:State
 					action { //it:State
-						println("TRANSPORT TROLLEY | Trolley stopped by the sonar, stop the pathexec..")
+						println("$name in ${currentState.stateName} | $currentMsg")
+						println("TRANSPORT TROLLEY | SEND ALARM TO BASICROBOt.")
 						emit("alarm", "alarm(STOP)" ) 
 					}
-					 transition(edgeName="t738",targetState="trolley_stopped",cond=whenReply("dopathdone"))
-					transition(edgeName="t739",targetState="savepath",cond=whenReply("dopathfail"))
+					 transition(edgeName="t746",targetState="savepath",cond=whenReply("dopathfail"))
+					transition(edgeName="t747",targetState="trolley_stopped",cond=whenReply("dopathdone"))
 				}	 
 				state("savepath") { //this:State
 					action { //it:State
@@ -179,38 +186,56 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								
 												PathToDo = payloadArg(0);
 						}
-						println("TRANSPORT TROLLEY | SAVE PATH: $PathToDo")
 					}
 					 transition( edgeName="goto",targetState="trolley_stopped", cond=doswitch() )
 				}	 
 				state("trolley_stopped") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
-						println("TRANSPORT TROLLEY | STOPPED")
 					}
-					 transition(edgeName="t740",targetState="handle_resume",cond=whenDispatch("resume_trolley"))
+					 transition(edgeName="t748",targetState="handle_resume",cond=whenDispatch("resume_trolley"))
 				}	 
 				state("handle_resume") { //this:State
 					action { //it:State
-						println("TRANSPORT TROLLEY | resume trolley after sonar resume message.")
-					}
-					 transition( edgeName="goto",targetState="trolley_resumed", cond=doswitch() )
-				}	 
-				state("trolley_resumed") { //this:State
-					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
-						println("TRANSPORT TROLLEY | RESUME")
-						println("TRASNSPORT TROLLEY | Last state of trolley: $LastState")
-						request("dopath", "dopath($PathToDo)" ,"pathexec" )  
-						 PathToDo = ""  
+						if( checkMsgContent( Term.createTerm("resume_trolley(LASTSTATE)"), Term.createTerm("resume_trolley(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								
+												LastState = payloadArg(0);
+								println("TRANSPORT TROLLEY | resume_trolley, need to do: $PathToDo.")
+								if(  PathToDo.equals("none")  
+								 ){ PathToDo = ""  
+								request("dopath", "dopath($PathToDo)" ,"pathexec" )  
+								}
+								else
+								 {request("dopath", "dopath($PathToDo)" ,"pathexec" )  
+								 }
+						}
+						if( checkMsgContent( Term.createTerm("dopathfail(ARG)"), Term.createTerm("dopathfail(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								
+												var PathToDo = payloadArg(0)
+								if(  PathToDo.length != 0 && PathToDo.length != 1  
+								 ){request("dopath", "dopath($PathToDo)" ,"pathexec" )  
+								}
+								else
+								 { PathToDo = ""  
+								 request("dopath", "dopath($PathToDo)" ,"pathexec" )  
+								 }
+						}
 					}
-					 transition(edgeName="t841",targetState="pickup_action",cond=whenReplyGuarded("dopathdone",{ LastState == "to_indoor"  
+					 transition(edgeName="t849",targetState="move_to_INDOOR",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_INDOOR"  
 					}))
-					transition(edgeName="t842",targetState="settle_action",cond=whenReplyGuarded("dopathdone",{ LastState == "to_container"  
+					transition(edgeName="t850",targetState="pickup_action",cond=whenReplyGuarded("dopathdone",{ LastState == "PICKING"  
 					}))
-					transition(edgeName="t843",targetState="back_to_home",cond=whenReplyGuarded("dopathdone",{ LastState == "to_home"  
+					transition(edgeName="t851",targetState="move_to_CONTAINER",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_CONTAINER"  
 					}))
-					transition(edgeName="t844",targetState="pathfail",cond=whenReply("dopathfail"))
+					transition(edgeName="t852",targetState="storage_action",cond=whenReplyGuarded("dopathdone",{ LastState == "STORAGING"  
+					}))
+					transition(edgeName="t853",targetState="move_to_HOME",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_HOME"  
+					}))
+					transition(edgeName="t854",targetState="handle_resume",cond=whenReply("dopathfail"))
+					transition(edgeName="t855",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 			}
 		}

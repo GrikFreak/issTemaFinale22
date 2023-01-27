@@ -250,7 +250,7 @@ div.imagedesc{
     <kc>Proactive</kc>: The Sonar is a proactive actor because is in charge of compute the distance from an obstacle. 
   </div>
   <div class="remark" id="reactive">
-    <kc>Reactive</kc>:The Sonar is also a reactive actor, because i the begging is started from the TransportTrolley.
+    <kc>Reactive</kc>:The Sonar is also a reactive actor, because i the begging is started from the waste service.
   </div>
   <h4>Led</h4>
   <div class="remark" id="reactive">
@@ -382,23 +382,23 @@ The status of the Trolley could be saved in :
 
   <div>
     <h5>How to comunicate to the path executor to stop</h5>
-    To stop the Trolley when it's moving we need to send an alarm also to the path executor , which will stop the Trolley and sennd bach a path_fail
+    To stop the Trolley when it's moving we need to send an alarm also to the path executor , which will stop the Trolley and send back a path_fail
     with the path remaining to the trolley.
     To send the alarm to the path_executor we could use :
     <li> an <kr>event</kr>: it's the easiest way , but if a comunication prolem occurs the Led won't receive the message.
       Furthermore, if we use an event other components could receive the message.</li> 
      <li> a <kr>dispatch</kr>: the strenght of the comunication is greater but in this way the Waste Service needs to know the existace of the Led. </li> 
     
-     For now we decided to eùuse an event base on the precedence considerations.
+     For now we decided to use an event, based on the precedence considerations and also because the path_executor natively support the event communication for stopping itself.
+     If we decide to use a dispatch, we have to build the communication structure inside the path_executor.
      
     </div>
     <div>
      <h5>Which data we comuicate to the WasteService?</h5>
-     The commitment gives us the Sonar component that includes a Distance clearear and a Distance Filter which eliminate
-     the distances that we don't want to send to the WasteService.
+    The commitment gives us the Sonar component that includes a Distance clearear and a Distance Filter which eliminate
+     the distances that we don't want to send to the WasteService (we want a precise range).
      So , then the sonar can filter the distances and sends directly a dispatch <ks>stop/resume</ks> to the WasteService. 
-
-
+  
     </div>
 
 
@@ -426,24 +426,31 @@ The status of the Trolley could be saved in :
     </tr>
     </table>
 
+    <h5>Problems with distance filter stops</h5>
+    To make easier the handling of stop/resume from waste service to TransportTrolley we decided to add a new <kr>request/reply</kr> called <b>transfer_request/transfer_done</b>. Due to differetiate the stop when the trolley is moving and when it is stopped at Indoor or in a Container.
+    </br>
+    </br>
+    <ks>Request transfer_request : transfer_request(PATH_TO_DO)</ks>
+    </br>
+    <ks>Reply transfer_done : transfer_done(DONE)</ks>
 
 
 
 
   <div>
     <h5>FIRST DISTRIBUTION</h5>
-    On the Raspberry there are two components of the system: the Led and the Sonar. 
+    <!-- On the Raspberry there are two components of the system: the Led and the Sonar. 
     We could use only one application containing both the Led and the Sonar , in this case the distribution would 
     be easier buth the system will be less flessible and less extensible.
     Or we could use two applications, in this case we need to separate the Led and the sonar.
 
-    As there are no specific requests from the client, the designer is left free to choose.
+    As there are no specific requests from the client, the designer is left free to choose. -->
 
     </div>
 <div id="logical_architecture">
   <h3>Logical Architecture</h3>
   From the previous considerations on the components of the system it is possible to define a first logical architecture: <br><br>
-  <center><img src="images/architectureSprint2.png" alt="core_logical_architecture" width="100%"></center>
+  <center><img src="images/architectureSprint2.1.png" alt="core_logical_architecture" width="100%"></center>
 </div>
 
 
@@ -461,13 +468,13 @@ The status of the Trolley could be saved in :
     <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.Sprint2/test/TestSprint2.java" >TestSprint2</a>
     
     <div><ks>TestLedOnAfterStop</ks>:</div>
-    <div>in this test we verify the correct operation of the LED  when the wasteService receives a stop. </li> 
+    <div>in this test we verify the correct operation of the LED when the WasteService receives a stop. </li> 
     
     <div><ks>TestResumeAfterStop</ks>:</div>
-    <div>in this test we verify the correct operation of the LED  when the wasteService receives a resume. </div> 
+    <div>in this test we verify the correct handling of the TransportTrolley when the sonar detects a distance less the distanceLimit, the WasteService sends the stop to the trolley and then the resume. </div> 
     
     <div><ks>TestBlinksAfterAcceptedLoad</ks>:</div>
-    <div>in this test we verify the correct operation of the LED  when the wasteService accept a load. </div> 
+    <div>in this test we verify the correct operation of the LED  when the WasteService accept a load. </div> 
     
 
     <h3>TestPlan: Led</h3> 
@@ -492,19 +499,20 @@ The status of the Trolley could be saved in :
 <h2>Project</h2> 
  <div class="remark">
   So far we have represented, for ease of notation, SONAR as a single actor. In reality
-  it is implemented through a pipeline of actors. In particular, it is composed of the following actors:
+  it is implemented through a pipeline of actors. In particular, it is composed of the following two actors:
  <ul>
 	<li>sonarHCSR04Support2021: use the SonarAlone  provided by the customer
     to get the distances detected by the physical sonar and feed them into the pipeline.</li>
 	<li>dataCleaner:filters the distances passed by the sonar HCSR04Support2021, considering only those included in a
     certain range. This is necessary since the physical sonar is made to detect distances not
     too high. </li>
-	<li>distanceFilter:  it has been modified for implementation needs, enriching it with business logic. It processes the distances coming from the dataCleaner sending, when necessary, the dispatch of
-    stop / resume at WasteService (distance higher or lower than DLIMIT). </li>
  </ul><br>
- <img src="./img_Sprint2/sonar.png" alt="RF2" width="90%" height="90%"><br><br>
+  Altought we decided to introduce in the context of the WasteService a new actor, Distance Filter, a similar version to the one given by the commitment.
+ 	It has been modified for implementation needs, enriching it with business logic. It processes the distances coming from the dataCleaner and sends, when necessary, a dispatch to
+  the  WasteService (distance higher or lower than DLIMIT). 
+</br>
  As for the LED, however, we decided to create our own version inspired by the code provided by the
- client for implementation needs. In detail the LED & eacute modeled as an actor and uses bash scripts
+ client for implementation needs. In detail the LED is modeled as an actor and uses bash scripts
  provided by the customer to switch on (<a href="../../CodiceRasp/led25GpioTurnOn.sh"> led25GpioTurnOn </a>) and switch off (<a href = "../../ CodiceRasp / led25GpioTurnOff.sh" > led25GpioTurnOff </a>)
  the physical LED. <br> <br>
  
@@ -534,8 +542,8 @@ The status of the Trolley could be saved in :
 
 
 <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
-<li>By Bignami Filippo, Greco Davide</li>
-<li>email: filippo.bignami@studio.unibo.it,  davide.greco4@studio.unibo.it</li>
+<li>By Bignami Filippo, Greco Davide, Rosadi Niccolò</li>
+<li>email: filippo.bignami@studio.unibo.it,  davide.greco4@studio.unibo.it, niccolo.rosadi@studio.unibo.it</li>
 <li>GitHub repository: https://github.com/GrikFreak/issTemaFinale22</li>
 </div>
 </body>

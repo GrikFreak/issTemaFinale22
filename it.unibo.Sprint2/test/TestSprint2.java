@@ -1,5 +1,4 @@
 import it.unibo.comm2022.utils.ColorsOut;
-import it.unibo.ctxraspberrypi.MainCtxraspberrypiKt;
 import it.unibo.ctxWasteService.MainCtxWasteServiceKt;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapHandler;
@@ -121,9 +120,9 @@ public class TestSprint2 {
         String wastetruckRequestStr = "msg(waste_request,request,gino,wasteservice,waste_request(glass,26),1)";
         CoapClient client_led = new CoapClient("coap://localhost:8030/ctxledqak22/led");
         try{
-            ConnTcp connTcp   = new ConnTcp("localhost", 8025);
+            ConnTcp connTcp = new ConnTcp("localhost", 8025);
 
-            String answer     = connTcp.request(wastetruckRequestStr);
+            String answer = connTcp.request(wastetruckRequestStr);
             System.out.println("Response=" + answer );
             assertTrue(answer.contains("loadaccept"));
             connTcp.close();

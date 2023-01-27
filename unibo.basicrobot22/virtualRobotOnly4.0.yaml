@@ -12,6 +12,6 @@ services:
 ## - only until it’s running. There’s a good reason for this.
 ## The best solution is to perform this check in your application code,
 ## -------------------------------------------------------------
-## docker-compose -f virtualRobotOnly4.0.yaml up -d
+## docker-compose up -d
 ## docker-compose down
 ## docker-compose run --service-ports wenv    starts wenv
