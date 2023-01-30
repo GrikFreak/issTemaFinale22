@@ -60,12 +60,13 @@ Context ctxbasicrobot  ip [ host="127.0.0.1" port=8020 ]
 Context ctxledqak22 ip [ host="127.0.0.1" port=8030 ] 
 
 Context ctxWasteService ip [ host="localhost" port=8025 ]
+Context ctxWasteTruck ip [ host="localhost" port=8024 ]
 
 ExternalQActor pathexec context ctxbasicrobot
 ExternalQActor led context ctxledqak22
 
 //we use a Mock, cause it's not an Actor
-QActor wastetruckmock context ctxWasteService {
+QActor wastetruckmock context ctxWasteTruck {
 	
 	[#
 		var Material 	= "";
