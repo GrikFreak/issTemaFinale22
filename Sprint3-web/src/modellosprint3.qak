@@ -1,4 +1,4 @@
-System sprint3
+System modellosprint3
 
 Request waste_request : waste_request(MATERIAL, TRUCKLOAD)
 Reply loadaccept : loadaccept(MATERIAL, TRUCKLOAD)
@@ -17,7 +17,8 @@ Reply storage_done : storage_done(DONE)
 Request home_request : home_request(PATH_TO_HOME)
 Reply home_done : home_done(DONE)
 
-Dispatch free_Indoor : free_Indoor(FREE)
+Request free_request : free_request(ARG)
+Reply free_indoor : free_indoor(DONE)
 
 //dispatch sent by ws to trolley to stop/resume it
 Dispatch stop_trolley : stop_trolley(STOP)
@@ -69,7 +70,7 @@ Context ctxledqak22 ip [ host="127.0.0.1" port=8030 ]
 
 Context ctxWasteServiceGUI ip [ host="localhost" port=8023 ]
 
-Context ctxwastetruck ip [ host="localhost" port=8024 ]
+Context ctxWasteTruck ip [ host="localhost" port=8024 ]
 
 Context ctxWasteService ip [ host="localhost" port=8025 ]
 
@@ -115,7 +116,7 @@ QActor wasteserviceguimock context ctxWasteServiceGUI {
 }
 
 //we use a Mock, cause it's not an Actor
-QActor wastetruckmock context ctxwastetruck {
+QActor wastetruckmock context ctxWasteTruck {
 	
 	[#
 		var Material 	= "";
@@ -149,10 +150,11 @@ QActor wastetruckmock context ctxwastetruck {
 				TruckLoad 	= payloadArg(1).toLong();
 			#]
 			println("WASTETRUCK | accepted $Material with load $TruckLoad.")
+			request wasteservice -m free_request : free_request(arg)
 		}
 	}
 	
-	Transition t1 whenMsg free_Indoor -> leave_Indoor
+	Transition t1 whenReply free_indoor -> leave_Indoor
 	
 	State rejected {
 		printCurrentMessage
@@ -168,7 +170,10 @@ QActor wastetruckmock context ctxwastetruck {
 	Goto leave_Indoor
 	
 	State leave_Indoor {
-		println("WASTETRUCK | WasteTruck left Indoor area.")
+		printCurrentMessage
+		onMsg(free_indoor : free_indoor(DONE)) {
+			println("WASTETRUCK | WasteTruck left Indoor area.")
+		}
 	}
 
 	Goto s0
@@ -243,6 +248,7 @@ QActor wasteservice context ctxWasteService {
   		run unibo.kotlin.planner22Util.showCurrentRobotState()
   		forward led -m led_status : led_status(OFF)
   		emit updateStatusLed : updateStatusLed(OFF)
+  		updateResource [# "Led:OFF" #]
 	}
 	
 	Goto s0 
@@ -354,13 +360,21 @@ QActor wasteservice context ctxWasteService {
 		[# TrolleyLastState = "PICKING"#]
 	}
 	
-	Transition t2 whenReply pickup_done -> go_to_Container
+	Transition t2 whenRequest free_request -> handle_free_truck
+	
+	State handle_free_truck {
+		printCurrentMessage
+		onMsg(free_request : free_request(ARG)){
+			println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
+			replyTo free_request with free_indoor : free_indoor(done)
+		}
+	}
+		
+	Transition t3 whenReply pickup_done -> go_to_Container
 					whenMsg stop -> handle_stop
 	
 	State go_to_Container {
 		printCurrentMessage
-		forward wastetruckmock -m free_Indoor : free_Indoor(FREE)
-		println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
 		run  unibo.kotlin.planner22Util.updateMapWithPath(PathIndoor)
 		run  unibo.kotlin.planner22Util.showCurrentRobotState()
 		if [# Material.equals("plastic") #]{
@@ -387,7 +401,7 @@ QActor wasteservice context ctxWasteService {
 		//request transporttrolley -m storage_request : storage_request($PathContainer)
 	}
 	
-	Transition t3 whenReply transfer_done -> handle_storage
+	Transition t4 whenReply transfer_done -> handle_storage
 					whenMsg stop -> handle_stop
 					
 	State handle_storage {
@@ -409,14 +423,14 @@ QActor wasteservice context ctxWasteService {
 		[# TrolleyLastState = "STORAGING" #]
 	}
 	
-	Transition t4 whenReply storage_done -> waiting_request
+	Transition t5 whenReply storage_done -> waiting_request
 					whenMsg stop -> handle_stop
 	
 	State waiting_request {
 		printCurrentMessage
 	}
 	
-	Transition t5 whenTime 100 -> go_to_Home
+	Transition t6 whenTime 100 -> go_to_Home
 				whenRequest waste_request -> go_to_Indoor
 				whenMsg stop -> handle_stop
 				
@@ -439,7 +453,7 @@ QActor wasteservice context ctxWasteService {
 		request transporttrolley -m home_request : home_request($PathHome)
 	}
 	
-	Transition t6 whenReply home_done -> back_to_Home
+	Transition t7 whenReply home_done -> back_to_Home
 					whenMsg stop -> handle_stop
 	
 	State back_to_Home{
@@ -477,7 +491,7 @@ QActor wasteservice context ctxWasteService {
 		updateResource [# "Led:ON" #]
 	} 
 	
-	Transition t7 whenMsg resume -> handle_resume
+	Transition t8 whenMsg resume -> handle_resume
 					
 	State handle_resume {
 		printCurrentMessage
@@ -493,7 +507,7 @@ QActor wasteservice context ctxWasteService {
 		delay 300
 	}
 	
-	Transition t8 whenReply transfer_done and [# TrolleyLastState == "TO_INDOOR" #] -> handle_pickup
+	Transition t9 whenReply transfer_done and [# TrolleyLastState == "TO_INDOOR" #] -> handle_pickup
 				 	whenReply transfer_done and [# TrolleyLastState == "TO_CONTAINER" #] -> handle_storage
 				  	whenReply transfer_done and [# TrolleyLastState == "TO_HOME" #] -> back_to_Home
 					whenReply pickup_done -> go_to_Container

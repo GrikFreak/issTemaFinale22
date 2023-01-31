@@ -31,11 +31,11 @@ public class WasteGUIUtils {
     public static String sendWasteTruckReq(String payload) {
         String answer="";
         try {
-            IApplMessage msg =  CommUtils.buildRequest("webGui", "load_req", payload, "wasteservice");
-            //ColorsOut.outappl("RobotUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
+            IApplMessage msg =  CommUtils.buildRequest("webGui", "waste_request", payload, "wasteservice");
+            ColorsOut.outappl("RobotUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
             if( msg.isRequest() ){
                 answer = connTcp.request( msg.toString() );
-                //System.out.println("RobotUtils | answer:" + answer );
+                System.out.println("RobotUtils | answer:" + answer );
             } else {
                 // altro tipo di msg
             }
@@ -67,7 +67,7 @@ public class WasteGUIUtils {
 
     public static CoapConnection connectWithWasteServiceUsingCoap(String addr, int port){
         try {
-            String ctxqakdest       = "ctxsprint2";
+            String ctxqakdest       = "ctxWasteService";
             String qakdestination 	= "wasteservice";
             String path   = ctxqakdest+"/"+qakdestination;
             conn           = new CoapConnection(addr+":"+port, path);

@@ -81,12 +81,12 @@ public class WasteGUIController {
     }
 
     @ResponseBody
-    @PostMapping("/load_req")
+    @PostMapping("/waste_request")
     public String sendWasteTruckRequest(Model viewmodel, @ModelAttribute WasteTruckConfig wasteTruckConfig){
         type = wasteTruckConfig.getType();
         quantity = wasteTruckConfig.getQuantity();
-        String msg =  "load_req("+type+","+quantity+")";
-        //System.out.println(msg);
+        String msg =  "waste_request("+type+","+quantity+")";
+        System.out.println("MSG: "+msg);
         String res="";
         try {
             res = WasteGUIUtils.sendWasteTruckReq(msg);

@@ -30,8 +30,8 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the TransportTrolley is waiting..")
 					}
-					 transition(edgeName="t035",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
-					transition(edgeName="t036",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t025",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
+					transition(edgeName="t026",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_INDOOR") { //this:State
 					action { //it:State
@@ -63,10 +63,10 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 }
 						}
 					}
-					 transition(edgeName="t137",targetState="move_to_INDOOR",cond=whenReply("dopathdone"))
-					transition(edgeName="t138",targetState="move_to_INDOOR",cond=whenReply("dopathfail"))
-					transition(edgeName="t139",targetState="handle_path",cond=whenDispatch("stop_trolley"))
-					transition(edgeName="t140",targetState="pickup_action",cond=whenRequest("pickup_request"))
+					 transition(edgeName="t127",targetState="move_to_INDOOR",cond=whenReply("dopathdone"))
+					transition(edgeName="t128",targetState="move_to_INDOOR",cond=whenReply("dopathfail"))
+					transition(edgeName="t129",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t130",targetState="pickup_action",cond=whenRequest("pickup_request"))
 				}	 
 				state("pickup_action") { //this:State
 					action { //it:State
@@ -82,8 +82,8 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								answer("pickup_request", "pickup_done", "pickup_done(arg)"   )  
 						}
 					}
-					 transition(edgeName="t241",targetState="move_to_CONTAINER",cond=whenRequest("transfer_request"))
-					transition(edgeName="t242",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t231",targetState="move_to_CONTAINER",cond=whenRequest("transfer_request"))
+					transition(edgeName="t232",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_CONTAINER") { //this:State
 					action { //it:State
@@ -114,10 +114,10 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 }
 						}
 					}
-					 transition(edgeName="t343",targetState="move_to_CONTAINER",cond=whenReply("dopathdone"))
-					transition(edgeName="t344",targetState="move_to_CONTAINER",cond=whenReply("dopathfail"))
-					transition(edgeName="t345",targetState="handle_path",cond=whenDispatch("stop_trolley"))
-					transition(edgeName="t346",targetState="storage_action",cond=whenRequest("storage_request"))
+					 transition(edgeName="t333",targetState="move_to_CONTAINER",cond=whenReply("dopathdone"))
+					transition(edgeName="t334",targetState="move_to_CONTAINER",cond=whenReply("dopathfail"))
+					transition(edgeName="t335",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t336",targetState="storage_action",cond=whenRequest("storage_request"))
 				}	 
 				state("storage_action") { //this:State
 					action { //it:State
@@ -133,9 +133,9 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								answer("storage_request", "storage_done", "storage_done(arg)"   )  
 						}
 					}
-					 transition(edgeName="t447",targetState="move_to_HOME",cond=whenRequest("home_request"))
-					transition(edgeName="t448",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
-					transition(edgeName="t449",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t437",targetState="move_to_HOME",cond=whenRequest("home_request"))
+					transition(edgeName="t438",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
+					transition(edgeName="t439",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_HOME") { //this:State
 					action { //it:State
@@ -164,10 +164,10 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 }
 						}
 					}
-					 transition(edgeName="t550",targetState="move_to_HOME",cond=whenReply("dopathdone"))
-					transition(edgeName="t551",targetState="move_to_HOME",cond=whenReply("dopathfail"))
-					transition(edgeName="t552",targetState="handle_path",cond=whenDispatch("stop_trolley"))
-					transition(edgeName="t553",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
+					 transition(edgeName="t540",targetState="move_to_HOME",cond=whenReply("dopathdone"))
+					transition(edgeName="t541",targetState="move_to_HOME",cond=whenReply("dopathfail"))
+					transition(edgeName="t542",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t543",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
 				}	 
 				state("handle_path") { //this:State
 					action { //it:State
@@ -175,8 +175,8 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						println("TRANSPORT TROLLEY | SEND ALARM TO BASICROBOt.")
 						emit("alarm", "alarm(STOP)" ) 
 					}
-					 transition(edgeName="t754",targetState="savepath",cond=whenReply("dopathfail"))
-					transition(edgeName="t755",targetState="trolley_stopped",cond=whenReply("dopathdone"))
+					 transition(edgeName="t744",targetState="savepath",cond=whenReply("dopathfail"))
+					transition(edgeName="t745",targetState="trolley_stopped",cond=whenReply("dopathdone"))
 				}	 
 				state("savepath") { //this:State
 					action { //it:State
@@ -193,7 +193,7 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 					}
-					 transition(edgeName="t756",targetState="handle_resume",cond=whenDispatch("resume_trolley"))
+					 transition(edgeName="t746",targetState="handle_resume",cond=whenDispatch("resume_trolley"))
 				}	 
 				state("handle_resume") { //this:State
 					action { //it:State
@@ -224,18 +224,18 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 }
 						}
 					}
-					 transition(edgeName="t857",targetState="move_to_INDOOR",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_INDOOR"  
+					 transition(edgeName="t847",targetState="move_to_INDOOR",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_INDOOR"  
 					}))
-					transition(edgeName="t858",targetState="pickup_action",cond=whenReplyGuarded("dopathdone",{ LastState == "PICKING"  
+					transition(edgeName="t848",targetState="pickup_action",cond=whenReplyGuarded("dopathdone",{ LastState == "PICKING"  
 					}))
-					transition(edgeName="t859",targetState="move_to_CONTAINER",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_CONTAINER"  
+					transition(edgeName="t849",targetState="move_to_CONTAINER",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_CONTAINER"  
 					}))
-					transition(edgeName="t860",targetState="storage_action",cond=whenReplyGuarded("dopathdone",{ LastState == "STORAGING"  
+					transition(edgeName="t850",targetState="storage_action",cond=whenReplyGuarded("dopathdone",{ LastState == "STORAGING"  
 					}))
-					transition(edgeName="t861",targetState="move_to_HOME",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_HOME"  
+					transition(edgeName="t851",targetState="move_to_HOME",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_HOME"  
 					}))
-					transition(edgeName="t862",targetState="handle_resume",cond=whenReply("dopathfail"))
-					transition(edgeName="t863",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t852",targetState="handle_resume",cond=whenReply("dopathfail"))
+					transition(edgeName="t853",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 			}
 		}

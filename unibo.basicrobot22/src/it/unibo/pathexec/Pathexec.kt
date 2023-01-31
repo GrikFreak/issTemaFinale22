@@ -80,7 +80,14 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						 var PathStillTodo = pathut.getPathTodo()  
+						forward("cmd", "cmd(h)" ,"basicrobot" ) 
 						println("PATH FAILURE - SORRY. PathStillTodo=$PathStillTodo")
+					}
+					 transition(edgeName="t114",targetState="afterAlarm",cond=whenReply("stepdone"))
+					transition(edgeName="t115",targetState="afterAlarm",cond=whenReply("stepfail"))
+				}	 
+				state("afterAlarm") { //this:State
+					action { //it:State
 						answer("dopath", "dopathfail", "dopathfail($PathStillTodo)"   )  
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )

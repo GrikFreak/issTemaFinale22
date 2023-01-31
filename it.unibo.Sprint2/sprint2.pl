@@ -7,7 +7,7 @@ context(ctxwasteservice, "localhost",  "TCP", "8025").
 context(ctxwastetruck, "localhost",  "TCP", "8024").
  qactor( pathexec, ctxbasicrobot, "external").
   qactor( led, ctxledqak22, "external").
-  qactor( wastetruckmock, ctxwastetruck, "it.unibo.wastetruckmock.Wastetruckmock").
+  qactor( wastetruckmock, ctxwasteservice, "it.unibo.wastetruckmock.Wastetruckmock").
   qactor( distancefilter, ctxwasteservice, "it.unibo.distancefilter.Distancefilter").
   qactor( wasteservice, ctxwasteservice, "it.unibo.wasteservice.Wasteservice").
   qactor( transporttrolley, ctxwasteservice, "it.unibo.transporttrolley.Transporttrolley").

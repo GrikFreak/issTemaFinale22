@@ -24,14 +24,14 @@ wsminimal.js
 
         socket.onopen = function (event) {
             //console.log("Connected to " + addr);
-            setMessageToWindow(infoDisplay,"Connected to " + addr);
+            //setMessageToWindow(infoDisplay,"Connected to " + addr);
         };
 
         socket.onmessage = function (event) {
-            //alert(`Got Message: ${event.data}`);
+            alert(`Got Message: ${event.data}`);
             msg = event.data;
             //alert(`Got Message: ${msg}`);
-            console.log("ws-status:" + msg);
+            //console.log("ws-status:" + msg);
             if( msg.includes("path") ) setMessageToWindow(pathexecDisplay,msg);
             else setMessageToWindow(robotDisplay,msg); //""+`${event.data}`*/
          };

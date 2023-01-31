@@ -22,7 +22,7 @@ class Distancefilter ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 					action { //it:State
 						println("DistanceFilter STARTS")
 					}
-					 transition(edgeName="t111",targetState="handleSonarEvent",cond=whenEvent("sonardata"))
+					 transition(edgeName="t10",targetState="handleSonarEvent",cond=whenEvent("sonardata"))
 				}	 
 				state("handleSonarEvent") { //this:State
 					action { //it:State
@@ -44,7 +44,7 @@ class Distancefilter ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 								 }
 						}
 					}
-					 transition(edgeName="t212",targetState="handleSonarEvent",cond=whenEvent("sonardata"))
+					 transition(edgeName="t21",targetState="handleSonarEvent",cond=whenEvent("sonardata"))
 				}	 
 			}
 		}

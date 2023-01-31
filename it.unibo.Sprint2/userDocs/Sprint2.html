@@ -437,16 +437,50 @@ The status of the Trolley could be saved in :
 
 
 
-  <div>
+  <!-- <div>
     <h5>FIRST DISTRIBUTION</h5>
-    <!-- On the Raspberry there are two components of the system: the Led and the Sonar. 
+    On the Raspberry there are two components of the system: the Led and the Sonar. 
     We could use only one application containing both the Led and the Sonar , in this case the distribution would 
     be easier buth the system will be less flessible and less extensible.
     Or we could use two applications, in this case we need to separate the Led and the sonar.
 
-    As there are no specific requests from the client, the designer is left free to choose. -->
+    As there are no specific requests from the client, the designer is left free to choose.
 
-    </div>
+    </div> -->
+    <!-- sonar -->
+</div>
+
+<h3>WasteTruck free indoor problem</h3>
+<div class="remark" id="waste truck">
+  <h4>Problem n°1: Why we need to use a dispatch to free the truck from indoor area?</h4>
+  After a deeper analysis of the system, we concluded to add a new request/reply interaction between the waste truck 
+  and the waste service for enable the waste truck to leave the indoor.
+  <table cellpadding="20%" style="border: 0px solid transparent;width:98%;" style="width:98%">
+    <tr>
+      <br><br>
+      <ks>Request free_request : free_request(ARG)</ks>
+      <br>
+      <ks>Reply free_indoor : free_indoor(DONE)</ks>
+      <td style="border: 0px">
+        <center><table cellpadding="5%">
+          <tbody><tr>
+              <th>Message</th>
+              <th>Semantic</th>
+          </tr>
+          <tr>
+              <td rowspan="1">free_request</td>
+              <td rowspan="1">request</td>
+          </tr>
+          <tr>
+            <td rowspan="1">free_indoor</td>
+            <td rowspan="1">reply</td>
+        </tr>
+      </tbody></table></center>
+    </td>
+  </tr>
+  </table>
+</div>
+
 <div id="logical_architecture">
   <h3>Logical Architecture</h3>
   From the previous considerations on the components of the system it is possible to define a first logical architecture: <br><br>
@@ -455,8 +489,6 @@ The status of the Trolley could be saved in :
 
 
 
-
-</div>
 
 <h2>Test plans</h2>
 <div id="test_plans">

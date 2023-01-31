@@ -6,7 +6,6 @@
  */  
    
 System  /* -trace  */   basicrobot
-mqttBroker "broker.hivemq.com" : 1883 eventTopic "unibo/basicrobot"   //broker.hivemq.com
 
 Dispatch cmd       	: cmd(MOVE)     
 Dispatch end       	: end(ARG)  
@@ -232,11 +231,20 @@ QActor pathexec context ctxbasicrobot{
 	State endWorkKo{
 		printCurrentMessage
 		[# var PathStillTodo = pathut.getPathTodo() #]
+	 	forward basicrobot -m cmd : cmd(h)
 		println("PATH FAILURE - SORRY. PathStillTodo=$PathStillTodo")
-		replyTo dopath with dopathfail : dopathfail( $PathStillTodo )
+		//delay 5000
+		//replyTo dopath with dopathfail : dopathfail( $PathStillTodo )
 	}	
+	
+	Transition t1 whenReply stepdone  -> afterAlarm  
+	              	whenReply stepfail  -> afterAlarm            
+	
+	State afterAlarm {
+		replyTo dopath with dopathfail : dopathfail( $PathStillTodo )
+	}
+	
 	Goto s0
-
 
 } 
  

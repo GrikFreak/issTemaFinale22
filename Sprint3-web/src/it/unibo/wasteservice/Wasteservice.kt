@@ -43,7 +43,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						unibo.kotlin.planner22Util.initAI(  )
 						unibo.kotlin.planner22Util.showCurrentRobotState(  )
 						forward("led_status", "led_status(OFF)" ,"led" ) 
-						emit("updateStatusLed", "updateStatusLed(OFF)" ) 
+						updateResourceRep( "Led:OFF"  
+						)
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
@@ -52,8 +53,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("WASTESERVICE | is waiting for a request..")
 					}
-					 transition(edgeName="t013",targetState="go_to_Indoor",cond=whenRequest("waste_request"))
-					transition(edgeName="t014",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t02",targetState="go_to_Indoor",cond=whenRequest("waste_request"))
+					transition(edgeName="t03",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("go_to_Indoor") { //this:State
 					action { //it:State
@@ -81,9 +82,6 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 														TrolleyLastState = "TO_INDOOR";
 														TrolleyPosition = "GENERIC";
 								forward("led_status", "led_status(BLINKS)" ,"led" ) 
-								emit("updateStatusLed", "updateStatusLed(BLINKS)" ) 
-								emit("updateTrolleyPos", "updateTrolleyPos(GENERIC)" ) 
-								emit("updateTrolleyStatus", "updateTrolleyStatus(WORKING)" ) 
 								updateResourceRep( "Led:BLINKS"  
 								)
 								updateResourceRep( "Trolley_pos:GENERIC"  
@@ -113,9 +111,6 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 						TrolleyLastState = "TO_INDOOR";
 								 						TrolleyPosition = "GENERIC";
 								 forward("led_status", "led_status(BLINKS)" ,"led" ) 
-								 emit("updateStatusLed", "updateStatusLed(BLINKS)" ) 
-								 emit("updateTrolleyPos", "updateTrolleyPos(GENERIC)" ) 
-								 emit("updateTrolleyStatus", "updateTrolleyStatus(WORKING)" ) 
 								 updateResourceRep( "Led:BLINKS"  
 								 )
 								 updateResourceRep( "Trolley_pos:GENERIC"  
@@ -128,19 +123,17 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								  {answer("waste_request", "loadrejected", "loadrejected($Material,$TruckLoad)"   )  
 								  }
 								 }
-								emit("updateContainersWeight", "updateContainersWeight($CurrentPB,$CurrentGB)" ) 
 								updateResourceRep( "ContainersWeight:$CurrentPB, $CurrentGB"  
 								)
 						}
 					}
-					 transition(edgeName="t115",targetState="handle_pickup",cond=whenReply("transfer_done"))
-					transition(edgeName="t116",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t14",targetState="handle_pickup",cond=whenReply("transfer_done"))
+					transition(edgeName="t15",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("handle_pickup") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						 TrolleyPosition = "INDOOR"  
-						emit("updateTrolleyPos", "updateTrolleyPos(INDOOR)" ) 
 						updateResourceRep( "Trolley_pos:INDOOR"  
 						)
 						if( checkMsgContent( Term.createTerm("transfer_done(DONE)"), Term.createTerm("transfer_done(ARG)"), 
@@ -149,14 +142,23 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						}
 						 TrolleyLastState = "PICKING" 
 					}
-					 transition(edgeName="t217",targetState="go_to_Container",cond=whenReply("pickup_done"))
-					transition(edgeName="t218",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t26",targetState="handle_free_truck",cond=whenRequest("free_request"))
+				}	 
+				state("handle_free_truck") { //this:State
+					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
+						if( checkMsgContent( Term.createTerm("free_request(ARG)"), Term.createTerm("free_request(ARG)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
+								answer("free_request", "free_indoor", "free_indoor(done)"   )  
+						}
+					}
+					 transition(edgeName="t37",targetState="go_to_Container",cond=whenReply("pickup_done"))
+					transition(edgeName="t38",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("go_to_Container") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
-						forward("free_Indoor", "free_Indoor(FREE)" ,"wastetruckmock" ) 
-						println("WASTESERVICE | Sent message to WasteTruck to leave indoor area.")
 						unibo.kotlin.planner22Util.updateMapWithPath( PathIndoor  )
 						unibo.kotlin.planner22Util.showCurrentRobotState(  )
 						if(  Material.equals("plastic")  
@@ -180,21 +182,19 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						println("WASTESERVICE | send request to store to the transport trolley.")
 						request("transfer_request", "transfer_request($PathContainer)" ,"transporttrolley" )  
 					}
-					 transition(edgeName="t319",targetState="handle_storage",cond=whenReply("transfer_done"))
-					transition(edgeName="t320",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t49",targetState="handle_storage",cond=whenReply("transfer_done"))
+					transition(edgeName="t410",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("handle_storage") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						if(  Material.equals("plastic")  
 						 ){ TrolleyPosition = "CONTAINER_P"  
-						emit("updateTrolleyPos", "updateTrolleyPos(CONTAINER_P)" ) 
 						updateResourceRep( "Trolley_pos:CONTAINER_P"  
 						)
 						}
 						else
 						 { TrolleyPosition = "CONTAINER_G"  
-						 emit("updateTrolleyPos", "updateTrolleyPos(CONTAINER_G)" ) 
 						 updateResourceRep( "Trolley_pos:CONTAINER_G"  
 						 )
 						 }
@@ -206,8 +206,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						}
 						 TrolleyLastState = "STORAGING"  
 					}
-					 transition(edgeName="t421",targetState="waiting_request",cond=whenReply("storage_done"))
-					transition(edgeName="t422",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t511",targetState="waiting_request",cond=whenReply("storage_done"))
+					transition(edgeName="t512",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("waiting_request") { //this:State
 					action { //it:State
@@ -215,9 +215,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						stateTimer = TimerActor("timer_waiting_request", 
 							scope, context!!, "local_tout_wasteservice_waiting_request", 100.toLong() )
 					}
-					 transition(edgeName="t523",targetState="go_to_Home",cond=whenTimeout("local_tout_wasteservice_waiting_request"))   
-					transition(edgeName="t524",targetState="go_to_Indoor",cond=whenRequest("waste_request"))
-					transition(edgeName="t525",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t613",targetState="go_to_Home",cond=whenTimeout("local_tout_wasteservice_waiting_request"))   
+					transition(edgeName="t614",targetState="go_to_Indoor",cond=whenRequest("waste_request"))
+					transition(edgeName="t615",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("go_to_Home") { //this:State
 					action { //it:State
@@ -234,8 +234,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 									TrolleyLastState = "TO_HOME";
 						request("home_request", "home_request($PathHome)" ,"transporttrolley" )  
 					}
-					 transition(edgeName="t626",targetState="back_to_Home",cond=whenReply("home_done"))
-					transition(edgeName="t627",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t716",targetState="back_to_Home",cond=whenReply("home_done"))
+					transition(edgeName="t717",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("back_to_Home") { //this:State
 					action { //it:State
@@ -244,8 +244,6 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						 
 									TrolleyStatus = "IDLE"
 									TrolleyPosition = "HOME"
-						emit("updateTrolleyPos", "updateTrolleyPos(HOME)" ) 
-						emit("updateTrolleyStatus", "updateTrolleyStatus(IDLE)" ) 
 						updateResourceRep( "Trolley_pos:HOME"  
 						)
 						updateResourceRep( "Trolley_status:IDLE"  
@@ -253,7 +251,6 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						if( checkMsgContent( Term.createTerm("home_done(DONE)"), Term.createTerm("home_done(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								forward("led_status", "led_status(OFF)" ,"led" ) 
-								emit("updateStatusLed", "updateStatusLed(OFF)" ) 
 								updateResourceRep( "Led:OFF"  
 								)
 								unibo.kotlin.planner22Util.updateMapWithPath( PathHome  )
@@ -267,41 +264,37 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("WASTESERVICE | Trolley stopped by the sonar, wait for resume..")
 						 TrolleyStatus = "STOPPED"  
-						emit("updateTrolleyStatus", "updateTrolleyStatus(STOPPED)" ) 
 						updateResourceRep( "Trolley_status:STOPPED"  
 						)
 						forward("stop_trolley", "stop_trolley(STOP)" ,"transporttrolley" ) 
 						forward("led_status", "led_status(ON)" ,"led" ) 
-						emit("updateStatusLed", "updateStatusLed(ON)" ) 
 						updateResourceRep( "Led:ON"  
 						)
 					}
-					 transition(edgeName="t728",targetState="handle_resume",cond=whenDispatch("resume"))
+					 transition(edgeName="t818",targetState="handle_resume",cond=whenDispatch("resume"))
 				}	 
 				state("handle_resume") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("WASTESERVICE | resume trolley after sonar resume message.")
 						 TrolleyStatus = "WORKING"  
-						emit("updateTrolleyStatus", "updateTrolleyStatus(WORKING)" ) 
 						updateResourceRep( "Trolley_status:WORKING"  
 						)
 						forward("led_status", "led_status(BLINKS)" ,"led" ) 
-						emit("updateStatusLed", "updateStatusLed(BLINKS)" ) 
 						updateResourceRep( "Led:BLINKS"  
 						)
 						forward("resume_trolley", "resume_trolley($TrolleyLastState)" ,"transporttrolley" ) 
 						delay(300) 
 					}
-					 transition(edgeName="t829",targetState="handle_pickup",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_INDOOR"  
+					 transition(edgeName="t919",targetState="handle_pickup",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_INDOOR"  
 					}))
-					transition(edgeName="t830",targetState="handle_storage",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_CONTAINER"  
+					transition(edgeName="t920",targetState="handle_storage",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_CONTAINER"  
 					}))
-					transition(edgeName="t831",targetState="back_to_Home",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_HOME"  
+					transition(edgeName="t921",targetState="back_to_Home",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_HOME"  
 					}))
-					transition(edgeName="t832",targetState="go_to_Container",cond=whenReply("pickup_done"))
-					transition(edgeName="t833",targetState="waiting_request",cond=whenReply("storage_done"))
-					transition(edgeName="t834",targetState="handle_stop",cond=whenDispatch("stop"))
+					transition(edgeName="t922",targetState="go_to_Container",cond=whenReply("pickup_done"))
+					transition(edgeName="t923",targetState="waiting_request",cond=whenReply("storage_done"))
+					transition(edgeName="t924",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 			}
 		}

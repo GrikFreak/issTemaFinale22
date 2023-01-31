@@ -43,9 +43,10 @@ class Wastetruckmock ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 												Material 	= payloadArg(0);
 												TruckLoad 	= payloadArg(1).toLong();
 								println("WASTETRUCK | accepted $Material with load $TruckLoad.")
+								request("free_request", "free_request(arg)" ,"wasteservice" )  
 						}
 					}
-					 transition(edgeName="t12",targetState="leave_Indoor",cond=whenDispatch("free_Indoor"))
+					 transition(edgeName="t12",targetState="leave_Indoor",cond=whenReply("free_indoor"))
 				}	 
 				state("rejected") { //this:State
 					action { //it:State
@@ -62,7 +63,11 @@ class Wastetruckmock ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 				}	 
 				state("leave_Indoor") { //this:State
 					action { //it:State
-						println("WASTETRUCK | WasteTruck left Indoor area.")
+						println("$name in ${currentState.stateName} | $currentMsg")
+						if( checkMsgContent( Term.createTerm("free_indoor(DONE)"), Term.createTerm("free_indoor(DONE)"), 
+						                        currentMsg.msgContent()) ) { //set msgArgList
+								println("WASTETRUCK | WasteTruck left Indoor area.")
+						}
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 

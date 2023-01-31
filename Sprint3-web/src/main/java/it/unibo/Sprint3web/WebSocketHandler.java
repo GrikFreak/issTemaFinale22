@@ -53,7 +53,7 @@ public class WebSocketHandler extends AbstractWebSocketHandler implements IWsHan
 
     public void sendToAll(String message)  {
         try{
-            ColorsOut.outappl("WebSocketHandler | sendToAll:" + message, ColorsOut.BLUE);
+            ColorsOut.outappl("WebSocketHandler | sendToAll message:" + message, ColorsOut.BLUE);
             //JSONObject jsm = new JSONObject(message);
             //IApplMessage mm = new ApplMessage(message);
             //String mstr    = mm.msgContent();//.replace("'","");
