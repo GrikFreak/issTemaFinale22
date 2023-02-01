@@ -1,0 +1,4 @@
+{"actor":"led", "msgType":"dispatch", "curstate":"wait_cmd", "nextstate":"esegui_cmd", "msgId":"led_status"}
+{"actor":"led", "msgType":"dispatch", "curstate":"on", "nextstate":"esegui_cmd", "msgId":"led_status"}
+{"actor":"led", "msgType":"dispatch", "curstate":"off", "nextstate":"esegui_cmd", "msgId":"led_status"}
+{"actor":"led", "msgType":"dispatch", "curstate":"blink", "nextstate":"esegui_cmd", "msgId":"led_status"}
