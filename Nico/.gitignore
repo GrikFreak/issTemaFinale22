@@ -1,4 +1,5 @@
 .gradle
+/unibolibs/
 **/build/
 !src/**/build/
 

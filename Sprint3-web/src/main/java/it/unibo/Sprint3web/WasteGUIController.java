@@ -1,5 +1,6 @@
 package it.unibo.Sprint3web;
 
+import it.unibo.Sprint3web.model.StopResumeConfig;
 import it.unibo.Sprint3web.model.WasteTruckConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -92,6 +93,39 @@ public class WasteGUIController {
             res = WasteGUIUtils.sendWasteTruckReq(msg);
         } catch (Exception e){
             System.out.println("WasteController | sendWasteTruckRequest ERROR:"+e.getMessage());
+        }
+
+        //return mainPage;
+        return res;
+    }
+
+    @ResponseBody
+    @PostMapping("/free_indoor")
+    public String sendFreeIndoorRequest(Model viewmodel){
+        String msg =  "free_request(FREEE)";
+        System.out.println("MSG: "+msg);
+        String res="";
+        try {
+            res = WasteGUIUtils.sendFreeIndoorRequest(msg);
+        } catch (Exception e){
+            System.out.println("WasteController | sendWasteTruckRequest ERROR:"+e.getMessage());
+        }
+
+        //return mainPage;
+        return res;
+    }
+
+    @ResponseBody
+    @PostMapping("/stop_resume")
+    public String sendStopResume(Model viewmodel, @ModelAttribute StopResumeConfig stopResumeConfig){
+        var distance = stopResumeConfig.getDistance();
+        String msg =  "distance("+distance+")";
+        System.out.println("MSG: "+msg);
+        String res="";
+        try {
+            res = WasteGUIUtils.sendStopResumeTrolley(msg);
+        } catch (Exception e){
+            System.out.println("WasteController | sendStopResumeTrolley ERROR:"+e.getMessage());
         }
 
         //return mainPage;

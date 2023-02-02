@@ -32,8 +32,8 @@ class Basicrobot ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 						 ){ var robotsonar = context!!.hasActor("realsonar")  
 						        	   if(robotsonar != null) unibo.robot.robotSupport.createSonarPipe(robotsonar) 
 						}
-						unibo.robot.robotSupport.move( "l"  )
-						unibo.robot.robotSupport.move( "r"  )
+						unibo.robot.robotSupport.move( "a"  )
+						unibo.robot.robotSupport.move( "d"  )
 						updateResourceRep( "basicrobot(start)"  
 						)
 					}
@@ -53,6 +53,7 @@ class Basicrobot ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 						println("$name in ${currentState.stateName} | $currentMsg")
 						if( checkMsgContent( Term.createTerm("cmd(MOVE)"), Term.createTerm("cmd(MOVE)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
+								 CurrentMove = payloadArg(0)  
 								unibo.robot.robotSupport.move( payloadArg(0)  )
 								updateResourceRep( "moveactivated(${payloadArg(0)})"  
 								)
@@ -62,15 +63,8 @@ class Basicrobot ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 				}	 
 				state("handleObstacle") { //this:State
 					action { //it:State
-						unibo.robot.robotSupport.move( "h"  )
 						updateResourceRep( "obstacle(${CurrentMove})"  
 						)
-						if(  CurrentMove == "w" 
-						 ){unibo.robot.robotSupport.move( "s"  )
-						delay(100) 
-						unibo.robot.robotSupport.move( "h"  )
-						}
-						emit("info", "info(obstacledoing(w))" ) 
 					}
 					 transition( edgeName="goto",targetState="work", cond=doswitch() )
 				}	 
@@ -85,7 +79,7 @@ class Basicrobot ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 						println("$name in ${currentState.stateName} | $currentMsg")
 						if( checkMsgContent( Term.createTerm("step(TIME)"), Term.createTerm("step(T)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-									StepTime = payloadArg(0).toLong() 	 
+									StepTime     = payloadArg(0).toLong()  	 
 								updateResourceRep( "step(${StepTime})"  
 								)
 						}
@@ -100,6 +94,7 @@ class Basicrobot ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 				}	 
 				state("stepDone") { //this:State
 					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
 						unibo.robot.robotSupport.move( "h"  )
 						updateResourceRep( "stepDone($StepTime)"  
 						)
@@ -110,11 +105,11 @@ class Basicrobot ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 				}	 
 				state("stepFail") { //this:State
 					action { //it:State
+						println("$name in ${currentState.stateName} | $currentMsg")
 						Duration = getDuration(StartTime)
 						unibo.robot.robotSupport.move( "h"  )
-						 var TunedDuration = Duration;  
-									TunedDuration = Duration * 5 / 6
-						println("basicrobot | stepFail duration=$Duration TunedDuration=$TunedDuration")
+						 var TunedDuration   =  ((Duration * 0.80)).toLong()    
+						println("basicrobot | stepFail duration=$Duration  TunedDuration=$TunedDuration")
 						unibo.robot.robotSupport.move( "s"  )
 						delay(TunedDuration)
 						unibo.robot.robotSupport.move( "h"  )

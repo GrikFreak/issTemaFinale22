@@ -27,20 +27,20 @@ class Ledqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 var Cmd = payloadArg(0)  
 								if(  Cmd=="ON"  
-								 ){ unibo.actor22comm.utils.ColorsOut.outappl( 
-													"${name} - on", unibo.actor22comm.utils.ColorsOut.MAGENTA)
+								 ){ unibo.comm22.utils.ColorsOut.outappl( 
+													"${name} - on", unibo.comm22.utils.ColorsOut.MAGENTA)
 								println("LED | ON")
 								}
 								else
 								 {if(  Cmd=="OFF"  
-								  ){ unibo.actor22comm.utils.ColorsOut.outappl( 
-								 						"${name} - off", unibo.actor22comm.utils.ColorsOut.GREEN)
+								  ){ unibo.comm22.utils.ColorsOut.outappl( 
+								 						"${name} - off", unibo.comm22.utils.ColorsOut.GREEN)
 								 println("LED | OFF")
 								 }
 								 else
 								  {if(  Cmd=="BLINKS"  
-								   ){ unibo.actor22comm.utils.ColorsOut.outappl( 
-								  							"${name} - blinks", unibo.actor22comm.utils.ColorsOut.BLUE)
+								   ){ unibo.comm22.utils.ColorsOut.outappl( 
+								  							"${name} - blinks", unibo.comm22.utils.ColorsOut.BLUE)
 								  println("LED | BLINKS")
 								  }
 								  }

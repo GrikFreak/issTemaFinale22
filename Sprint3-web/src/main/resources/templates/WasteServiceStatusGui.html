@@ -29,7 +29,7 @@
             <div class="card iss-bg-infoarea text-primary">
                 <div class="card-header px-1">STATO TROLLEY:</div>
                 <div class="card-content px-1">
-                    <span id="trolley_status">HOME</span>
+                    <span id="trolley_status">TROLLEY_STATUS:IDLE</span>
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
             <div class="card iss-bg-infoarea text-primary">
                 <div class="card-header px-1">POSIZIONE TROLLEY:</div>
                 <div class="card-content px-1">
-                    <span id="trolley_position">HOME</span>
+                    <span id="trolley_position">TROLLEY_POS:HOME</span>
                 </div>
             </div>
 
@@ -100,7 +100,7 @@
                 <label for="ip_led">Indirizzo Led</label>
                 <input type="text" id="ip_led" name="ip_led" value="127.0.0.1">
                 <label for="port_led">Porta Led</label>
-                <input type="text" id="port_led" name="port_led" value="8035">
+                <input type="text" id="port_led" name="port_led" value="8030">
             </div>
         </font>
         <div style='margin-top:10px;margin-bottom:10px;' >
@@ -131,6 +131,20 @@
         <div style='margin-top:10px;'>
             Risposta <input type="text" id="response" readonly="readonly"/>
         </div>
+        <div style='margin-top:10px;'>
+            Free indoor <input type="text" id="free_indoor" readonly="readonly"/>
+        </div>
+
+        <!-- INVIO SONAR -->
+        <div>
+            <label for="distance" >Distance</label>
+            <input type="text" id="distance" name="distance" value="">
+        </div>
+
+        <div style='margin-top:10px;'>
+            <input type="button" value="Invio Distance" onclick="sendstopresume()">
+        </div>
+
     </font>
 </div>
 
@@ -157,7 +171,6 @@
 <!-- <script src="../static/jquery.min.js"></script> -->
 <script src="sockjs.min.js"></script>
 <script src="ajax_loadreq.js"></script>
-<!-- <script src="app.js"></script> -->
 <script src="ioutils.js"></script>
 <script src="wsminimal.js"></script>
 <script>connect()</script>  <!-- connect definita in wsminimal-->

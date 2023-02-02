@@ -9,7 +9,7 @@ public class RobotCoapObserver implements CoapHandler{
 
     @Override
     public void onLoad(CoapResponse response) {
-        ColorsOut.outappl("RobotCoapObserver changed!" + response, ColorsOut.GREEN);
+        ColorsOut.outappl("RobotCoapObserver changed!" + response.getResponseText(), ColorsOut.GREEN);
         //send info over the websocket
         WebSocketConfiguration.wshandler.sendToAll("" + response.getResponseText());
         //simpMessagingTemplate.convertAndSend(WebSocketConfig.topicForTearoomstatemanager, new ResourceRep("" + HtmlUtils.htmlEscape(response.getResponseText())));

@@ -14,6 +14,7 @@ class Wastetruckmock ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 		return "s0"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
+		val interruptedStateTransitions = mutableListOf<Transition>()
 		
 				var Material 	= "";
 				var TruckLoad 	= 0L;
@@ -30,7 +31,11 @@ class Wastetruckmock ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 						   			val Mat = Materials[randomIndex]
 						request("waste_request", "waste_request($Mat,$Load)" ,"wasteservice" )  
 						println("WASTETRUCK | sent request of $Mat with load $Load.")
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition(edgeName="t00",targetState="accepted",cond=whenReply("loadaccept"))
 					transition(edgeName="t01",targetState="rejected",cond=whenReply("loadrejected"))
 				}	 
@@ -45,7 +50,11 @@ class Wastetruckmock ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 								println("WASTETRUCK | accepted $Material with load $TruckLoad.")
 								request("free_request", "free_request(arg)" ,"wasteservice" )  
 						}
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition(edgeName="t12",targetState="leave_Indoor",cond=whenReply("free_indoor"))
 				}	 
 				state("rejected") { //this:State
@@ -58,14 +67,22 @@ class Wastetruckmock ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 												TruckLoad 	= payloadArg(1).toLong();
 								println("WASTETRUCK | rejected $Material load with weight $TruckLoad")
 						}
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition( edgeName="goto",targetState="leave_Indoor", cond=doswitch() )
 				}	 
 				state("leave_Indoor") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("WASTETRUCK | WasteTruck left Indoor area.")
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 			}

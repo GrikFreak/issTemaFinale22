@@ -14,6 +14,7 @@ class Distancefilter ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 		return "s0"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
+		val interruptedStateTransitions = mutableListOf<Transition>()
 		
 				var DistanceLimit = 20;
 				var Stopped = false;
@@ -21,8 +22,12 @@ class Distancefilter ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 				state("s0") { //this:State
 					action { //it:State
 						println("DistanceFilter STARTS")
+						//genTimer( actor, state )
 					}
-					 transition(edgeName="t13",targetState="handleSonarEvent",cond=whenEvent("sonardata"))
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t10",targetState="handleSonarEvent",cond=whenEvent("sonardata"))
 				}	 
 				state("handleSonarEvent") { //this:State
 					action { //it:State
@@ -43,8 +48,12 @@ class Distancefilter ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( n
 								 }
 								 }
 						}
+						//genTimer( actor, state )
 					}
-					 transition(edgeName="t24",targetState="handleSonarEvent",cond=whenEvent("sonardata"))
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t21",targetState="handleSonarEvent",cond=whenEvent("sonardata"))
 				}	 
 			}
 		}

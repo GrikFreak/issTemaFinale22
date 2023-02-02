@@ -15,12 +15,15 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		 var CurMoveTodo = ""    //Upcase, since var to be used in guards
-		   var StepTime    = "292"
+		   var StepTime    = "330"
+		   var PathTodo    = ""
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						  CurMoveTodo = "" 
-									
+									StepTime = unibo.robot.robotSupport.readStepTime() //stepTimeConfig.json
+						updateResourceRep( "pathexecsteptime($StepTime)"  
+						)
 						println("pathexec ready. StepTime=$StepTime")
 					}
 					 transition(edgeName="t09",targetState="doThePath",cond=whenRequest("dopath"))
@@ -30,7 +33,10 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 						println("$name in ${currentState.stateName} | $currentMsg")
 						if( checkMsgContent( Term.createTerm("dopath(PATH)"), Term.createTerm("dopath(PATH)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								pathut.setPath( payloadArg(0)  )
+								 PathTodo = payloadArg(0)  
+								updateResourceRep( "pathexecdopath($PathTodo)"  
+								)
+								pathut.setPath( PathTodo  )
 						}
 						println("pathexec pathTodo = ${pathut.getPathTodo()}")
 					}
@@ -47,6 +53,7 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 				}	 
 				state("doMove") { //this:State
 					action { //it:State
+						delay(330) 
 					}
 					 transition( edgeName="goto",targetState="doMoveW", cond=doswitchGuarded({ CurMoveTodo == "w"  
 					}) )
@@ -55,14 +62,18 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 				}	 
 				state("doMoveTurn") { //this:State
 					action { //it:State
+						updateResourceRep( "pathexecdoturn($CurMoveTodo)"  
+						)
 						forward("cmd", "cmd($CurMoveTodo)" ,"basicrobot" ) 
 						stateTimer = TimerActor("timer_doMoveTurn", 
-							scope, context!!, "local_tout_pathexec_doMoveTurn", 292.toLong() )
+							scope, context!!, "local_tout_pathexec_doMoveTurn", 330.toLong() )
 					}
 					 transition(edgeName="t010",targetState="nextMove",cond=whenTimeout("local_tout_pathexec_doMoveTurn"))   
 				}	 
 				state("doMoveW") { //this:State
 					action { //it:State
+						updateResourceRep( "pathexecdostep($CurMoveTodo)"  
+						)
 						request("step", "step($StepTime)" ,"basicrobot" )  
 					}
 					 transition(edgeName="t011",targetState="endWorkKo",cond=whenEvent("alarm"))
@@ -72,6 +83,8 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 				state("endWorkOk") { //this:State
 					action { //it:State
 						println("endWorkOk: PATH DONE - BYE")
+						updateResourceRep( "path $PathTodo done"  
+						)
 						answer("dopath", "dopathdone", "dopathdone(ok)"   )  
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
@@ -80,14 +93,9 @@ class Pathexec ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, s
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						 var PathStillTodo = pathut.getPathTodo()  
-						forward("cmd", "cmd(h)" ,"basicrobot" ) 
+						updateResourceRep( "pathstilltodo($PathStillTodo)"  
+						)
 						println("PATH FAILURE - SORRY. PathStillTodo=$PathStillTodo")
-					}
-					 transition(edgeName="t114",targetState="afterAlarm",cond=whenReply("stepdone"))
-					transition(edgeName="t115",targetState="afterAlarm",cond=whenReply("stepfail"))
-				}	 
-				state("afterAlarm") { //this:State
-					action { //it:State
 						answer("dopath", "dopathfail", "dopathfail($PathStillTodo)"   )  
 					}
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )

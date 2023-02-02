@@ -50,6 +50,41 @@ public class WasteGUIUtils {
             return "loadrejected";
         }
     }
+    public static String sendFreeIndoorRequest(String payload) {
+        String answer="";
+        try {
+            IApplMessage msg =  CommUtils.buildRequest("webGui", "free_request", payload, "wasteservice");
+            ColorsOut.outappl("RobotUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
+            if( msg.isRequest() ){
+                answer = connTcp.request( msg.toString() );
+                System.out.println("RobotUtils | answer:" + answer );
+            } else {
+                System.out.println("Sono nell' else..");
+            }
+        } catch (Exception e) {
+            ColorsOut.outerr("RobotUtils | sendMsg ERROR:"+e.getMessage());
+        }
+        if(answer.contains("free_indoor"))
+        {
+            return "indoor_free";
+        }
+        else{
+            return answer+": Impossible: you should not be here";
+        }
+    }
+    public static String sendStopResumeTrolley(String payload) {
+        IApplMessage msg;
+        try {
+            msg = CommUtils.buildEvent("webGui", "sonardata", payload);
+            ColorsOut.outappl("RobotUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
+            if(msg.isEvent()){
+                connTcp.forward(msg.toString());
+            }
+        } catch (Exception e) {
+            ColorsOut.outerr("RobotUtils | sendMsg ERROR:" + e.getMessage());
+        }
+        return "Stop/Resume concluded";
+    }
 
     public static CoapConnection connectWithLedUsingCoap(String addr, int port){
         try {
@@ -67,7 +102,7 @@ public class WasteGUIUtils {
 
     public static CoapConnection connectWithWasteServiceUsingCoap(String addr, int port){
         try {
-            String ctxqakdest       = "ctxWasteService";
+            String ctxqakdest       = "ctxwasteservice";
             String qakdestination 	= "wasteservice";
             String path   = ctxqakdest+"/"+qakdestination;
             conn           = new CoapConnection(addr+":"+port, path);

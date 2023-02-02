@@ -28,12 +28,24 @@ wsminimal.js
         };
 
         socket.onmessage = function (event) {
-            alert(`Got Message: ${event.data}`);
+            //alert(`Got Message: ${event.data}`);
             msg = event.data;
             //alert(`Got Message: ${msg}`);
             //console.log("ws-status:" + msg);
-            if( msg.includes("path") ) setMessageToWindow(pathexecDisplay,msg);
-            else setMessageToWindow(robotDisplay,msg); //""+`${event.data}`*/
+            if(msg.includes("LED")){
+                setMessageToWindow(led,msg);
+            }else if(msg.includes("TROLLEY_POS")){
+                setMessageToWindow(trolley_position,msg);
+            }else if(msg.includes("TROLLEY_STATUS")){
+                setMessageToWindow(trolley_status,msg);
+            }else if(msg.includes("ContainersWeight")){
+                var plastic = msg.split(":")[1].split(",")[0];
+                var glass = msg.split(":")[1].split(",")[1].trim();
+                console.log("weights: " + plastic + glass);
+                setMessageToWindow(container_p, plastic);
+                setMessageToWindow(container_g, glass);
+            }
          };
     }//connect
 
+// LED,TROLLEY_POS,TROLLEY_STATUS, ContainersWeight
