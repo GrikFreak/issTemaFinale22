@@ -30,7 +30,6 @@ Dispatch resume : resume(OK)
 
 Event alarm : alarm(STOP)
 
-
 //Event containers_weight : containers_weight(GWEIGHT, PWEIGHT)
 
 //Event TROLLEY_STATUS : TROLLEY_STATUS(STATUS)
@@ -173,6 +172,7 @@ QActor wastetruckmock context ctxwasteservice {
 	
 }
 */
+
 QActor distancefilter context ctxwasteservice {
 	
 	[#
@@ -230,8 +230,10 @@ QActor wasteservice context ctxwasteservice {
 		val YHome = 0;
 		
 		var TrolleyStatus = "IDLE"; //IDLE, WORKING, STOPPED
-		var TrolleyLastState = "TO_INDOOR"; //TO_HOME, TO_CONTAINER, TO_INDOOR, PICKING, STORAGING
+		var TrolleyLastState = "HOME"; //HOME, TO_HOME, TO_CONTAINER, TO_INDOOR, PICKING, STORAGING
 		var TrolleyPosition = "HOME"; //HOME, CONTAINER_P, CONTAINER_G, INDOOR, GENERIC
+		
+		var HandlingRequest = false;
 	#]
 	
 	State init initial {
@@ -267,6 +269,7 @@ QActor wasteservice context ctxwasteservice {
 				if [# TruckLoad + CurrentPB <= MAXPB #]{
 					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
 					[# CurrentPB += TruckLoad #]
+					[# HandlingRequest = true #]
 					println("WASTESERVICE | current container plastic weight: $CurrentPB")
 					
 					run unibo.kotlin.planner22Util.setGoal(XIndoor,YIndoor) 
@@ -300,8 +303,8 @@ QActor wasteservice context ctxwasteservice {
 				if [# TruckLoad + CurrentGB <= MAXGB #]{
 					replyTo waste_request with loadaccept : loadaccept($Material, $TruckLoad) 
 					[# CurrentGB += TruckLoad #]
+					[# HandlingRequest = true #]
 					println("WASTESERVICE | current container glass weight: $CurrentGB")
-				
 					run unibo.kotlin.planner22Util.setGoal(XIndoor,YIndoor) 
 					[# PathIndoor = unibo.kotlin.planner22Util.doPlan().toString()
 						.replace(" ","")
@@ -341,6 +344,7 @@ QActor wasteservice context ctxwasteservice {
 					//whenMsg stop -> handle_stop
 						
 	Transition t1 whenReply transfer_done -> handle_pickup 
+					whenRequest waste_request and [# HandlingRequest == false #]-> go_to_Indoor
 					whenMsg stop -> handle_stop
 					
 	State handle_pickup {
@@ -417,6 +421,7 @@ QActor wasteservice context ctxwasteservice {
 			request transporttrolley -m storage_request : storage_request($Material)
 		}
 		[# TrolleyLastState = "STORAGING" #]
+
 	}
 	
 	Transition t5 whenReply storage_done -> waiting_request
@@ -424,6 +429,7 @@ QActor wasteservice context ctxwasteservice {
 	
 	State waiting_request {
 		printCurrentMessage
+		[# HandlingRequest = false #]
 	}
 	
 	Transition t6 whenTime 100 -> go_to_Home
@@ -504,12 +510,14 @@ QActor wasteservice context ctxwasteservice {
 		delay 300
 	}
 	
-	Transition t9 whenReply transfer_done and [# TrolleyLastState == "TO_INDOOR" #] -> handle_pickup
+	Transition t9 whenTime 350 -> s0
+					whenReply transfer_done and [# TrolleyLastState == "TO_INDOOR" #] -> handle_pickup
 				 	whenReply transfer_done and [# TrolleyLastState == "TO_CONTAINER" #] -> handle_storage
-				  	whenReply transfer_done and [# TrolleyLastState == "TO_HOME" #] -> back_to_Home
+				  	whenReply home_done -> back_to_Home
 					whenReply pickup_done -> go_to_Container
 		 			whenReply storage_done -> waiting_request
 					whenMsg stop -> handle_stop
+					
 	
 }
 
@@ -530,6 +538,7 @@ QActor transporttrolley context ctxwasteservice {
 	State s0 initial {
 		printCurrentMessage
 		println("the TransportTrolley is waiting..")
+		[# LastState = "HOME" #]
 	}
 	
 	Transition t0 whenRequest transfer_request -> move_to_INDOOR
@@ -574,10 +583,10 @@ QActor transporttrolley context ctxwasteservice {
 			delay 1000
 			replyTo pickup_request with pickup_done : pickup_done(arg)
 		}
-		onMsg (dopathdone : dopathdone(ARG)) {
+		/* onMsg (dopathdone : dopathdone(ARG)) {
 			println("TRANSPORT TROLLEY | arrived to Container")
 			replyTo pickup_request with pickup_done : pickup_done(arg)
-		}
+		} */
 	}
 	
 	Transition t2 whenRequest transfer_request -> move_to_CONTAINER
@@ -620,12 +629,13 @@ QActor transporttrolley context ctxwasteservice {
 		printCurrentMessage
 		onMsg(storage_request : storage_request(ARG)){
 			delay 1000
+			println("TRANSPORT TROLLEY | arrived storage request from WS")
 			replyTo storage_request with storage_done : storage_done(arg)
 		}
-		onMsg (dopathdone : dopathdone(ARG)) {
+		/* onMsg (dopathdone : dopathdone(ARG)) {
 			println("TRANSPORT TROLLEY | arrived to Container")
 			replyTo storage_request with storage_done : storage_done(arg)
-		}
+		} */
 	}
 	
 	Transition t4 whenRequest home_request -> move_to_HOME
@@ -732,6 +742,7 @@ QActor transporttrolley context ctxwasteservice {
 				  whenReply dopathdone and [# LastState == "TO_CONTAINER" #] -> move_to_CONTAINER
 				  whenReply dopathdone and [# LastState == "STORAGING" #] -> storage_action
 				  whenReply dopathdone and [# LastState == "TO_HOME" #] -> move_to_HOME
+				  whenReply dopathdone and [# LastState == "HOME" #] -> s0
 				  whenReply dopathfail -> handle_resume
 				  whenMsg stop_trolley -> trolley_stopped
 }

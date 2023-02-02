@@ -14,7 +14,6 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 		return "init"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
-		val interruptedStateTransitions = mutableListOf<Transition>()
 		 
 				var MAXPB 	= 500L;
 				var MAXGB 	= 500L;
@@ -34,8 +33,10 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 				val YHome = 0;
 				
 				var TrolleyStatus = "IDLE"; //IDLE, WORKING, STOPPED
-				var TrolleyLastState = "TO_INDOOR"; //TO_HOME, TO_CONTAINER, TO_INDOOR, PICKING, STORAGING
+				var TrolleyLastState = "HOME"; //HOME, TO_HOME, TO_CONTAINER, TO_INDOOR, PICKING, STORAGING
 				var TrolleyPosition = "HOME"; //HOME, CONTAINER_P, CONTAINER_G, INDOOR, GENERIC
+				
+				var HandlingRequest = false;
 		return { //this:ActionBasciFsm
 				state("init") { //this:State
 					action { //it:State
@@ -44,22 +45,14 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						unibo.kotlin.planner22Util.initAI(  )
 						unibo.kotlin.planner22Util.showCurrentRobotState(  )
 						forward("led_status", "led_status(OFF)" ,"led" ) 
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 				state("s0") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("WASTESERVICE | is waiting for a request..")
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
 					 transition(edgeName="t02",targetState="go_to_Indoor",cond=whenRequest("waste_request"))
 					transition(edgeName="t03",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
@@ -76,6 +69,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 ){if(  TruckLoad + CurrentPB <= MAXPB  
 								 ){answer("waste_request", "loadaccept", "loadaccept($Material,$TruckLoad)"   )  
 								 CurrentPB += TruckLoad  
+								 HandlingRequest = true  
 								println("WASTESERVICE | current container plastic weight: $CurrentPB")
 								unibo.kotlin.planner22Util.setGoal( XIndoor, YIndoor  )
 								 PathIndoor = unibo.kotlin.planner22Util.doPlan().toString()
@@ -103,6 +97,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								 {if(  TruckLoad + CurrentGB <= MAXGB  
 								  ){answer("waste_request", "loadaccept", "loadaccept($Material,$TruckLoad)"   )  
 								  CurrentGB += TruckLoad  
+								  HandlingRequest = true  
 								 println("WASTESERVICE | current container glass weight: $CurrentGB")
 								 unibo.kotlin.planner22Util.setGoal( XIndoor, YIndoor  )
 								  PathIndoor = unibo.kotlin.planner22Util.doPlan().toString()
@@ -129,13 +124,11 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								updateResourceRep( "ContainersWeight:$CurrentPB, $CurrentGB"  
 								)
 						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
 					 transition(edgeName="t14",targetState="handle_pickup",cond=whenReply("transfer_done"))
-					transition(edgeName="t15",targetState="handle_stop",cond=whenDispatch("stop"))
+					transition(edgeName="t15",targetState="go_to_Indoor",cond=whenRequestGuarded("waste_request",{ HandlingRequest == false  
+					}))
+					transition(edgeName="t16",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("handle_pickup") { //this:State
 					action { //it:State
@@ -148,12 +141,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								request("pickup_request", "pickup_request($Material)" ,"transporttrolley" )  
 						}
 						 TrolleyLastState = "PICKING" 
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t26",targetState="handle_free_truck",cond=whenRequest("free_request"))
+					 transition(edgeName="t27",targetState="handle_free_truck",cond=whenRequest("free_request"))
 				}	 
 				state("handle_free_truck") { //this:State
 					action { //it:State
@@ -163,13 +152,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								println("WASTESERVICEeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee | Sent message to WasteTruck to leave indoor area.")
 								answer("free_request", "free_indoor", "free_indoor(done)"   )  
 						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t37",targetState="go_to_Container",cond=whenReply("pickup_done"))
-					transition(edgeName="t38",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t38",targetState="go_to_Container",cond=whenReply("pickup_done"))
+					transition(edgeName="t39",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("go_to_Container") { //this:State
 					action { //it:State
@@ -198,13 +183,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						updateResourceRep( "TROLLEY_POS:GENERIC"  
 						)
 						request("transfer_request", "transfer_request($PathContainer)" ,"transporttrolley" )  
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t49",targetState="handle_storage",cond=whenReply("transfer_done"))
-					transition(edgeName="t410",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t410",targetState="handle_storage",cond=whenReply("transfer_done"))
+					transition(edgeName="t411",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("handle_storage") { //this:State
 					action { //it:State
@@ -226,29 +207,20 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								request("storage_request", "storage_request($Material)" ,"transporttrolley" )  
 						}
 						 TrolleyLastState = "STORAGING"  
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t511",targetState="waiting_request",cond=whenReply("storage_done"))
-					transition(edgeName="t512",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t512",targetState="waiting_request",cond=whenReply("storage_done"))
+					transition(edgeName="t513",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("waiting_request") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
-						//genTimer( actor, state )
+						 HandlingRequest = false  
+						stateTimer = TimerActor("timer_waiting_request", 
+							scope, context!!, "local_tout_wasteservice_waiting_request", 100.toLong() )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-				 	 		//sysaction { //it:State
-				 	 		  stateTimer = TimerActor("timer_waiting_request", 
-				 	 			scope, context!!, "local_tout_wasteservice_waiting_request", 100.toLong() )
-				 	 		//}
-					}	 	 
-					 transition(edgeName="t613",targetState="go_to_Home",cond=whenTimeout("local_tout_wasteservice_waiting_request"))   
-					transition(edgeName="t614",targetState="go_to_Indoor",cond=whenRequest("waste_request"))
-					transition(edgeName="t615",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t614",targetState="go_to_Home",cond=whenTimeout("local_tout_wasteservice_waiting_request"))   
+					transition(edgeName="t615",targetState="go_to_Indoor",cond=whenRequest("waste_request"))
+					transition(edgeName="t616",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("go_to_Home") { //this:State
 					action { //it:State
@@ -266,13 +238,9 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						updateResourceRep( "TROLLEY_POS:GENERIC"  
 						)
 						request("home_request", "home_request($PathHome)" ,"transporttrolley" )  
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t716",targetState="back_to_Home",cond=whenReply("home_done"))
-					transition(edgeName="t717",targetState="handle_stop",cond=whenDispatch("stop"))
+					 transition(edgeName="t717",targetState="back_to_Home",cond=whenReply("home_done"))
+					transition(edgeName="t718",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 				state("back_to_Home") { //this:State
 					action { //it:State
@@ -291,11 +259,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 								unibo.kotlin.planner22Util.updateMapWithPath( PathHome  )
 								unibo.kotlin.planner22Util.showCurrentRobotState(  )
 						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
 					 transition( edgeName="goto",targetState="s0", cond=doswitch() )
 				}	 
 				state("handle_stop") { //this:State
@@ -307,12 +271,8 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						)
 						forward("stop_trolley", "stop_trolley(STOP)" ,"transporttrolley" ) 
 						forward("led_status", "led_status(ON)" ,"led" ) 
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t818",targetState="handle_resume",cond=whenDispatch("resume"))
+					 transition(edgeName="t819",targetState="handle_resume",cond=whenDispatch("resume"))
 				}	 
 				state("handle_resume") { //this:State
 					action { //it:State
@@ -324,20 +284,18 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						forward("led_status", "led_status(BLINKS)" ,"led" ) 
 						forward("resume_trolley", "resume_trolley($TrolleyLastState)" ,"transporttrolley" ) 
 						delay(300) 
-						//genTimer( actor, state )
+						stateTimer = TimerActor("timer_handle_resume", 
+							scope, context!!, "local_tout_wasteservice_handle_resume", 350.toLong() )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t919",targetState="handle_pickup",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_INDOOR"  
+					 transition(edgeName="t920",targetState="s0",cond=whenTimeout("local_tout_wasteservice_handle_resume"))   
+					transition(edgeName="t921",targetState="handle_pickup",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_INDOOR"  
 					}))
-					transition(edgeName="t920",targetState="handle_storage",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_CONTAINER"  
+					transition(edgeName="t922",targetState="handle_storage",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_CONTAINER"  
 					}))
-					transition(edgeName="t921",targetState="back_to_Home",cond=whenReplyGuarded("transfer_done",{ TrolleyLastState == "TO_HOME"  
-					}))
-					transition(edgeName="t922",targetState="go_to_Container",cond=whenReply("pickup_done"))
-					transition(edgeName="t923",targetState="waiting_request",cond=whenReply("storage_done"))
-					transition(edgeName="t924",targetState="handle_stop",cond=whenDispatch("stop"))
+					transition(edgeName="t923",targetState="back_to_Home",cond=whenReply("home_done"))
+					transition(edgeName="t924",targetState="go_to_Container",cond=whenReply("pickup_done"))
+					transition(edgeName="t925",targetState="waiting_request",cond=whenReply("storage_done"))
+					transition(edgeName="t926",targetState="handle_stop",cond=whenDispatch("stop"))
 				}	 
 			}
 		}

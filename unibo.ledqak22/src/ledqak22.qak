@@ -62,6 +62,7 @@ QActor led context ctxledqak22 {
 		updateResource [# "LED:OFF" #]
 
 	}
+	
 	Transition t3 whenMsg led_status -> esegui_cmd
 	
 	State blink {
@@ -80,6 +81,7 @@ QActor led context ctxledqak22 {
 		updateResource [# "LED:BLINKS" #]
 		
 	}
-	Transition t1 whenTime 300 -> blink
+	
+	Transition t1 whenTime 10000 -> off
 				  whenMsg led_status -> esegui_cmd
 }

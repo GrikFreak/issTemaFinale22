@@ -33,12 +33,20 @@ function callback(theXhr)
 }
 function callbackFreeIndoor(theXhr)
 {
-    var risposta = theXhr.responseText;
-    console.log("Prima di readystate"+risposta);
     if(theXhr.readyState===4 && theXhr.status===200)
     {
-        console.log("free_indoor"+risposta);
-        document.getElementById("free_indoor").value=risposta;
+        var risposta = theXhr.responseText;
+        console.log(risposta);
+
+        if (risposta.includes("loadaccept") || risposta.includes("loadrejected")){
+            document.getElementById("response").value=risposta;
+            if (risposta.includes("loadaccept")){
+                sendfreeindoor();
+            }
+        }else{
+            console.log("free_indoor"+risposta);
+            document.getElementById("free_indoor").value=risposta;
+        }
     }
 }
 

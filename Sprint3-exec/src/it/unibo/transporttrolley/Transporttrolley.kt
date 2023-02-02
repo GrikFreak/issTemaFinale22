@@ -14,7 +14,6 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 		return "s0"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
-		val interruptedStateTransitions = mutableListOf<Transition>()
 		
 				var Status	= "IDLE";	
 				var Position = "HOME";
@@ -30,13 +29,10 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("the TransportTrolley is waiting..")
-						//genTimer( actor, state )
+						 LastState = "HOME"  
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t025",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
-					transition(edgeName="t026",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t027",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
+					transition(edgeName="t028",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_INDOOR") { //this:State
 					action { //it:State
@@ -67,15 +63,11 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 request("dopath", "dopath($PathToDo)" ,"pathexec" )  
 								 }
 						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t127",targetState="move_to_INDOOR",cond=whenReply("dopathdone"))
-					transition(edgeName="t128",targetState="move_to_INDOOR",cond=whenReply("dopathfail"))
-					transition(edgeName="t129",targetState="handle_path",cond=whenDispatch("stop_trolley"))
-					transition(edgeName="t130",targetState="pickup_action",cond=whenRequest("pickup_request"))
+					 transition(edgeName="t129",targetState="move_to_INDOOR",cond=whenReply("dopathdone"))
+					transition(edgeName="t130",targetState="move_to_INDOOR",cond=whenReply("dopathfail"))
+					transition(edgeName="t131",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t132",targetState="pickup_action",cond=whenRequest("pickup_request"))
 				}	 
 				state("pickup_action") { //this:State
 					action { //it:State
@@ -85,18 +77,9 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								delay(1000) 
 								answer("pickup_request", "pickup_done", "pickup_done(arg)"   )  
 						}
-						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
-						                        currentMsg.msgContent()) ) { //set msgArgList
-								println("TRANSPORT TROLLEY | arrived to Container")
-								answer("pickup_request", "pickup_done", "pickup_done(arg)"   )  
-						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t231",targetState="move_to_CONTAINER",cond=whenRequest("transfer_request"))
-					transition(edgeName="t232",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t233",targetState="move_to_CONTAINER",cond=whenRequest("transfer_request"))
+					transition(edgeName="t234",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_CONTAINER") { //this:State
 					action { //it:State
@@ -126,15 +109,11 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 request("dopath", "dopath($PathToDo)" ,"pathexec" )  
 								 }
 						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t333",targetState="move_to_CONTAINER",cond=whenReply("dopathdone"))
-					transition(edgeName="t334",targetState="move_to_CONTAINER",cond=whenReply("dopathfail"))
-					transition(edgeName="t335",targetState="handle_path",cond=whenDispatch("stop_trolley"))
-					transition(edgeName="t336",targetState="storage_action",cond=whenRequest("storage_request"))
+					 transition(edgeName="t335",targetState="move_to_CONTAINER",cond=whenReply("dopathdone"))
+					transition(edgeName="t336",targetState="move_to_CONTAINER",cond=whenReply("dopathfail"))
+					transition(edgeName="t337",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t338",targetState="storage_action",cond=whenRequest("storage_request"))
 				}	 
 				state("storage_action") { //this:State
 					action { //it:State
@@ -142,21 +121,13 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 						if( checkMsgContent( Term.createTerm("storage_request(ARG)"), Term.createTerm("storage_request(ARG)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								delay(1000) 
+								println("TRANSPORT TROLLEY | arrived storage request from WS")
 								answer("storage_request", "storage_done", "storage_done(arg)"   )  
 						}
-						if( checkMsgContent( Term.createTerm("dopathdone(ARG)"), Term.createTerm("dopathdone(ARG)"), 
-						                        currentMsg.msgContent()) ) { //set msgArgList
-								println("TRANSPORT TROLLEY | arrived to Container")
-								answer("storage_request", "storage_done", "storage_done(arg)"   )  
-						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t437",targetState="move_to_HOME",cond=whenRequest("home_request"))
-					transition(edgeName="t438",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
-					transition(edgeName="t439",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+					 transition(edgeName="t439",targetState="move_to_HOME",cond=whenRequest("home_request"))
+					transition(edgeName="t440",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
+					transition(edgeName="t441",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 				state("move_to_HOME") { //this:State
 					action { //it:State
@@ -184,28 +155,20 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 {request("dopath", "dopath($PathToDo)" ,"pathexec" )  
 								 }
 						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t540",targetState="move_to_HOME",cond=whenReply("dopathdone"))
-					transition(edgeName="t541",targetState="move_to_HOME",cond=whenReply("dopathfail"))
-					transition(edgeName="t542",targetState="handle_path",cond=whenDispatch("stop_trolley"))
-					transition(edgeName="t543",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
+					 transition(edgeName="t542",targetState="move_to_HOME",cond=whenReply("dopathdone"))
+					transition(edgeName="t543",targetState="move_to_HOME",cond=whenReply("dopathfail"))
+					transition(edgeName="t544",targetState="handle_path",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t545",targetState="move_to_INDOOR",cond=whenRequest("transfer_request"))
 				}	 
 				state("handle_path") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("TRANSPORT TROLLEY | SEND ALARM TO BASICROBOt.")
 						emit("alarm", "alarm(STOP)" ) 
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t744",targetState="savepath",cond=whenReply("dopathfail"))
-					transition(edgeName="t745",targetState="trolley_stopped",cond=whenReply("dopathdone"))
+					 transition(edgeName="t746",targetState="savepath",cond=whenReply("dopathfail"))
+					transition(edgeName="t747",targetState="trolley_stopped",cond=whenReply("dopathdone"))
 				}	 
 				state("savepath") { //this:State
 					action { //it:State
@@ -215,22 +178,14 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								
 												PathToDo = payloadArg(0);
 						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
 					 transition( edgeName="goto",targetState="trolley_stopped", cond=doswitch() )
 				}	 
 				state("trolley_stopped") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t746",targetState="handle_resume",cond=whenDispatch("resume_trolley"))
+					 transition(edgeName="t748",targetState="handle_resume",cond=whenDispatch("resume_trolley"))
 				}	 
 				state("handle_resume") { //this:State
 					action { //it:State
@@ -260,23 +215,21 @@ class Transporttrolley ( name: String, scope: CoroutineScope  ) : ActorBasicFsm(
 								 request("dopath", "dopath($PathToDo)" ,"pathexec" )  
 								 }
 						}
-						//genTimer( actor, state )
 					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t847",targetState="move_to_INDOOR",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_INDOOR"  
+					 transition(edgeName="t849",targetState="move_to_INDOOR",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_INDOOR"  
 					}))
-					transition(edgeName="t848",targetState="pickup_action",cond=whenReplyGuarded("dopathdone",{ LastState == "PICKING"  
+					transition(edgeName="t850",targetState="pickup_action",cond=whenReplyGuarded("dopathdone",{ LastState == "PICKING"  
 					}))
-					transition(edgeName="t849",targetState="move_to_CONTAINER",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_CONTAINER"  
+					transition(edgeName="t851",targetState="move_to_CONTAINER",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_CONTAINER"  
 					}))
-					transition(edgeName="t850",targetState="storage_action",cond=whenReplyGuarded("dopathdone",{ LastState == "STORAGING"  
+					transition(edgeName="t852",targetState="storage_action",cond=whenReplyGuarded("dopathdone",{ LastState == "STORAGING"  
 					}))
-					transition(edgeName="t851",targetState="move_to_HOME",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_HOME"  
+					transition(edgeName="t853",targetState="move_to_HOME",cond=whenReplyGuarded("dopathdone",{ LastState == "TO_HOME"  
 					}))
-					transition(edgeName="t852",targetState="handle_resume",cond=whenReply("dopathfail"))
-					transition(edgeName="t853",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
+					transition(edgeName="t854",targetState="s0",cond=whenReplyGuarded("dopathdone",{ LastState == "HOME"  
+					}))
+					transition(edgeName="t855",targetState="handle_resume",cond=whenReply("dopathfail"))
+					transition(edgeName="t856",targetState="trolley_stopped",cond=whenDispatch("stop_trolley"))
 				}	 
 			}
 		}

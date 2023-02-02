@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import it.unibo.Robots.common.RobotUtils;
 import it.unibo.Sprint3web.model.IpConfig;
 import unibo.comm22.coap.CoapConnection;
 
@@ -74,8 +73,8 @@ public class WasteGUIController {
         CoapConnection connWaste = WasteGUIUtils.connectWithWasteServiceUsingCoap(wasteserviceip,portwasteservice);
         CoapConnection connLed = WasteGUIUtils.connectWithLedUsingCoap(ledip,portled);
 
-        connWaste.observeResource( new RobotCoapObserver() );
-        connLed.observeResource( new RobotCoapObserver() );
+        connWaste.observeResource( new WSCoapObserver() );
+        connLed.observeResource( new LedCoapObserver() );
 
         return buildThePage(viewmodel);
         //return mainPage;
@@ -92,7 +91,7 @@ public class WasteGUIController {
         try {
             res = WasteGUIUtils.sendWasteTruckReq(msg);
         } catch (Exception e){
-            System.out.println("WasteController | sendWasteTruckRequest ERROR:"+e.getMessage());
+            System.out.println("WasteGUIController | sendWasteTruckRequest ERROR:"+e.getMessage());
         }
 
         //return mainPage;
@@ -108,7 +107,7 @@ public class WasteGUIController {
         try {
             res = WasteGUIUtils.sendFreeIndoorRequest(msg);
         } catch (Exception e){
-            System.out.println("WasteController | sendWasteTruckRequest ERROR:"+e.getMessage());
+            System.out.println("WasteGUIController | sendWasteTruckRequest ERROR:"+e.getMessage());
         }
 
         //return mainPage;
@@ -125,7 +124,7 @@ public class WasteGUIController {
         try {
             res = WasteGUIUtils.sendStopResumeTrolley(msg);
         } catch (Exception e){
-            System.out.println("WasteController | sendStopResumeTrolley ERROR:"+e.getMessage());
+            System.out.println("WasteGUIController | sendStopResumeTrolley ERROR:"+e.getMessage());
         }
 
         //return mainPage;

@@ -22,9 +22,9 @@ public class WasteGUIUtils {
     public static void connectWithWasteServiceUsingTcp(String addr, int port){
         try {
             connTcp = TcpClientSupport.connect(addr, port, 10);
-            System.out.println("WasteUtils | connect WASTE_SERVICE with Tcp conn:" + connTcp );
+            System.out.println("WSUtils | connect WASTE_SERVICE with Tcp conn:" + connTcp );
         }catch(Exception e){
-            ColorsOut.outerr("RobotUtils | connectWithRobotUsingTcp ERROR:"+e.getMessage());
+            ColorsOut.outerr("WSUtils | connectWithRobotUsingTcp ERROR:"+e.getMessage());
         }
     }
 
@@ -32,56 +32,54 @@ public class WasteGUIUtils {
         String answer="";
         try {
             IApplMessage msg =  CommUtils.buildRequest("webGui", "waste_request", payload, "wasteservice");
-            ColorsOut.outappl("RobotUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
+            ColorsOut.outappl("WSUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
             if( msg.isRequest() ){
                 answer = connTcp.request( msg.toString() );
-                System.out.println("RobotUtils | answer:" + answer );
+                System.out.println("WasteRequestUtils | answer:" + answer );
             } else {
                 // altro tipo di msg
             }
         } catch (Exception e) {
-            ColorsOut.outerr("RobotUtils | sendMsg ERROR:"+e.getMessage());
+            ColorsOut.outerr("WasteRequestUtils | sendMsg ERROR:"+e.getMessage());
         }
-        if(answer.contains("loadaccept"))
-        {
+        if(answer.contains("loadaccept")) {
             return "loadaccept";
         }
-        else{
+        else if(answer.contains("loadrejected")){
             return "loadrejected";
-        }
+        } else return "free_indoor";
     }
     public static String sendFreeIndoorRequest(String payload) {
         String answer="";
         try {
             IApplMessage msg =  CommUtils.buildRequest("webGui", "free_request", payload, "wasteservice");
-            ColorsOut.outappl("RobotUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
+            ColorsOut.outappl("FreeIndoorUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
             if( msg.isRequest() ){
                 answer = connTcp.request( msg.toString() );
-                System.out.println("RobotUtils | answer:" + answer );
+                System.out.println("FreeIndoorUtils | answer:" + answer );
             } else {
                 System.out.println("Sono nell' else..");
             }
         } catch (Exception e) {
-            ColorsOut.outerr("RobotUtils | sendMsg ERROR:"+e.getMessage());
+            ColorsOut.outerr("FreeIndoorUtils | sendMsg ERROR:"+e.getMessage());
         }
-        if(answer.contains("free_indoor"))
-        {
-            return "indoor_free";
+        if(answer.contains("loadaccept")) {
+            return "loadaccept";
         }
-        else{
-            return answer+": Impossible: you should not be here";
-        }
+        else if(answer.contains("loadrejected")){
+            return "loadrejected";
+        } else return "free_indoor";
     }
     public static String sendStopResumeTrolley(String payload) {
         IApplMessage msg;
         try {
             msg = CommUtils.buildEvent("webGui", "sonardata", payload);
-            ColorsOut.outappl("RobotUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
+            ColorsOut.outappl("WSUtils | sendMsg msg:" + msg + " conn=" + connTcp, ColorsOut.BLUE);
             if(msg.isEvent()){
                 connTcp.forward(msg.toString());
             }
         } catch (Exception e) {
-            ColorsOut.outerr("RobotUtils | sendMsg ERROR:" + e.getMessage());
+            ColorsOut.outerr("WSUtils | sendMsg ERROR:" + e.getMessage());
         }
         return "Stop/Resume concluded";
     }
@@ -92,10 +90,10 @@ public class WasteGUIUtils {
             String qakdestination 	= "led";
             String path   = ctxqakdest+"/"+qakdestination;
             conn           = new CoapConnection(addr+":"+port, path);
-            ((CoapConnection)conn).observeResource( new RobotCoapObserver() );
-            System.out.println("WasteUtils | connect LED with Coap conn:" + conn );
+            ((CoapConnection)conn).observeResource( new LedCoapObserver() );
+            System.out.println("LedUtils | connect LED with Coap conn:" + conn );
         }catch(Exception e){
-            System.out.println("RobotUtils | connectUsingCoap ERROR:"+e.getMessage());
+            System.out.println("LedUtils | connectUsingCoap ERROR:"+e.getMessage());
         }
         return (CoapConnection) conn;
     }
@@ -106,10 +104,10 @@ public class WasteGUIUtils {
             String qakdestination 	= "wasteservice";
             String path   = ctxqakdest+"/"+qakdestination;
             conn           = new CoapConnection(addr+":"+port, path);
-            ((CoapConnection)conn).observeResource( new RobotCoapObserver() );
-            System.out.println("WasteUtils | connect WASTE_SERVICE with Coap conn:" + conn );
+            ((CoapConnection)conn).observeResource( new WSCoapObserver() );
+            System.out.println("WSUtils | connect WASTE_SERVICE with Coap conn:" + conn );
         }catch(Exception e){
-            System.out.println("RobotUtils | connectUsingCoap ERROR:"+e.getMessage());
+            System.out.println("WSUtils | connectUsingCoap ERROR:"+e.getMessage());
         }
         return (CoapConnection) conn;
     }
