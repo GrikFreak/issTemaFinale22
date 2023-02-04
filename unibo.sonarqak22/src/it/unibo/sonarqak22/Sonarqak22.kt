@@ -14,14 +14,19 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 		return "s0"
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
-		 val simulate       = true
+		val interruptedStateTransitions = mutableListOf<Transition>()
+		 val simulate       = false
 			   val sonarActorName = "sonarqak22"
 			   val usingDomain    = false
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						sonarConfig.configureTheSonar( simulate, sonarActorName, usingDomain  )
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition(edgeName="t00",targetState="activateTheSonar",cond=whenDispatch("sonaractivate"))
 					transition(edgeName="t01",targetState="deactivateTheSonar",cond=whenDispatch("sonardeactivate"))
 				}	 
@@ -34,14 +39,22 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 						else
 						 {forward("sonaractivate", "info(ok)" ,"sonardatasource" ) 
 						 }
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition(edgeName="t02",targetState="handleSonarData",cond=whenEvent("sonar"))
 					transition(edgeName="t03",targetState="deactivateTheSonar",cond=whenDispatch("sonardeactivate"))
 				}	 
 				state("deactivateTheSonar") { //this:State
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition( edgeName="goto",targetState="end", cond=doswitch() )
 				}	 
 				state("handleSonarData") { //this:State
@@ -50,8 +63,13 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 val D = payloadArg(0)  
 								emit("sonardata", "distance($D)" ) 
+								println("Sonar emitted: $D")
 						}
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 					 transition(edgeName="t04",targetState="handleSonarData",cond=whenEvent("sonar"))
 					transition(edgeName="t05",targetState="deactivateTheSonar",cond=whenDispatch("sonardeactivate"))
 				}	 
@@ -59,7 +77,11 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 					action { //it:State
 						println("sonarqak22 BYE")
 						 System.exit(0)  
+						//genTimer( actor, state )
 					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 				}	 
 			}
 		}

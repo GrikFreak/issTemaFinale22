@@ -18,21 +18,21 @@
 System /*-trace*/ sonarqak22
 //mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo/sonarqak22"
 
+
 //SONAR 
 Dispatch sonaractivate   : info(ARG)
 Dispatch sonardeactivate : info(ARG)
-Event    sonar           : distance( V )   //emitted by sonarSimulator or sonardatasource	
+Event    sonar           : distance( V )   //emitted by sonarSimulator or sonardatasource (es.sonarHCSR04Support2021)
 Event    sonardata       : distance( V )   //for the application level
 Event obstacle : obstacle(V)
 Event noobstacle : noobstacle(V)
 
- 
-// mettere ip del proprio pc
-Context ctxWasteService ip [host="127.0.0.1" port=8025]  
-//Context ctxWasteService ip [host="127.0.0.1" port=8025]  
+// mettere ip del proprio pc (o raspberry)
+Context ctxwasteservice ip [host="192.168.1.114" port=8025]  
+//Context ctxwasteservice ip [host="127.0.0.1" port=8025]  
 Context ctxsonarqak22 ip [host="localhost" port=8035] 
 
-ExternalQActor wasteservice context ctxWasteService
+ExternalQActor wasteservice context ctxwasteservice
 
 //DATA SOURCES
 CodedQActor sonarsimulator  context ctxsonarqak22 className "sonarSimulator"  
@@ -49,7 +49,7 @@ CodedQActor datacleaner    context ctxsonarqak22 className "dataCleaner"
 
 
 QActor sonarqak22 context ctxsonarqak22{
-	[# val simulate       = true
+	[# val simulate       = false
 	   val sonarActorName = "sonarqak22"
 	   val usingDomain    = false
 	#]
@@ -84,6 +84,7 @@ QActor sonarqak22 context ctxsonarqak22{
    		 	[# val D = payloadArg(0) #]  
   		    //println("%%%%%%%%%%%%%%%%%%%%%%%%%%% emit %%%%%%%%%%%%%%% ${D}")
   		 	emit sonardata : distance($D) //for the application
+  		 	println("Sonar emitted: $D")
   		 }
   	}
    	Transition t0 whenEvent sonar -> handleSonarData

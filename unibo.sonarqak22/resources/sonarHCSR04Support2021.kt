@@ -43,8 +43,8 @@ class sonarHCSR04Support2021 ( name : String ) : ActorBasic( name ) {
 				if( data != null ){
 					try{ 
 						val v = data.toInt()
-						if( v <= 100 ){	//A first filter ...
-							val m1 = "distance( ${v*2} )"
+						if( v <= 200 ){	//A first filter ...
+							val m1 = "distance( ${v} )"
 							val event = MsgUtil.buildEvent( "sonarHCSR04Support","sonar",m1)
 							//emit( event )  //should be propagated also to the remote resource
 							emitLocalStreamEvent( event )		//not propagated to remote actors

@@ -1,0 +1,1 @@
+g++  SonarAlone.c -l wiringPi -o  SonarAlone
