@@ -12,26 +12,20 @@ console.log("ID: ", trolley_status, trolley_position)
 
 function setMessageToWindow(outfield, message) {
     var output = message
-    let stopped = false;
-    let blinking = false;
     console.log("outfield.id: ", outfield.id)
     if(outfield.id.includes("trolley") || outfield.id.includes("led")){
         outfield.innerHTML = `<tt>${output.split(":")[1]}</tt>`
     } else {
         outfield.innerHTML = `<tt>${output}</tt>`
     }
+
     if(outfield.id.includes("led")) {
         if(outfield.innerHTML.includes("ON")){
-            outfield.parentElement.classList.add('stopped');
-            blinking = true;
-        }
-        else if(outfield.innerHTML.includes("BLINKS")) {
-            outfield.parentElement.classList.add('active');
-            stopped = true;
-        }
-        else {
-            stopped ? outfield.parentElement.classList.remove('stopped') : outfield.parentElement.classList.remove('active');
-            stopped ? stopped = !stopped : blinking = !blinking;
+            outfield.parentElement.className = "led stopped";
+        } else if(outfield.innerHTML.includes("BLINK")) {
+            outfield.parentElement.className = "led active";
+        }    else {
+            outfield.parentElement.className = "led";
         }
     }
 }
