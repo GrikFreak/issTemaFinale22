@@ -22,6 +22,9 @@ function callback(theXhr)
 
         if (risposta.includes("loadaccept") || risposta.includes("loadrejected")){
             document.getElementById("response").value=risposta;
+            setTimeout(function () {
+                document.getElementById("response").value = "";
+            }, 3500);
             if (risposta.includes("loadaccept")){
                 sendfreeindoor();
             }
@@ -46,6 +49,15 @@ function callbackFreeIndoor(theXhr)
         }else{
             console.log("free_indoor"+risposta);
             document.getElementById("free_indoor").value=risposta;
+            if (risposta === "free_indoor") {
+                setTimeout(function () {
+                    const alert = document.getElementById("free_indoor");
+                    alert.style.display = "block";
+                    setTimeout(function () {
+                        alert.style.display = "none";
+                    }, 5000);
+                }, 0);
+            }
         }
     }
 }
