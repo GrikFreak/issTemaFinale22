@@ -4,8 +4,8 @@ System /*-trace*/ ledqak22
 
 Dispatch led_status : led_status(STATUS)
 
-//Context ctxledqak22 ip [host="localhost" port=8030] 
-Context ctxledqak22 ip [host="192.168.1.114" port=8030] 
+Context ctxledqak22 ip [host="localhost" port=8030] 
+//Context ctxledqak22 ip [host="192.168.1.114" port=8030] 
 
 
 QActor led context ctxledqak22 {

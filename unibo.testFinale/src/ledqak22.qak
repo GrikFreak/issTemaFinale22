@@ -1,0 +1,87 @@
+System /*-trace*/ ledqak22
+
+//mqttBroker "broker.hivemq.com" : 1883  eventTopic "unibo/ledqak22"
+
+Dispatch led_status : led_status(STATUS)
+
+Context ctxledqak22 ip [host="localhost" port=8030] 
+
+
+QActor led context ctxledqak22 {
+	[#
+		var Cmd = ""
+		var Blink = false
+	#]
+	
+	State wait_cmd initial {
+		printCurrentMessage
+		println("LED | WAIT CMD")
+		println("LED | OFF")
+		updateResource [# "LED:OFF" #]
+		//[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh") #] //led inizialmente spento 
+	}
+	Transition t0 whenMsg led_status -> esegui_cmd
+	
+	State esegui_cmd {
+		printCurrentMessage
+		onMsg(led_status : led_status (CMD)){
+			
+			[#
+				Cmd = payloadArg(0)
+				println(Cmd)
+				Blink = false
+					
+			
+			if(Cmd == "BLINKS") {
+				Blink = true
+			}
+			#] 
+		}
+		
+	}
+	Goto blink if [# Blink #] else onoff
+	
+	State onoff{
+		
+	}Goto on if [# Cmd  == "ON" #] else off
+	
+	State on{
+		printCurrentMessage
+		println("LED | ON")
+		//[#Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")#]
+		updateResource [# "LED:ON" #]
+			
+	}
+	Transition t2 whenMsg led_status -> esegui_cmd
+	
+	
+	State off{
+		printCurrentMessage
+		println("LED | OFF")
+		//[#Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")#]
+		updateResource [# "LED:OFF" #]
+
+	}
+	
+	Transition t3 whenMsg led_status -> esegui_cmd
+	
+	State blink {
+		printCurrentMessage
+		updateResource [# "LED:BLINK" #]
+		[#
+			//Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")
+			
+		#]
+		delay 300
+		[#
+			//Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")
+				
+		#]
+		println("LED | BLINKS")
+		updateResource [# "LED:BLINKS" #]
+		
+	}
+	
+	Transition t1 whenTime 10000 -> off
+				  whenMsg led_status -> esegui_cmd
+}
