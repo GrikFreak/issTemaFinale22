@@ -1,7 +1,7 @@
 %====================================================================================
 % sonarqak22 description   
 %====================================================================================
-context(ctxwasteservice, "127.0.0.1",  "TCP", "8025").
+context(ctxwasteservice, "192.168.1.114",  "TCP", "8025").
 context(ctxsonarqak22, "localhost",  "TCP", "8035").
  qactor( wasteservice, ctxwasteservice, "external").
   qactor( sonarsimulator, ctxsonarqak22, "sonarSimulator").

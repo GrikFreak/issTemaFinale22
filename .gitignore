@@ -1,6 +1,7 @@
 /.metadata/
 /testProgetto/
 .gradle
+.gradle/
 **/build/
 !src/**/build/
 
