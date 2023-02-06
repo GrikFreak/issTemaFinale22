@@ -105,6 +105,17 @@ eclipse {
     }	
  }
 
+distributions {      
+    main{
+        contents{
+        	from "./sysRules.pl"
+        	from "./sonarqak22.pl"
+        	from "./sonarConfig.json"
+        	from "./SonarAlone.c"
+        	from "./SonarAlone"
+		}
+	}
+}
 
 application {
     // Define the main class for the application.

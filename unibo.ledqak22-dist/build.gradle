@@ -108,6 +108,18 @@ application {
     mainClass = 'it.unibo.ctxledqak22.MainCtxledqak22Kt'
 }
 
+distributions {      
+    main{
+        contents{
+        	from "./sysRules.pl"
+        	from "./ledqak22.pl"
+        	from "./led25GpioTurnOff.sh"
+        	from "./led25GpioTurnOn.sh"
+        	from "./ledConfig.json"
+		}
+	}
+}
+
  jar {
     println("building jar")
     from sourceSets.main.allSource

@@ -105,6 +105,16 @@ eclipse {
     }	
  }
 
+distributions {      
+    main{
+        contents{
+        	from "./sysRules.pl"
+        	from "./basicrobot22.pl"
+        	from "./basicrobotConfig.json"
+        	from "./stepTimeConfig.json"
+		}
+	}
+}
 
 application {
     // Define the main class for the application.

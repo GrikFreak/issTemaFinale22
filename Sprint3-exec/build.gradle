@@ -108,6 +108,15 @@ application {
     mainClass = 'it.unibo.ctxwasteservice.MainCtxwasteserviceKt'
 }
 
+distributions {      
+    main{
+        contents{
+        	from "./sysRules.pl"
+        	from "./wasteservice.pl"
+		}
+	}
+}
+
  jar {
     println("building jar")
     from sourceSets.main.allSource

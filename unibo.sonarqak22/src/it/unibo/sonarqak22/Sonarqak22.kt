@@ -15,12 +15,15 @@ class Sonarqak22 ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name,
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		val interruptedStateTransitions = mutableListOf<Transition>()
-		 val simulate       = false
+		 var simulate       = false
 			   val sonarActorName = "sonarqak22"
 			   val usingDomain    = false
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
+						sonarSupport.create( "sonarConfig.json"  )
+						 simulate = sonarSupport.simulate  
+						println("$simulate")
 						sonarConfig.configureTheSonar( simulate, sonarActorName, usingDomain  )
 						//genTimer( actor, state )
 					}

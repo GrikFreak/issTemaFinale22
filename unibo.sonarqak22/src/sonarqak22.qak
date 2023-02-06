@@ -49,12 +49,15 @@ CodedQActor datacleaner    context ctxsonarqak22 className "dataCleaner"
 
 
 QActor sonarqak22 context ctxsonarqak22{
-	[# val simulate       = false
+	[# var simulate       = false
 	   val sonarActorName = "sonarqak22"
 	   val usingDomain    = false
 	#]
 	State s0 initial {
 		//printCurrentMessage
+		run sonarSupport.create("sonarConfig.json")
+		[# simulate = sonarSupport.simulate #]
+		println("$simulate")
 		run  sonarConfig.configureTheSonar(simulate, sonarActorName, usingDomain)
 		 
 		//ASSUMPTION: the sonar subsystem emits the event sonar:distance(V)

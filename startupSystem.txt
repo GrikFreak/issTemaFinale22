@@ -1,0 +1,4 @@
+docker run -p 8090:8090 -p 8091:8091/tcp -p 8091:8091/udp --network="host" my-virtual-robot-23:2.0  # credo che anche qui le porte si possano evitare
+docker run -p 8020:8020 --network="host" basicrobot-dist:1.0      # -p 8020:8020 si puo evitare dato che non accedo al basic robot da localhost
+docker run -p 8025:8025 --network="host" waste-service:1.0 
+

@@ -12,6 +12,7 @@ QActor led context ctxledqak22 {
 	[#
 		var Cmd = ""
 		var Blink = false
+		var ledType = ""
 	#]
 	
 	State wait_cmd initial {
@@ -19,7 +20,13 @@ QActor led context ctxledqak22 {
 		println("LED | WAIT CMD")
 		println("LED | OFF")
 		updateResource [# "LED:OFF" #]
-		[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh") #] //led inizialmente spento 
+		run ledSupport.create("ledConfig.json")
+		[# ledType = ledSupport.ledKind #]
+		if[# ledType  != "virtual" #]{
+			[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh") #] //led inizialmente spento
+			println("$ledType")
+		}
+		
 	}
 	Transition t0 whenMsg led_status -> esegui_cmd
 	
@@ -49,7 +56,9 @@ QActor led context ctxledqak22 {
 	State on{
 		printCurrentMessage
 		println("LED | ON")
-		[#Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")#]
+		if[# ledType  != "virtual" #]{
+			[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh") #]
+		}
 		updateResource [# "LED:ON" #]
 			
 	}
@@ -59,7 +68,9 @@ QActor led context ctxledqak22 {
 	State off{
 		printCurrentMessage
 		println("LED | OFF")
-		[#Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")#]
+		if[# ledType  != "virtual" #]{
+			[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh") #]
+		}
 		updateResource [# "LED:OFF" #]
 
 	}
@@ -68,15 +79,15 @@ QActor led context ctxledqak22 {
 	State blink {
 		printCurrentMessage
 		updateResource [# "LED:BLINK" #]
-		[#
-			Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")
-			
-		#]
+		if[# ledType  != "virtual" #]{
+			[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh") #]
+		}
+		
 		delay 300
-		[#
-			Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")
-				
-		#]
+		if[# ledType  != "virtual" #]{
+			[# Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh") #]
+		}
+		
 		println("LED | BLINKS")
 		updateResource [# "LED:BLINKS" #]
 		

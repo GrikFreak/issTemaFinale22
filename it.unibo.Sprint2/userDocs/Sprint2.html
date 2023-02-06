@@ -533,7 +533,7 @@ The status of the Trolley could be saved in :
   So far we have represented, for ease of notation, SONAR as a single actor. In reality
   it is implemented through a pipeline of actors. In particular, it is composed of the following two actors:
  <ul>
-	<li>sonarHCSR04Support2021: use the SonarAlone  provided by the customer
+	<li>sonarHCSR04Support2021: use the <a href="../../supportiRaspberry/SonarAlone.c">SonarAlone</a>   provided by the customer
     to get the distances detected by the physical sonar and feed them into the pipeline.</li>
 	<li>dataCleaner:filters the distances passed by the sonar HCSR04Support2021, considering only those included in a
     certain range. This is necessary since the physical sonar is made to detect distances not
@@ -545,7 +545,7 @@ The status of the Trolley could be saved in :
 </br>
  As for the LED, however, we decided to create our own version inspired by the code provided by the
  client for implementation needs. In detail the LED is modeled as an actor and uses bash scripts
- provided by the customer to switch on (<a href="../../CodiceRasp/led25GpioTurnOn.sh"> led25GpioTurnOn </a>) and switch off (<a href = "../../ CodiceRasp / led25GpioTurnOff.sh" > led25GpioTurnOff </a>)
+ provided by the customer to switch on (<a href="../../supportiRaspberry/led25GpioTurnOn.sh"> led25GpioTurnOn </a>) and switch off (<a href = "../../supportiRaspberry/led25GpioTurnOff.sh" > led25GpioTurnOff </a>)
  the physical LED. <br> <br>
  
  In addition to this, it was decided to restart the TransportTrolley in the resume phase in the state in which it was stopped,
@@ -560,9 +560,9 @@ The status of the Trolley could be saved in :
 
 
 </div>
+<div><h1><b><a href="../../it.unibo.CoreAnalysis-Sprint1/userDocs/CoreAnalysis-Sprint1.2.html">Sprint1</a></b></h1></div>
+<div><h1><b><a href="../../Sprint3-web/userDocs/Sprint3.html">Sprint3</a></b></h1></div>
 
-<h2>Testing</h2>
-<a href="#testPlan">Test plans</a>
 
 <!-- <h2>Deployment</h2>
 <div class="remark">

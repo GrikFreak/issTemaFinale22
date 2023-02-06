@@ -18,6 +18,7 @@ class Led ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scope 
 		
 				var Cmd = ""
 				var Blink = false
+				var ledType = ""
 		return { //this:ActionBasciFsm
 				state("wait_cmd") { //this:State
 					action { //it:State
@@ -26,7 +27,12 @@ class Led ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scope 
 						println("LED | OFF")
 						updateResourceRep( "LED:OFF"  
 						)
-						 Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")  
+						ledSupport.create( "ledConfig.json"  )
+						 ledType = ledSupport.ledKind  
+						if(  ledType  != "virtual"  
+						 ){ Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")  
+						println("$ledType")
+						}
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -75,7 +81,9 @@ class Led ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scope 
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("LED | ON")
-						Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh") 
+						if(  ledType  != "virtual"  
+						 ){ Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")  
+						}
 						updateResourceRep( "LED:ON"  
 						)
 						//genTimer( actor, state )
@@ -89,7 +97,9 @@ class Led ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scope 
 					action { //it:State
 						println("$name in ${currentState.stateName} | $currentMsg")
 						println("LED | OFF")
-						Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh") 
+						if(  ledType  != "virtual"  
+						 ){ Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")  
+						}
 						updateResourceRep( "LED:OFF"  
 						)
 						//genTimer( actor, state )
@@ -104,13 +114,13 @@ class Led ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( name, scope 
 						println("$name in ${currentState.stateName} | $currentMsg")
 						updateResourceRep( "LED:BLINK"  
 						)
-						
-									Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")
-									
+						if(  ledType  != "virtual"  
+						 ){ Runtime.getRuntime().exec("sudo bash led25GpioTurnOn.sh")  
+						}
 						delay(300) 
-						
-									Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")
-										
+						if(  ledType  != "virtual"  
+						 ){ Runtime.getRuntime().exec("sudo bash led25GpioTurnOff.sh")  
+						}
 						println("LED | BLINKS")
 						updateResourceRep( "LED:BLINKS"  
 						)
