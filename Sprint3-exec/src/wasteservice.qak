@@ -59,6 +59,7 @@ Context ctxbasicrobot  ip [ host="127.0.0.1" port=8020 ]
 
 //Context ctxledqak22 ip [ host="127.0.0.1" port=8030 ]
 Context ctxledqak22 ip [ host="192.168.1.123" port=8030 ] 
+//Context ctxledqak22 ip [ host="192.168.40.163" port=8030 ] 
 
 //Context ctxwasteserviceGUI ip [ host="localhost" port=8023 ]
 

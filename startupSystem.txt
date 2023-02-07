@@ -1,4 +1,24 @@
-docker run -p 8090:8090 -p 8091:8091/tcp -p 8091:8091/udp --network="host" my-virtual-robot-23:2.0  # credo che anche qui le porte si possano evitare
-docker run -p 8020:8020 --network="host" basicrobot-dist:1.0      # -p 8020:8020 si puo evitare dato che non accedo al basic robot da localhost
-docker run -p 8025:8025 --network="host" waste-service:1.0 
+docker build -t basicrobot-dist:1.0 .
+docker build -t waste-service:1.0 .
 
+docker run -p 8090:8090 -p 8091:8091/tcp -p 8091:8091/udp --network="host" my-virtual-robot-23:2.0  # le porte si possano evitare: --network="host"
+docker run -p 8020:8020 --network="host" basicrobot-dist:1.0      # # le porte si possano evitare: --network="host"
+docker run -p 8025:8025 --network="host" waste-service:1.0 		# # le porte si possano evitare: --network="host"
+
+
+docker-compose -f wasteService-system-dist.yaml up
+
+192.168.40.55/24 : RETE CREATA DAL TELEFONO
+10.42.0.1/24 : RETE CREATA DAL COMPUTER
+
+* modifica wasteservice.qak con l'ip del led
+* ./gradlew distZip -x test
+* copia i file nella cartella bin e ricrea lo zip
+* docker build -t waste-service:1.0 .
+* poi esegui il docker compose
+
+* modifica il sonar con l'ip del waste service
+* ./gradlew distZip -x test
+* copia i file nella cartella bin e ricrea lo zip
+* copia lo zip dentro raspberry con filezilla o scp -r file.zip pi@3.122.120.41:/home/pi/unibo.sonarqak22
+* unzip

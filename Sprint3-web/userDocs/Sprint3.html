@@ -489,7 +489,7 @@
     <div class="remark">
       <div>
         <ul>
-          <li><b>BasicRobot</b>: we created a Docker distribution of the component starting from the
+          <li><b><a href="../../unibo.basicrobot22-dist/">BasicRobot</a> </b>: we created a Docker distribution of the component starting from the
             <code>`gradlew distZip`</code> package<br>
             <pre><code>
           FROM openjdk:11
@@ -503,7 +503,7 @@
           CMD [ "bash", "./unibo.basicrobot22" ]</code></pre>
 
           </li>
-          <li><b>WasteService</b>: we created a Docker distribution of the component starting from the
+          <li><b><a href="../../Sprint3-exec/">WasteService</a></b>: we created a Docker distribution of the component starting from the
             <code>`gradlew distZip`</code> package<br>
             <pre><code>
           FROM openjdk:11
@@ -518,7 +518,7 @@
         </code>
         </pre>
           </li>
-          <li><b>Led</b>: we use the <code>`gradlew distZip`</code> package<br>, with the configuration files needed. We also
+          <li><b><a href="../../unibo.ledqak22-dist/">Led</a></b>: we use the <code>`gradlew distZip`</code> package<br>, with the configuration files needed. We also
             add the support code for the use of the led in the Raspberry <br>
             The led behaviour change according to the configuration in the `ledConfig.json` file
             <pre><code>
@@ -539,7 +539,7 @@
             }
             </code></pre>
           </li>
-          <li><b>Sonar</b>: we use the <code>`gradlew distZip`</code> package<br>, with the configuration files needed. We also
+          <li><b><a href="../../unibo.sonarqak22/">Sonar</a></b>: we use the <code>`gradlew distZip`</code> package<br>, with the configuration files needed. We also
             add the support code for the use of the sonar in the Raspberry <br>
             The sonar behaviour change according to the configuration in the `sonarConfig.json` file
             <pre><code>
@@ -560,7 +560,10 @@
             </code></pre>
 
           </li>
+          <li><b><a href="../../wasteService-system-dist.yaml">wasteService-system-dist.yaml</a></b>: for easy of use, a yaml file for start the <b>waste-service,basicribot,VirtualEnv</b> with docker-compose has been created. This yaml file use the images created above with Docker.
+            With the command <code>`docker-compose -f wasteService-system-dist.yaml up`</code> the three containers start automatically in the proper order. 
 
+          </li>
         </ul>
       </div>
 
