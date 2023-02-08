@@ -2,6 +2,7 @@ version: "3"
 services:
   wenv:
     image: my-virtual-robot-23:2.0
+    #image: parsleyencode/my-virtual-robot-23:2.0
     network_mode: "host"
     #image: virtualrobotdisi23:1.0
     #image: docker.io/natbodocker/virtualrobotdisi:4.0
@@ -12,6 +13,7 @@ services:
     #  - 8091:8091/udp
   robot:
      image: basicrobot-dist:1.0
+     #image: parsleyencode/basicrobot-dist:1.0
      network_mode: "host"
      #image: docker.io/natbodocker/basicrobot22:2.0
      #image: basicrobot22:1.0

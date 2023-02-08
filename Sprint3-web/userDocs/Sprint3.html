@@ -485,7 +485,9 @@
     <h2>Execution of the project</h2>
     <div class="remark">
       <ul>
-        <li><b><a href="../../unibo.basicrobot22-dist/">BasicRobot</a> </b>: enter in this folder and execute <code>`./gradlew run`</code>. You can configure the basicrobot with the files "stepTimeConfig.json" for the stepTime and "./basicrobotConfig.json" for configure the connection with the VEnv. We suggest to leave localhost on "./basicrobotConfig.json" and to execute the container of the VEnv with --network="host" (eg:docker run --network="host" docker.io/natbodocker/virtualrobotdisi23:1.0)</li>
+        <li><b><a href="../../unibo.basicrobot22-dist/">BasicRobot</a> </b>: enter in this folder and execute <code>`./gradlew run`</code>. You can configure the basicrobot with the files "stepTimeConfig.json" for the stepTime and "./basicrobotConfig.json" for configure the connection with the VEnv. We suggest to leave localhost on "./basicrobotConfig.json" and to execute the container of the VEnv with --network="host" (eg:docker run --network="host" docker.io/natbodocker/virtualrobotdisi23:1.0)
+          <ul><li>We also released a docker image on Docker Hub of the BasicRobot and the VEnv: </li> <a href="https://hub.docker.com/repository/docker/parsleyencode/my-virtual-robot-23/general">parsleyencode/my-virtual-robot-23:2.0</a>, <a href="https://hub.docker.com/repository/docker/parsleyencode/basicrobot-dist/general">parsleyencode/basicrobot-dist:1.0</a></ul>. Run this images with --network="host" for avoid comunication problems, or use docker-compose with the file <b><a href="../../wasteService-system-dist.yaml">wasteService-system-dist.yaml</a></b> (the two docker hub images are commented, uncomment them)
+        </li>
         <li><b><a href="../../Sprint3-exec/">WasteService</a></b>: enter in this folder and execute <code>`./gradlew run`</code>. You have to configure the ip of the led inside the `src/wasteservice.qak` file, then let xtext update the corrisponding file. After this you can execute the wasteservice.</li>
         <li><b><a href="../../unibo.ledqak22-dist/">Led</a></b>:  enter in this folder, and configure in the `ledConfig.json` file if you want a virtual/real led. </li>
         <li><b><a href="../../unibo.sonarqak22/">Sonar</a></b>:  enter in this folder, and configure in the `sonarConfig.json` file if you want a simulate true/false sonar. Update the ip of the waste-service inside the `src/sonarqak22.qak`, then let xtext update the corrisponding file. After this you can execute the led locally or export it to the Raspberry.</li>
@@ -569,7 +571,7 @@
 
           </li>
           <li><b><a href="../../wasteService-system-dist.yaml">wasteService-system-dist.yaml</a></b>: for easy of use, a yaml file for start the <b>waste-service,basicribot,VirtualEnv</b> with docker-compose has been created. This yaml file use the images created above with Docker.
-            With the command <code>`docker-compose -f wasteService-system-dist.yaml up`</code> the three containers start automatically in the proper order. 
+            With the command <code>`docker-compose -f wasteService-system-dist.yaml up`</code> the three containers start automatically in the proper order. In the comment there is also the link of the BasicRobot and VirtualEvn images from DockerHub. Uncomment them for use them.
 
           </li>
         </ul>
