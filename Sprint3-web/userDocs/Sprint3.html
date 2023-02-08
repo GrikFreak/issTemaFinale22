@@ -480,9 +480,17 @@
           to avoid page reloading so as not to lose the information to be shown to the user.
         </li>
       </div>
-
-
-
+    </div>
+    
+    <h2>Execution of the project</h2>
+    <div class="remark">
+      <ul>
+        <li><b><a href="../../unibo.basicrobot22-dist/">BasicRobot</a> </b>: enter in this folder and execute <code>`./gradlew run`</code>. You can configure the basicrobot with the files "stepTimeConfig.json" for the stepTime and "./basicrobotConfig.json" for configure the connection with the VEnv. We suggest to leave localhost on "./basicrobotConfig.json" and to execute the container of the VEnv with --network="host" (eg:docker run --network="host" docker.io/natbodocker/virtualrobotdisi23:1.0)</li>
+        <li><b><a href="../../Sprint3-exec/">WasteService</a></b>: enter in this folder and execute <code>`./gradlew run`</code>. You have to configure the ip of the led inside the `src/wasteservice.qak` file, then let xtext update the corrisponding file. After this you can execute the wasteservice.</li>
+        <li><b><a href="../../unibo.ledqak22-dist/">Led</a></b>:  enter in this folder, and configure in the `ledConfig.json` file if you want a virtual/real led. </li>
+        <li><b><a href="../../unibo.sonarqak22/">Sonar</a></b>:  enter in this folder, and configure in the `sonarConfig.json` file if you want a simulate true/false sonar. Update the ip of the waste-service inside the `src/sonarqak22.qak`, then let xtext update the corrisponding file. After this you can execute the led locally or export it to the Raspberry.</li>
+        <li><b><a href="../">Sprint3-web</a></b>:  enter in this folder and execute <code>`./gradlew bootRun`</code>. The default port for the WebApplication in <b>8050</b>. The port is setted inside the application.properties file. 
+      </ul>
     </div>
 
     <h2>Distribution</h2>
