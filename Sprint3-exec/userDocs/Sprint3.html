@@ -1,0 +1,599 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<style type="text/css">
+  body {
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+
+  ;
+
+  P {
+    font-family: Tahoma;
+    font-size: 10pt;
+  }
+
+  ;
+
+  a,
+  a:visited,
+  a:active,
+  a:link,
+  a:hover {
+    text-decoration: underline;
+    color: #545454;
+    background-color: transparent;
+    font-size: 93%;
+  }
+
+  a:hover {
+    background-color: #cccccc;
+  }
+
+
+  hr {
+    clear: both;
+    height: 1px;
+    color: #242424;
+    background-color: transparent;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: #242424;
+    clear: left;
+    font: 100% Tahoma, Helvetica, Arial, sans-serif;
+    margin-bottom: 0.5em;
+    padding-top: 0.5em;
+    border-radius: 10px;
+    padding: 5px;
+  }
+
+  top {
+    width: 100%;
+  }
+
+
+  #i {
+    color: #ff1010;
+  }
+
+  tt {
+    font-family: "Arial";
+    font-size: 90%;
+    color: #006600;
+  }
+
+  em {
+    font-family: "Arial";
+    font-size: 80%;
+    font-weight: bold;
+    border-style: solid;
+    border-color: #abe876;
+    color: #1632cc;
+  }
+
+  bc {
+    font-family: "Arial";
+    font-size: 90%;
+    font-weight: bold;
+    color: #990000;
+    background-color: #fcf8c7;
+  }
+
+  ks {
+    font-family: "Arial";
+    font-weight: bold;
+    color: #0000CD;
+    font-size: 90%;
+  }
+
+  kc {
+    font-family: "Arial";
+    font-weight: bold;
+    color: #008000;
+    font-size: 90%;
+  }
+
+  kr {
+    font-family: "Arial";
+    font-weight: bold;
+    color: #ff0000;
+    font-size: 90%;
+  }
+
+  pre {
+    font-family: "Consolas";
+    font-size: 85%;
+    background-color: #f5f5f5;
+    border: 1.5px solid silver;
+    padding: 5px;
+  }
+
+  m {
+    font-family: "Helvetica";
+    line-height: 100%;
+    font-size: 75%;
+  }
+
+  div.body {
+
+    font-size: 18px;
+  }
+
+  k {
+    color: #990000;
+    font-weight: bold;
+    font-size: 90%;
+  }
+
+  h1 {
+    font-size: 150%;
+    background-color: #b2c0ff;
+    padding: 10px;
+  }
+
+  h2 {
+    background-color: #9ed8ff;
+    font-size: 130%;
+  }
+
+  h3 {
+    background-color: #e6ccff;
+    font-size: 100%;
+  }
+
+  h4 {
+    background-color: #ccffcc;
+    font-size: 100%;
+    width: 95%;
+    border-radius: 5px;
+    padding: 2px;
+  }
+
+  h5 {
+    background-color: #d5ffb0;
+    font-size: 100%;
+
+  }
+
+  div.req {
+    background-color: #d9ffb3;
+    font-size: 18px;
+    width: 700px;
+    border: 3px solid green;
+    padding: 15px;
+    margin: 10px;
+  }
+
+  div.remark {
+    background-color: #E3F2FD;
+    border: 1.5px solid #d5f2ed;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 25px;
+  }
+
+  table,
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  #exampleclass tbody,
+  #exampleclass thead,
+  #exampleclass th {
+    border: 0;
+  }
+
+  ol,
+  ul,
+  li {
+    margin: 0;
+    margin-left: 10px;
+    padding: 0;
+    padding-bottom: 5px;
+  }
+
+  table,
+  th,
+  td {
+    border: 1px solid black;
+  }
+
+  img {
+    border: 1.5px solid #d5f2ed
+  }
+
+  a,
+  a:visited,
+  a:active,
+  a:link,
+  a:hover {
+    text-decoration: underline;
+    color: #545454;
+    background-color: transparent;
+  }
+
+  div.wrapdesc {
+    width: 90%;
+    margin: auto;
+  }
+
+  div.imagedesc {
+    width: 85%;
+    margin: auto;
+  }
+</style>
+
+<head>
+
+  <title>SPRINT 3: WasteServiceStatusGUI</title>
+</head>
+
+<body>
+  <div id="top">
+    <h1>SPRINT 3: WasteServiceStatusGUI<font size="5"></font>
+    </h1>
+  </div>
+
+  <div class="body">
+
+    <h2>Recap Sprint 2</h2>
+    <div>
+      <center><img src="images/architectureSprint2.1.png" alt="corerobot_logical_architecture" width="100%"></center>
+      <br>
+      <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.Sprint2/src/sprint2.qak">
+        <ks>Sprint2 executable model</ks>
+      </a>
+      <br><br>
+      <div> <b>Relevant tests:</b>
+        <br><br>
+        <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.Sprint2/test/">Test Sprint2</a>
+        <br><br>
+        <a href="https://github.com/GrikFreak/issTemaFinale22/tree/main/unibo.ledqak22/test">Test Led</a>
+        <!-- <br>
+        <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestPickUp</a> -->
+      </div>
+    </div>
+    <h2>Requirements</h2>
+    <div id="Requirements" class="remark">
+      For the complete requirements see <a
+        href="../../it.unibo.CoreAnalysis-Sprint1/userDocs/CoreAnalysis-Sprint1.2.html#requirments">Requirements</a>
+    </div>
+
+    <h2>Requirement analysis</h2>
+    <div class="remark">
+      <div class="remark" id="Requirements_analysis">
+        <h3>WasteServiceStatusGUI requirements</h3>
+        <h4><a href="#R5">R5</a></h4>
+        <div class="remark" id="R1A">
+          <kc>Formalization</kc>:The WasteService must create a WasteServiceStatusGUI that shows to the Service-manager:
+          <li>the current state of the transport trolley and it position in the room;</li>
+          <li>the current weigth of the material stored in the two waste-containers;</li>
+          <li>the current state of the Led.</li>
+        </div>
+        <div>
+          <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/Sprint3-exec/src/wasteservice.qak">
+            <ks>R5 Executable model</ks>
+          </a>
+        </div>
+
+        <h3>Component given by the commitment:</h3>
+        <div class="remark" id="component">
+          The commitment makes available the example code for the realization of the <a
+            href="https://github.com/anatali/issLab2022/tree/main/webRobot22">
+            <ks>GUI</ks>
+          </a>
+        </div>
+        <h3>Problem on RF5</h3>
+        <h4>State and position of the Transport Trolley</h4>
+        <div class="remark" id="Problem1">
+          It is necessary to identify the states of the trolley, moreover it is necessary to indicate its position; it
+          can be both precise, therefore expressed in coordiante, or approximate.
+        </div>
+        <h4>State of the Led and current weight of the conteiner</h4>
+        <div class="remark" id="Problem2">
+          The Gui must monitor the status of the LED and keep track of how much material is inside the containers. For
+          this reason it is necessary to analyze how to receive this information. </div>
+
+        <h4>Centralitation or Distribution</h4>
+        <div class="remark" id="Problem3">
+          Since the Gui must be aware of the information previously described, it is necessary to establish whether they
+          are contained within a single entity or distributed among several entities.
+        </div>
+
+      </div>
+
+      <h2>Problem analysis</h2>
+      <div class="remark" id="ProbAnalRF5">
+        <h4>Problem n°1:How to rapresent the state and the position of the Transport Trolley.</h4>
+        Some of the information that the WasteServiceStatusGui must show are the state of the Trolley and its position.
+        As regards the state of the Trolley, it is necessary to establish in which phases the Trolley can be found; they
+        are:
+        <li>The Trolley could be at Home, waiting for a request.</li>
+        <li>The Trolley may be performing an action.</li>
+        <li>The Trolley could be stopped.</li>
+        Furthermore the Gui must show the position of the Trolley, it can be represented in two ways:
+        <li>Through a <kr>precise position</kr>:
+          in this case the coordinates or an animated map are used to indicate the current position of the Trolley. It
+          certainly represents a much more precise solution but will require more information and a much more
+          implementation time.</li>
+        <li>Through an <kr>approximate position</kr>:
+          this solution consists in indicating the area where the Trolley is located. From an implementation point of
+          view it takes less time and the information sent are less, but it's less precise than the previous solution.
+        </li>
+
+        <h5>Conclusion</h5>
+        Since there are no particular specific requests from the client, the designer is left free to choose.
+
+        <h4>Problem n°2: How to comunicate the current state of the Led and current weight of the conteiners</h4>
+        The GUI must show, beside the status and position of the Trolley, the current state of the Led and current
+        weight of the conteiners. This informations can be obtained through various forms of interaction. In particular,
+        in addition to the forms of point-to-point communications (request-response and dispatch), which are not
+        particularly effective, there are two alternatives:
+        <li>
+          <kr>Events</kr>: this type of message makes it possible not to know the address of the WasteStatusGui, however
+          it is a type of fragile sending, which does not guarantee the receipt of the message.
+        </li>
+        <li>
+          <kr>Coap Observers</kr>: Since the entities we are interested in, are modeled as actors, they are also COAP
+          resources. Therefore it is possible to associate to each of them a specific COAP observer which will be
+          notified every time a state transition occurs.
+        </li>
+
+        <h5>Conclusion</h5>
+        Both solutions are valid, and both have the problem that they can't be implemented on the browser side, so it's
+        necessary to implement them on the server side. In doing so, a server-browser communication must be implemented
+        to share this information, such as, for example, likethe web sockets.
+
+        <h4>Problem n°3: Centralitation or Distribution</h4>
+        The information required by the WasteServiceStatusGui can be contained in a single entity or distributed
+        throughout the entire system:
+        <li>
+          <kr>Centralitation</kr>: in this case there will be a single entity responsible for updating and sharing the
+          information that the GUI is interested in. In particular, in this entity it will be responsible for notifying
+          the GUI whenever there is a change of status for an entity in which we are interested.
+        </li>
+        <li>
+          <kr>Distribution</kr>: this solution consists in containing the information in the various entities that make
+          up the system.
+          If the solution is chosen through events, this would not involve major changes, while if you want to use the
+          COAP resources, it is necessary to introduce an observer for each actor.
+        </li>
+
+        <h5>Conclusion</h5>
+        Since there are no specific requests from the client, it is advisable to implement a distributed strategy, as it
+        divides the tasks among the various entities.
+
+      </div>
+      <div id="Solution_proposed">
+        <h3>Proposed Solution</h3>
+        As for problem ome it was decided to represent the states of the trolley as follows:
+        to indicate that the Trolley is at home, the status indicated is <kr>IDLE</kr>, to indicate that the Trolley is
+        performing an action, <kr>WORKING</kr> has been used and to indicate that the trolley is stationary, the <kr>
+          STOPPED</kr> status has been created.
+        Also, a more approximate approach was used to represent the position. Consequently, the following positions have
+        been identified: Home, Indoor, Container Plastic, Container Glass and Generic that is used if the Trolley is
+        moving from one position to another.
+        For data transmission it was decided to use COAP resources, and it was also decided to use the distribution
+        solution, to reduce the tasks of the Waste Service.
+        The implementation can be obtained by introducing a server-side Controller in which there will be two COAP
+        observers in charge of monitoring the WasteService and the Led respectively. Furthermore, it was decided to use
+        WebSockets for the communication of the changes.
+      </div>
+      <div id="Led/WasteService refactoring">
+        <h3>Led/WasteService refactoring</h3>
+        Due to the use of the COAP interaction, we had slightly modified the Led and the WasteService for update their status using COAP `updateResource` function.
+        <div>
+        <a href="../../Sprint3-exec/src/wasteservice.qak">wasteservice.qak</a>
+        <a href="../../unibo.ledqak22-dist/src/ledqak22.qak">ledqak22.qak</a>
+      </div>
+      </div>
+
+      <div id="logical_architecture">
+        <h3>Logical Architecture</h3>
+        From the previous considerations on the components of the system it is possible to define
+        the following logical architecture: <br><br>
+        <center><img src="images/architectureSprint3.png" alt="core_logical_architecture" width="100%"></center>
+      </div>
+
+
+
+
+    </div>
+
+    <h2>Test plans</h2>
+    <div id="test_plans">
+      <div class="remark">
+        Test plans are coded in Java (JUnit). The test automatically launch the wasteservice, but we need a basicRobot22
+        already running in localhost.
+
+        <h3>TestPlan: Sprint3</h3>
+        <a
+          href="https://github.com/GrikFreak/issTemaFinale22/blob/main/unibo.testFinale/test/unibo/testqakexample/TestCore0.java">testFinale</a>
+        <div>This being the final test,we use it to test the correct behaviour of the whole project. Due to this, we
+          test the updateResource of both the WasteService and the Led.</div>
+
+        <div>
+          <ks>testLoadOK</ks>:
+        </div>
+        <div>In this test we verify the correct operation when the wasteTruck submit a loadRequest with a correct amount
+          of load. </li>
+
+          <div>
+            <ks>testLoadKO</ks>:
+          </div>
+          <div>In this test we verify the correct operation when the wasteTruck submit a loadRequest with a too hight
+            amount of load. Then we submit a new loadRequest with a correct amount of load and we test that the system
+            will accept and manage the request correctly. </div>
+
+        </div>
+
+
+
+
+      </div>
+
+      <h2>Project</h2>
+      <div class="remark">
+        We decided to use Spring Boot as a web framework through which to create the web GUI required in the
+        requirements provided by the customer.
+        In detail it is necessary to distinguish what is located on the server side with what is located on the browser
+        side.
+        <ul>
+          In particular on the server we find:
+          <li>
+            <kr>Controller</kr>: represents the main server-side component. It is in charge of managing all the requests
+            coming from the browser and of generating all the COAP observers to monitor the information to be shown to
+            the user and to notify the GUI in case of changes in order to make the necessary modifications.
+          </li>
+          <li>
+            <kr>WasteServiceStatusGuiApplication</kr>: it is the component that takes care of starting the entire
+            application.
+          </li>
+          <li>
+            <kr>Some other classes</kr>: the remaining server-side code is used by the WasteController to establish
+            connections with the system.
+          </li>
+        </ul><br>
+        <ul>
+          On the browser, instead, we find:
+          <li>
+            <kr>WasteServiceStatusGui</kr>: represents the graphical interface of the web application.
+          </li>
+          <li>
+            <kr>JavaScript files</kr>:
+            used for dynamic updating of the interface.
+          </li>
+        </ul><br>
+        In detail, the HTTP protocol is used to communicate with the server in two different ways:
+        <li>
+          <kr>Synchronous request</kr>: the information (IP and port) to establish the COAP connections with the
+          entities in which you are interested are sent to the server via a form.
+        </li>
+        <li>
+          <kr>Ajax (asynchronous request)</kr>: used to send a waste_request and the free_request to the server and also
+          to avoid page reloading so as not to lose the information to be shown to the user.
+        </li>
+      </div>
+    </div>
+    
+    <h2>Execution of the project</h2>
+    <div class="remark">
+      <ul>
+        <li><b><a href="../../unibo.basicrobot22-dist/">BasicRobot</a> </b>: enter in this folder and execute <code>`./gradlew run`</code>. You can configure the basicrobot with the files "stepTimeConfig.json" for the stepTime and "./basicrobotConfig.json" for configure the connection with the VEnv. We suggest to leave localhost on "./basicrobotConfig.json" and to execute the container of the VEnv with --network="host" (eg:docker run --network="host" docker.io/natbodocker/virtualrobotdisi23:1.0)
+          <ul><li>We also released a docker image on Docker Hub of the BasicRobot and the VEnv: </li> <a href="https://hub.docker.com/repository/docker/parsleyencode/my-virtual-robot-23/general">parsleyencode/my-virtual-robot-23:2.0</a>, <a href="https://hub.docker.com/repository/docker/parsleyencode/basicrobot-dist/general">parsleyencode/basicrobot-dist:1.0</a></ul>. Run this images with --network="host" for avoid comunication problems, or use docker-compose with the file <b><a href="../../wasteService-system-dist.yaml">wasteService-system-dist.yaml</a></b> (the two docker hub images are commented, uncomment them)
+        </li>
+        <li><b><a href="../../Sprint3-exec/">WasteService</a></b>: enter in this folder and execute <code>`./gradlew run`</code>. You have to configure the ip of the led inside the `src/wasteservice.qak` file, then let xtext update the corrisponding file. After this you can execute the wasteservice.</li>
+        <li><b><a href="../../unibo.ledqak22-dist/">Led</a></b>:  enter in this folder, and configure in the `ledConfig.json` file if you want a virtual/real led. </li>
+        <li><b><a href="../../unibo.sonarqak22/">Sonar</a></b>:  enter in this folder, and configure in the `sonarConfig.json` file if you want a simulate true/false sonar. Update the ip of the waste-service inside the `src/sonarqak22.qak`, then let xtext update the corrisponding file. After this you can execute the led locally or export it to the Raspberry.</li>
+        <li><b><a href="../">Sprint3-web</a></b>:  enter in this folder and execute <code>`./gradlew bootRun`</code>. The default port for the WebApplication in <b>8050</b>. The port is setted inside the application.properties file. 
+      </ul>
+    </div>
+
+    <h2>Distribution</h2>
+    <div class="remark">
+      <div>
+        <ul>
+          <li><b><a href="../../unibo.basicrobot22-dist/">BasicRobot</a> </b>: we created a Docker distribution of the component starting from the
+            <code>`gradlew distZip`</code> package<br>
+            <pre><code>
+          FROM openjdk:11
+          EXPOSE 8020
+          
+          COPY unibo.basicrobot22-1.0.zip /
+          RUN unzip unibo.basicrobot22-1.0.zip
+          WORKDIR /unibo.basicrobot22-1.0/bin/
+          # the files .json .pl are already inside bin
+          
+          CMD [ "bash", "./unibo.basicrobot22" ]</code></pre>
+
+          </li>
+          <li><b><a href="../../Sprint3-exec/">WasteService</a></b>: we created a Docker distribution of the component starting from the
+            <code>`gradlew distZip`</code> package<br>
+            <pre><code>
+          FROM openjdk:11
+          EXPOSE 8025
+
+          COPY unibo.wasteservice-1.0.zip /
+          RUN unzip unibo.wasteservice-1.0.zip
+          WORKDIR /unibo.wasteservice-1.0/bin/
+          # the files .pl are already inside bin
+
+          CMD [ "bash", "./unibo.wasteservice" ]
+        </code>
+        </pre>
+          </li>
+          <li><b><a href="../../unibo.ledqak22-dist/">Led</a></b>: we use the <code>`gradlew distZip`</code> package<br>, with the configuration files needed. We also
+            add the support code for the use of the led in the Raspberry <br>
+            The led behaviour change according to the configuration in the `ledConfig.json` file
+            <pre><code>
+            {"type":"real"} or {"type":"virtual"}
+            </code></pre>
+
+              <pre><code>
+              distributions {      
+                main{
+                    contents{
+                      from "./sysRules.pl"
+                      from "./ledqak22.pl"
+                      from "./led25GpioTurnOff.sh"
+                      from "./led25GpioTurnOn.sh"
+                      from "./ledConfig.json"
+                }
+              }
+            }
+            </code></pre>
+          </li>
+          <li><b><a href="../../unibo.sonarqak22/">Sonar</a></b>: we use the <code>`gradlew distZip`</code> package<br>, with the configuration files needed. We also
+            add the support code for the use of the sonar in the Raspberry <br>
+            The sonar behaviour change according to the configuration in the `sonarConfig.json` file
+            <pre><code>
+              {"simulate":"true"} or {"simulate":"false"}
+            </code></pre>
+            <pre><code>
+              distributions {      
+                main{
+                    contents{
+                      from "./sysRules.pl"
+                      from "./sonarqak22.pl"
+                      from "./sonarConfig.json"
+                      from "./SonarAlone.c"
+                      from "./SonarAlone"
+                }
+              }
+            }
+            </code></pre>
+
+          </li>
+          <li><b><a href="../../wasteService-system-dist.yaml">wasteService-system-dist.yaml</a></b>: for easy of use, a yaml file for start the <b>waste-service,basicribot,VirtualEnv</b> with docker-compose has been created. This yaml file use the images created above with Docker.
+            With the command <code>`docker-compose -f wasteService-system-dist.yaml up`</code> the three containers start automatically in the proper order. In the comment there is also the link of the BasicRobot and VirtualEvn images from DockerHub. Uncomment them for use them.
+
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <div><h1><b><a href="../../it.unibo.CoreAnalysis-Sprint1/userDocs/CoreAnalysis-Sprint1.2.html">Sprint1</a></b></h1></div>
+    <div><h1><b><a href="../../it.unibo.Sprint2/userDocs/Sprint2.html">Sprint2</a></b></h1></div>
+    <!-- <h2>Deployment</h2>
+<div class="remark">
+  Two applications are distributed on the Raspberry, one containing the <a href="../../distribuzione/unibo.led-1.0"> LED </a> and one the <a href = "../../ distribution /unibo.sonar-1.0">SONAR </a>, accompanied with the various
+  codes related to physical LEDs and SONARs. <br>
+  Finally, the remaining part of the system (TROLLEY and WASTE_SERVICE) resides on another node which in this case corresponds to the PC.</div>
+</div> -->
+
+
+
+    <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
+      <li>By Bignami Filippo, Greco Davide , Niccolò Rosadi</li>
+      <li>email: filippo.bignami@studio.unibo.it, davide.greco4@studio.unibo.it, niccolo.rosadi@studio.unibo.it</li>
+      <li>GitHub repository: https://github.com/GrikFreak/issTemaFinale22</li>
+    </div>
+</body>
+
+</html>
