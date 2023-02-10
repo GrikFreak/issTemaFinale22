@@ -45,7 +45,6 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						println("WASTESERVICE | Start.")
 						unibo.kotlin.planner22Util.initAI(  )
 						unibo.kotlin.planner22Util.showCurrentRobotState(  )
-						forward("led_status", "led_status(OFF)" ,"led" ) 
 						updateResourceRep( "READY"  
 						)
 						//genTimer( actor, state )
@@ -62,6 +61,7 @@ class Wasteservice ( name: String, scope: CoroutineScope  ) : ActorBasicFsm( nam
 						)
 						updateResourceRep( "TROLLEY_STATUS:IDLE"  
 						)
+						forward("led_status", "led_status(OFF)" ,"led" ) 
 						println("WASTESERVICE | is waiting for a request..")
 						//genTimer( actor, state )
 					}

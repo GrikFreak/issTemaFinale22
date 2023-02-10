@@ -244,7 +244,7 @@ QActor wasteservice context ctxwasteservice {
 		//run unibo.kotlin.planner22Util.createRoomMapFromTextfile( "map.txt" )	
    		run unibo.kotlin.planner22Util.initAI() 
   		run unibo.kotlin.planner22Util.showCurrentRobotState()
-  		forward led -m led_status : led_status(OFF)
+  		//forward led -m led_status : led_status(OFF)
   		updateResource [# "READY" #]
   		//updateResource [# "LED:OFF" #]
   		//emit updateStatusLed : updateStatusLed(OFF)
@@ -256,6 +256,7 @@ QActor wasteservice context ctxwasteservice {
 		printCurrentMessage
 		updateResource [# "TROLLEY_POS:HOME" #]
 		updateResource [# "TROLLEY_STATUS:IDLE" #]
+		forward led -m led_status : led_status(OFF)
 		println("WASTESERVICE | is waiting for a request..")
 	}
 	

@@ -61,7 +61,7 @@ private CoapConnection connWS;
 */
 
 		waitForApplStarted();
-		CommUtils.delay(5000);
+		CommUtils.delay(10000);
 		System.out.println("Before END --------------------");
   	}
 
@@ -90,7 +90,7 @@ private CoapConnection connWS;
 	}
 	@After
 	public void down() {
-		tWS.interrupt();
+		//tWS.interrupt();
 		//tBR.interrupt();
 		ColorsOut.outappl("TestCore0 ENDS" , ColorsOut.BLUE);
 	}
