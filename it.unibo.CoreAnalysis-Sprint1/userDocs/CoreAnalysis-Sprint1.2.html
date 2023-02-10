@@ -278,6 +278,14 @@ div.imagedesc{
 <br>
 <h2>Requirements analysis</h2>
 <div class="remark" id = "Requirements_analysis">
+  <h3>Qak introduction</h3>
+  <div>Having the need to use connections such as <b>events, requests/responses, dipach </b>and not being natively supported by languages such as Java, for the development of
+    executable models was chosen the <b>QAK</b> language . It is convenient because it natively supports actors and makes it easy to usethe different types of connections mentioned
+    above; furthermore it allows to reduce the Abstraction Gap just highlighted.</div>
+    <ul>
+      <li><a href="https://github.com/anatali/issLab2022/blob/main/it.unibo.issLabStart/userDocs/Dispense/lezioni/html/QakIntro.html">QakIntro.html</a></li>
+      <li><a href="https://doc.akka.io//docs/akka/current/typed/guide/actors-motivation.html">actors-motivation.html</a></li>
+    </ul>
   <h3>Core requirements</h3>
   <h4><a href="#R1A">R1A</a></h4>
   <div class="remark" id="R1A">
@@ -511,7 +519,7 @@ We have also added a PathExectur to perform the trolley steps planned by the pla
    </div>
 
    <h3>TestPlan: storage_request</h3> 
-   <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestPickUp.java" >TestStorage</a>
+   <a href="https://github.com/GrikFreak/issTemaFinale22/blob/main/it.unibo.CoreAnalysis-Sprint1/test/TestStorage.java" >TestStorage</a>
    
    <div><ks>Test testStorageDone</ks>:</div>
    <div>After the Waste Service recieved the pickup_done reply it sends to the TransportTrolley the <ks>storage_request</ks> and then the  TransportTrolley sends the reply <ks>storage_done</ks>.</div> 
